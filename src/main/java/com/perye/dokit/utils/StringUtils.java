@@ -186,7 +186,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
      * 获得当天是周几
      */
     public static String getWeekDay(){
-        String[] weekDays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+//        String[] weekDays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
 
