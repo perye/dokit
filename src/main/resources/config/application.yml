@@ -11,7 +11,6 @@ spring:
     redis:
       repositories:
         enabled: false
-  #配置 Jpa
   jpa:
     properties:
       hibernate:
@@ -19,24 +18,20 @@ spring:
     open-in-view: true
 
   redis:
-    #数据库索引
     database: 0
     host: 127.0.0.1
     port: 6379
     password:
-    #连接超时时间
     timeout: 5000
 
-#七牛云
+
 qiniu:
-  # 文件大小 /M
+
   max-size: 15
 
-#邮箱验证码有效时间/分钟
 code:
   expiration: 5
 
-#登录图形验证码有效时间/分钟
 loginCode:
   expiration: 2
 
