@@ -20,10 +20,6 @@ public class GenConfig {
     /** 包路径 **/
     private String pack;
 
-    /** 模块名 **/
-    @Column(name = "module_name")
-    private String moduleName;
-
     /** 前端文件路径 **/
     private String path;
 

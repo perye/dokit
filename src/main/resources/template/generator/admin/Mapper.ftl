@@ -1,4 +1,4 @@
-package ${package}.service.mapper;
+package ${package}.mapper;
 
 import com.perye.dokit.mapper.EntityMapper;
 import ${package}.entity.${className};

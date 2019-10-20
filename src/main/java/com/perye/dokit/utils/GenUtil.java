@@ -67,7 +67,6 @@ public class GenUtil {
     public static void generatorCode(List<ColumnInfo> columnInfos, GenConfig genConfig, String tableName) throws IOException {
         Map<String,Object> map = new HashMap();
         map.put("package",genConfig.getPack());
-        map.put("moduleName",genConfig.getModuleName());
         map.put("author",genConfig.getAuthor());
         map.put("date", LocalDate.now().toString());
         map.put("tableName",tableName);
@@ -167,7 +166,7 @@ public class GenUtil {
      * 定义后端文件路径以及名称
      */
     public static String getAdminFilePath(String templateName, GenConfig genConfig, String className) {
-        String projectPath = System.getProperty("user.dir") + File.separator + genConfig.getModuleName();
+        String projectPath = System.getProperty("user.dir");
         String packagePath = projectPath + File.separator + "src" +File.separator+ "main" + File.separator + "java" + File.separator;
         if (!ObjectUtils.isEmpty(genConfig.getPack())) {
             packagePath += genConfig.getPack().replace(".", File.separator) + File.separator;
