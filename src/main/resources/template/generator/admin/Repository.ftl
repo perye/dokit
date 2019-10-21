@@ -10,12 +10,12 @@ public interface ${className}Repository extends JpaRepository<${className}, ${pk
     <#list columns as column>
         <#if column.columnKey = 'UNI'>
 
-            /**
-            * findBy${column.capitalColumnName}
-            * @param ${column.columnName}
-            * @return
-            */
-            ${className} findBy${column.capitalColumnName}(${column.columnType} ${column.columnName});
+    /**
+    * findBy${column.capitalColumnName}
+    * @param ${column.columnName}
+    * @return
+    */
+    ${className} findBy${column.capitalColumnName}(${column.columnType} ${column.columnName});
         </#if>
     </#list>
 </#if>

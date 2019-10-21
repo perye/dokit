@@ -1,25 +1,26 @@
 <template>
-    <el-dialog :append-to-body="true" :close-on-click-modal="false" :before-close="cancel" :visible.sync="dialog" :title="isAdd ? '新增' : '编辑'" width="500px">
-        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-            <#if columns??>
-                <#list columns as column>
-                    <#if column.changeColumnName != '${pkChangeColName}'>
-                        <el-form-item label="<#if column.columnComment != ''>${column.columnComment}<#else>${column.changeColumnName}</#if>" <#if column.columnKey = 'UNI'>prop="${column.changeColumnName}"</#if>>
-                            <el-input v-model="form.${column.changeColumnName}" style="width: 370px;"/>
-                        </el-form-item>
-                    </#if>
-                </#list>
-            </#if>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button type="text" @click="cancel">取消</el-button>
-            <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
-        </div>
-    </el-dialog>
+  <el-dialog :append-to-body="true" :close-on-click-modal="false" :before-close="cancel" :visible.sync="dialog" :title="isAdd ? '新增' : '编辑'" width="500px">
+    <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
+    <#if columns??>
+      <#list columns as column>
+        <#if column.changeColumnName != '${pkChangeColName}'>
+      <el-form-item label="<#if column.columnComment != ''>${column.columnComment}<#else>${column.changeColumnName}</#if>" <#if column.columnKey = 'UNI'>prop="${column.changeColumnName}"</#if>>
+        <el-input v-model="form.${column.changeColumnName}" style="width: 370px;"/>
+      </el-form-item>
+        </#if>
+      </#list>
+    </#if>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="text" @click="cancel">取消</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
     import { add, edit } from '@/api/${changeClassName}'
+
     export default {
         props: {
             isAdd: {
@@ -33,7 +34,7 @@
                 form: {
             <#if columns??>
             <#list columns as column>
-            ${column.changeColumnName}: ''<#if column_has_next>,</#if>
+                    ${column.changeColumnName}: ''<#if column_has_next>,</#if>
             </#list>
             </#if>
         },
@@ -94,7 +95,7 @@
                 this.form = {
                 <#if columns??>
                 <#list columns as column>
-                ${column.changeColumnName}: ''<#if column_has_next>,</#if>
+                    ${column.changeColumnName}: ''<#if column_has_next>,</#if>
                 </#list>
                 </#if>
             }

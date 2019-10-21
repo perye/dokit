@@ -1,6 +1,5 @@
 package ${package}.mapper;
 
-import com.perye.dokit.mapper.EntityMapper;
 import ${package}.entity.${className};
 import ${package}.dto.${className}DTO;
 import org.mapstruct.Mapper;

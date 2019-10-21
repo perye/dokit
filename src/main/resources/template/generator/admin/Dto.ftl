@@ -19,17 +19,16 @@ import java.io.Serializable;
 public class ${className}DTO implements Serializable {
 <#if columns??>
     <#list columns as column>
-
         <#if column.columnComment != ''>
-            // ${column.columnComment}
+    // ${column.columnComment}
         </#if>
         <#if column.columnKey = 'PRI'>
             <#if !auto && pkColumnType = 'Long'>
-                // 处理精度丢失问题
-                @JsonSerialize(using= ToStringSerializer.class)
+    // 处理精度丢失问题
+    @JsonSerialize(using= ToStringSerializer.class)
             </#if>
         </#if>
-        private ${column.columnType} ${column.changeColumnName};
+    private ${column.columnType} ${column.changeColumnName};
     </#list>
 </#if>
 }

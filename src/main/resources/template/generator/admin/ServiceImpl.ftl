@@ -5,7 +5,7 @@ import ${package}.entity.${className};
     <#list columns as column>
         <#if column.columnKey = 'UNI'>
             <#if column_index = 1>
-                import com.perye.dokit.exception.EntityExistException;
+import com.perye.dokit.exception.EntityExistException;
             </#if>
         </#if>
     </#list>
@@ -22,11 +22,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 <#if !auto && pkColumnType = 'Long'>
-    import cn.hutool.core.lang.Snowflake;
-    import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 </#if>
 <#if !auto && pkColumnType = 'String'>
-    import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.IdUtil;
 </#if>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,36 +35,32 @@ import com.perye.dokit.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
 
-/**
-* @author ${author}
-* @date ${date}
-*/
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class ${className}ServiceImpl implements ${className}Service {
 
-@Autowired
-private ${className}Repository ${changeClassName}Repository;
+    @Autowired
+    private ${className}Repository ${changeClassName}Repository;
 
-@Autowired
-private ${className}Mapper ${changeClassName}Mapper;
+    @Autowired
+    private ${className}Mapper ${changeClassName}Mapper;
 
-@Override
-public Map<String,Object> queryAll(${className}QueryCriteria criteria, Pageable pageable){
-Page<${className}> page = ${changeClassName}Repository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-return PageUtil.toPage(page.map(${changeClassName}Mapper::toDto));
-}
+    @Override
+    public Map<String,Object> queryAll(${className}QueryCriteria criteria, Pageable pageable){
+        Page<${className}> page = ${changeClassName}Repository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(${changeClassName}Mapper::toDto));
+    }
 
-@Override
-public List<${className}DTO> queryAll(${className}QueryCriteria criteria){
-    return ${changeClassName}Mapper.toDto(${changeClassName}Repository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    @Override
+    public List<${className}DTO> queryAll(${className}QueryCriteria criteria){
+        return ${changeClassName}Mapper.toDto(${changeClassName}Repository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     public ${className}DTO findById(${pkColumnType} ${pkChangeColName}) {
-    Optional<${className}> ${changeClassName} = ${changeClassName}Repository.findById(${pkChangeColName});
-    ValidationUtil.isNull(${changeClassName},"${className}","${pkChangeColName}",${pkChangeColName});
-    return ${changeClassName}Mapper.toDto(${changeClassName}.get());
+        Optional<${className}> ${changeClassName} = ${changeClassName}Repository.findById(${pkChangeColName});
+        ValidationUtil.isNull(${changeClassName},"${className}","${pkChangeColName}",${pkChangeColName});
+        return ${changeClassName}Mapper.toDto(${changeClassName}.get());
     }
 
     @Override
@@ -80,41 +76,41 @@ public List<${className}DTO> queryAll(${className}QueryCriteria criteria){
     <#if columns??>
         <#list columns as column>
             <#if column.columnKey = 'UNI'>
-                if(${changeClassName}Repository.findBy${column.capitalColumnName}(resources.get${column.capitalColumnName}()) != null){
-                throw new EntityExistException(${className}.class,"${column.columnName}",resources.get${column.capitalColumnName}());
-                }
+        if(${changeClassName}Repository.findBy${column.capitalColumnName}(resources.get${column.capitalColumnName}()) != null){
+            throw new EntityExistException(${className}.class,"${column.columnName}",resources.get${column.capitalColumnName}());
+        }
             </#if>
         </#list>
     </#if>
-    return ${changeClassName}Mapper.toDto(${changeClassName}Repository.save(resources));
+        return ${changeClassName}Mapper.toDto(${changeClassName}Repository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(${className} resources) {
-    Optional<${className}> optional${className} = ${changeClassName}Repository.findById(resources.get${pkCapitalColName}());
-    ValidationUtil.isNull( optional${className},"${className}","id",resources.get${pkCapitalColName}());
-    ${className} ${changeClassName} = optional${className}.get();
+        Optional<${className}> optional${className} = ${changeClassName}Repository.findById(resources.get${pkCapitalColName}());
+        ValidationUtil.isNull( optional${className},"${className}","id",resources.get${pkCapitalColName}());
+        ${className} ${changeClassName} = optional${className}.get();
     <#if columns??>
         <#list columns as column>
             <#if column.columnKey = 'UNI'>
                 <#if column_index = 1>
-                    ${className} ${changeClassName}1 = null;
+        ${className} ${changeClassName}1 = null;
                 </#if>
-                ${changeClassName}1 = ${changeClassName}Repository.findBy${column.capitalColumnName}(resources.get${column.capitalColumnName}());
-                if(${changeClassName}1 != null && !${changeClassName}1.get${pkCapitalColName}().equals(${changeClassName}.get${pkCapitalColName}())){
-                throw new EntityExistException(${className}.class,"${column.columnName}",resources.get${column.capitalColumnName}());
-                }
+        ${changeClassName}1 = ${changeClassName}Repository.findBy${column.capitalColumnName}(resources.get${column.capitalColumnName}());
+        if(${changeClassName}1 != null && !${changeClassName}1.get${pkCapitalColName}().equals(${changeClassName}.get${pkCapitalColName}())){
+            throw new EntityExistException(${className}.class,"${column.columnName}",resources.get${column.capitalColumnName}());
+        }
             </#if>
         </#list>
     </#if>
-    ${changeClassName}.copy(resources);
-    ${changeClassName}Repository.save(${changeClassName});
+        ${changeClassName}.copy(resources);
+        ${changeClassName}Repository.save(${changeClassName});
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(${pkColumnType} ${pkChangeColName}) {
-    ${changeClassName}Repository.deleteById(${pkChangeColName});
+        ${changeClassName}Repository.deleteById(${pkChangeColName});
     }
  }

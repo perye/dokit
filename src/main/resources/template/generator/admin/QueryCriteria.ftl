@@ -17,14 +17,14 @@ public class ${className}QueryCriteria{
     <#list queryColumns as column>
 
         <#if column.columnQuery = '1'>
-            // 模糊
-            @Query(type = Query.Type.INNER_LIKE)
+    // 模糊
+    @Query(type = Query.Type.INNER_LIKE)
         </#if>
         <#if column.columnQuery = '2'>
-            // 精确
-            @Query
+    // 精确
+    @Query
         </#if>
-        private ${column.columnType} ${column.changeColumnName};
+    private ${column.columnType} ${column.changeColumnName};
     </#list>
 </#if>
 }
