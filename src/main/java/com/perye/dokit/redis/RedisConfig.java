@@ -55,7 +55,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         // 全局开启AutoType，不建议使用
         // ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
         // 建议使用这种方式，小范围指定白名单
-        ParserConfig.getGlobalInstance().addAccept("com.perye.dokit.domain");
+        ParserConfig.getGlobalInstance().addAccept("com.perye.dokit.entity");
         ParserConfig.getGlobalInstance().addAccept("com.perye.dokit.dto");
         ParserConfig.getGlobalInstance().addAccept("com.perye.dokit.security");
         // key的序列化采用StringRedisSerializer

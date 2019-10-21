@@ -1,6 +1,7 @@
 package com.perye.dokit.service.impl;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.perye.dokit.dto.QiniuQueryCriteria;
 import com.perye.dokit.entity.QiniuConfig;
 import com.perye.dokit.entity.QiniuContent;
@@ -87,7 +88,8 @@ public class QiNiuServiceImpl implements QiNiuService {
             }
             Response response = uploadManager.put(file.getBytes(), key, upToken);
             //解析上传成功的结果
-            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+//            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+            DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
             //存入数据库
             QiniuContent qiniuContent = new QiniuContent();
             qiniuContent.setSuffix(FileUtil.getExtensionName(putRet.key));
