@@ -66,11 +66,11 @@
         },
         methods:{
             onSubmit() {
-                this.submitStatus = true;
-                this.submitText = "查询中";
                 if (this.form.text === "") {
                     this.$message.error("搜索不能为空");
                 } else {
+                    this.submitStatus = true;
+                    this.submitText = "查询中";
                     searchKnowledge(this.form.text).then(result => {
                         console.log(result.data)
                         this.form.answer = result.data.info.text;
