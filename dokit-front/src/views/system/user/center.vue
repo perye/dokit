@@ -39,7 +39,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>操作日志</span>
-            <div style="display:inline-block;float: right;cursor: pointer" @click="refresh"><i :class="ico"/></div>
+            <div style="display:inline-block;float: right;cursor: pointer" @click="refresh()"><i :class="ico"/></div>
           </div>
           <div>
             <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
@@ -142,7 +142,8 @@ export default {
     },
     refresh() {
       this.ico = 'el-icon-loading'
-      this.$refs.log.init()
+      // this.$refs.log.init()
+        this.init();
       setTimeout(() => {
         this.ico = 'el-icon-refresh'
       }, 300)
