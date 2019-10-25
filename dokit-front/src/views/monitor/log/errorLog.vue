@@ -21,9 +21,9 @@
       </el-table-column>
     </el-table>
     <el-dialog :visible.sync="dialog" title="异常详情" append-to-body top="0" width="85%">
-      <span>
+      <pre>
         {{ errorInfo }}
-      </span>
+      </pre>
     </el-dialog>
     <!--分页组件-->
     <el-pagination
@@ -37,45 +37,52 @@
 </template>
 
 <script>
-import initData from '@/mixins/initData'
-import { parseTime } from '@/utils/index'
-import { getErrDetail } from '@/api/log'
-import Search from './search'
-export default {
-  name: 'ErrorLog',
-  components: { Search },
-  mixins: [initData],
-  data() {
-    return {
-      errorInfo: '', dialog: false
+    import initData from '@/mixins/initData'
+    import {parseTime} from '@/utils/index'
+    import {getErrDetail} from '@/api/log'
+    import Search from './search'
+
+    export default {
+        name: 'ErrorLog',
+        components: {Search},
+        mixins: [initData],
+        data() {
+            return {
+                errorInfo: '', dialog: false
+            }
+        },
+        created() {
+            this.$nextTick(() => {
+                this.init()
+            })
+        },
+        methods: {
+            parseTime,
+            beforeInit() {
+                this.url = 'api/logs/error'
+                const sort = 'id,desc'
+                const query = this.query
+                const value = query.value
+                this.params = {page: this.page, size: this.size, sort: sort}
+                if (value) {
+                    this.params['blurry'] = value
+                }
+                return true
+            },
+            info(id) {
+                this.dialog = true
+                getErrDetail(id).then(res => {
+                    this.errorInfo = res.exception
+                    console.log(this.errorInfo);
+                })
+            }
+        }
     }
-  },
-  created() {
-    this.$nextTick(() => {
-      this.init()
-    })
-  },
-  methods: {
-    parseTime,
-    beforeInit() {
-      this.url = 'api/logs/error'
-      const sort = 'id,desc'
-      const query = this.query
-      const value = query.value
-      this.params = { page: this.page, size: this.size, sort: sort }
-      if (value) { this.params['blurry'] = value }
-      return true
-    },
-    info(id) {
-      this.dialog = true
-      getErrDetail(id).then(res => {
-        this.errorInfo = res.exception
-      })
-    }
-  }
-}
 </script>
 
 <style scoped>
-
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
 </style>
