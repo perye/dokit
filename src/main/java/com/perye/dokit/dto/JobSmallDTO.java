@@ -9,13 +9,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class JobSmallDTO implements Serializable {
 
-    /**
-     * ID
-     */
+    // ID
     private Long id;
 
-    /**
-     * 名称
-     */
+    // 名称
     private String name;
 }

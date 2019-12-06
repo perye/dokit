@@ -2,12 +2,8 @@ package com.perye.dokit.service;
 
 import com.perye.dokit.entity.EmailConfig;
 import com.perye.dokit.vo.EmailVo;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 
-@CacheConfig(cacheNames = "email")
 public interface EmailService {
 
     /**
@@ -16,14 +12,12 @@ public interface EmailService {
      * @param old 旧的配置
      * @return EmailConfig
      */
-    @CachePut(key = "'1'")
     EmailConfig update(EmailConfig emailConfig, EmailConfig old);
 
     /**
      * 查询配置
      * @return EmailConfig 邮件配置
      */
-    @Cacheable(key = "'1'")
     EmailConfig find();
 
     /**

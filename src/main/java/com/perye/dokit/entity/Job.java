@@ -15,18 +15,14 @@ import java.io.Serializable;
 @Table(name="job")
 public class Job implements Serializable {
 
-    /**
-     * ID
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @NotNull(groups = Update.class)
     private Long id;
 
-    /**
-     * 名称
-     */
+
     @Column(name = "name",nullable = false)
     @NotBlank
     private String name;
@@ -35,9 +31,7 @@ public class Job implements Serializable {
     @NotNull
     private Long sort;
 
-    /**
-     * 状态
-     */
+
     @Column(name = "enabled",nullable = false)
     @NotNull
     private Boolean enabled;
@@ -46,9 +40,6 @@ public class Job implements Serializable {
     @JoinColumn(name = "dept_id")
     private Dept dept;
 
-    /**
-     * 创建日期
-     */
     @Column(name = "create_time")
     @CreationTimestamp
     private Timestamp createTime;

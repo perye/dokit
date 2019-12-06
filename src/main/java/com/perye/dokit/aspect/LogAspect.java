@@ -45,7 +45,7 @@ public class LogAspect {
      */
     @Around("logPointcut()")
     public Object logAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Object result = null;
+        Object result;
         currentTime = System.currentTimeMillis();
         result = proceedingJoinPoint.proceed();
         Log log = new Log("INFO", System.currentTimeMillis() - currentTime);

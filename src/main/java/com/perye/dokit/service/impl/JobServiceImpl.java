@@ -11,6 +11,9 @@ import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,17 +24,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = "job")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class JobServiceImpl implements JobService {
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
-    @Autowired
-    private JobMapper jobMapper;
+    private final JobMapper jobMapper;
 
-    @Autowired
-    private DeptRepository deptRepository;
+    private final DeptRepository deptRepository;
+
+    public JobServiceImpl(JobRepository jobRepository, JobMapper jobMapper, DeptRepository deptRepository) {
+        this.jobRepository = jobRepository;
+        this.jobMapper = jobMapper;
+        this.deptRepository = deptRepository;
+    }
 
     @Override
     public Object queryAll(JobQueryCriteria criteria, Pageable pageable) {
@@ -44,30 +51,32 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @Cacheable(key = "#p0")
     public JobDTO findById(Long id) {
-        Optional<Job> job = jobRepository.findById(id);
-        ValidationUtil.isNull(job,"Job","id",id);
-        return jobMapper.toDto(job.get());
+        Job job = jobRepository.findById(id).orElseGet(Job::new);
+        ValidationUtil.isNull(job.getId(),"Job","id",id);
+        return jobMapper.toDto(job);
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public JobDTO create(Job resources) {
         return jobMapper.toDto(jobRepository.save(resources));
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(Job resources) {
-        Optional<Job> optionalJob = jobRepository.findById(resources.getId());
-        ValidationUtil.isNull( optionalJob,"Job","id",resources.getId());
-
-        Job job = optionalJob.get();
+        Job job = jobRepository.findById(resources.getId()).orElseGet(Job::new);
+        ValidationUtil.isNull( job.getId(),"Job","id",resources.getId());
         resources.setId(job.getId());
         jobRepository.save(resources);
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         jobRepository.deleteById(id);

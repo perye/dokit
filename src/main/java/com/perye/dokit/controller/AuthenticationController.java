@@ -10,6 +10,8 @@ import com.perye.dokit.security.ImgResult;
 import com.perye.dokit.security.JwtUser;
 import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,21 +30,25 @@ import java.io.IOException;
  */
 @Slf4j
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
+@Api(tags = "系统：系统授权接口")
 public class AuthenticationController {
 
     @Value("${jwt.header}")
     private String tokenHeader;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private RedisService redisService;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    @Qualifier("jwtUserDetailsService")
-    private UserDetailsService userDetailsService;
+    private final RedisService redisService;
+
+    private final UserDetailsService userDetailsService;
+
+    public AuthenticationController(JwtTokenUtil jwtTokenUtil, RedisService redisService, @Qualifier("jwtUserDetailsService") UserDetailsService userDetailsService) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.redisService = redisService;
+        this.userDetailsService = userDetailsService;
+    }
 
     /**
      * 登录授权
@@ -50,7 +56,8 @@ public class AuthenticationController {
      * @return
      */
     @Log("用户登录")
-    @PostMapping(value = "${jwt.auth.path}")
+    @ApiOperation("登录授权")
+    @PostMapping(value = "/login")
     public ResponseEntity login(@Validated @RequestBody AuthorizationUser authorizationUser){
 
         // 查询验证码
@@ -80,21 +87,16 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticationInfo(token,jwtUser));
     }
 
-    /**
-     * 获取用户信息
-     * @return
-     */
-    @GetMapping(value = "${jwt.auth.account}")
+    @ApiOperation("获取用户信息")
+    @GetMapping(value = "/info")
     public ResponseEntity getUserInfo(){
         JwtUser jwtUser = (JwtUser)userDetailsService.loadUserByUsername(SecurityUtils.getUsername());
         return ResponseEntity.ok(jwtUser);
     }
 
-    /**
-     * 获取验证码
-     */
-    @GetMapping(value = "vCode")
-    public ImgResult getCode(HttpServletResponse response) throws IOException {
+    @ApiOperation("获取验证码")
+    @GetMapping(value = "/vCode")
+    public ImgResult getCode() throws IOException {
 
         //生成随机字串
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4);

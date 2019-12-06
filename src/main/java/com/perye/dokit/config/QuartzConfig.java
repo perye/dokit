@@ -2,7 +2,6 @@ package com.perye.dokit.config;
 
 import org.quartz.Scheduler;
 import org.quartz.spi.TriggerFiredBundle;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,10 +19,13 @@ public class QuartzConfig {
      * 解决Job中注入Spring Bean为null的问题
      */
     @Component("quartzJobFactory")
-    public class QuartzJobFactory extends AdaptableJobFactory {
+    public static class QuartzJobFactory extends AdaptableJobFactory {
 
-        @Autowired
-        private AutowireCapableBeanFactory capableBeanFactory;
+        private final AutowireCapableBeanFactory capableBeanFactory;
+
+        public QuartzJobFactory(AutowireCapableBeanFactory capableBeanFactory) {
+            this.capableBeanFactory = capableBeanFactory;
+        }
 
         @Override
         protected Object createJobInstance(TriggerFiredBundle bundle) throws Exception {
@@ -37,9 +39,9 @@ public class QuartzConfig {
 
     /**
      * 注入scheduler到spring
-     * @param quartzJobFactory
-     * @return
-     * @throws Exception
+     * @param quartzJobFactory /
+     * @return Scheduler
+     * @throws Exception /
      */
     @Bean(name = "scheduler")
     public Scheduler scheduler(QuartzJobFactory quartzJobFactory) throws Exception {

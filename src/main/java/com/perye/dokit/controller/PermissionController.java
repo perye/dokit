@@ -7,7 +7,8 @@ import com.perye.dokit.entity.Permission;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.mapper.PermissionMapper;
 import com.perye.dokit.service.PermissionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,47 +20,51 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("api")
+@Api(tags = "系统：权限管理")
+@RequestMapping("/api/permissions")
 public class PermissionController {
 
-    @Autowired
-    private PermissionService permissionService;
+    private final PermissionService permissionService;
 
-    @Autowired
-    private PermissionMapper permissionMapper;
+    private final PermissionMapper permissionMapper;
 
     private static final String ENTITY_NAME = "permission";
 
-    /**
-     * 返回全部的权限，新增角色时下拉选择
-     * @return
-     */
-    @GetMapping(value = "/permissions/tree")
+    public PermissionController(PermissionService permissionService, PermissionMapper permissionMapper) {
+        this.permissionService = permissionService;
+        this.permissionMapper = permissionMapper;
+    }
+
+    @ApiOperation("返回全部的权限，新增角色时下拉选择")
+    @GetMapping(value = "/tree")
     @PreAuthorize("hasAnyRole('ADMIN','PERMISSION_ALL','PERMISSION_CREATE','PERMISSION_EDIT','ROLES_SELECT','ROLES_ALL')")
     public ResponseEntity getTree(){
-        return new ResponseEntity(permissionService.getPermissionTree(permissionService.findByPid(0L)),HttpStatus.OK);
+        return new ResponseEntity<>(permissionService.getPermissionTree(permissionService.findByPid(0L)),HttpStatus.OK);
     }
 
     @Log("查询权限")
-    @GetMapping(value = "/permissions")
+    @ApiOperation("查询权限")
+    @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','PERMISSION_ALL','PERMISSION_SELECT')")
     public ResponseEntity getPermissions(PermissionQueryCriteria criteria){
         List<PermissionDTO> permissionDTOS = permissionService.queryAll(criteria);
-        return new ResponseEntity(permissionService.buildTree(permissionDTOS),HttpStatus.OK);
+        return new ResponseEntity<>(permissionService.buildTree(permissionDTOS),HttpStatus.OK);
     }
 
     @Log("新增权限")
-    @PostMapping(value = "/permissions")
+    @ApiOperation("新增权限")
+    @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','PERMISSION_ALL','PERMISSION_CREATE')")
     public ResponseEntity create(@Validated @RequestBody Permission resources){
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity(permissionService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(permissionService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改权限")
-    @PutMapping(value = "/permissions")
+    @ApiOperation("修改权限")
+    @PutMapping
     @PreAuthorize("hasAnyRole('ADMIN','PERMISSION_ALL','PERMISSION_EDIT')")
     public ResponseEntity update(@Validated(Permission.Update.class) @RequestBody Permission resources){
         permissionService.update(resources);
@@ -67,7 +72,8 @@ public class PermissionController {
     }
 
     @Log("删除权限")
-    @DeleteMapping(value = "/permissions/{id}")
+    @ApiOperation("删除权限")
+    @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','PERMISSION_ALL','PERMISSION_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         List<Permission> permissions = permissionService.findByPid(id);

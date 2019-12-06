@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Api(tags = "本地存储管理")
+@Api(tags = "工具：本地存储管理")
 @RestController
 @RequestMapping("/api/localStorage")
 public class LocalStorageController {
@@ -24,21 +24,21 @@ public class LocalStorageController {
     public LocalStorageController(LocalStorageService localStorageService) {
         this.localStorageService = localStorageService;
     }
-    @ApiOperation(value = "查询文件")
+    @ApiOperation("查询文件")
     @GetMapping()
     @PreAuthorize("hasAnyRole('ADMIN','LOCALSTORAGE_ALL','LOCALSTORAGE_SELECT')")
     public ResponseEntity getLocalStorages(LocalStorageQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(localStorageService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "上传文件")
+    @ApiOperation("上传文件")
     @PostMapping()
     @PreAuthorize("hasAnyRole('ADMIN','LOCALSTORAGE_ALL','LOCALSTORAGE_CREATE')")
     public ResponseEntity create(@RequestParam String name, @RequestParam("file") MultipartFile file){
         return new ResponseEntity<>(localStorageService.create(name, file),HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "修改文件")
+    @ApiOperation("修改文件")
     @PutMapping()
     @PreAuthorize("hasAnyRole('ADMIN','LOCALSTORAGE_ALL','LOCALSTORAGE_EDIT')")
     public ResponseEntity update(@Validated @RequestBody LocalStorage resources){
@@ -46,7 +46,7 @@ public class LocalStorageController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation(value = "删除文件")
+    @ApiOperation("删除文件")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','LOCALSTORAGE_ALL','LOCALSTORAGE_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
@@ -56,7 +56,7 @@ public class LocalStorageController {
 
     @Log("多选删除")
     @DeleteMapping
-    @ApiOperation(value = "多选删除")
+    @ApiOperation("多选删除")
     public ResponseEntity deleteAll(@RequestBody Long[] ids) {
         localStorageService.deleteAll(ids);
         return new ResponseEntity(HttpStatus.OK);

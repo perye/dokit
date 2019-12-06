@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("api/email")
-@Api(tags = "邮件管理")
+@Api(tags = "工具：邮件管理")
 public class EmailController {
 
     private final EmailService emailService;
@@ -32,7 +32,7 @@ public class EmailController {
 
     @Log("配置邮件")
     @PutMapping()
-    @ApiOperation(value = "配置邮件")
+    @ApiOperation("配置邮件")
     public ResponseEntity emailConfig(@Validated @RequestBody EmailConfig emailConfig){
         emailService.update(emailConfig,emailService.find());
         return new ResponseEntity(HttpStatus.OK);
@@ -40,7 +40,7 @@ public class EmailController {
 
     @Log("发送邮件")
     @PostMapping()
-    @ApiOperation(value = "发送邮件")
+    @ApiOperation("发送邮件")
     public ResponseEntity send(@Validated @RequestBody EmailVo emailVo) throws Exception {
         emailService.send(emailVo,emailService.find());
         return new ResponseEntity(HttpStatus.OK);

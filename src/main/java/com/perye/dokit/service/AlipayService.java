@@ -2,11 +2,7 @@ package com.perye.dokit.service;
 
 import com.perye.dokit.entity.AlipayConfig;
 import com.perye.dokit.vo.TradeVo;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 
-@CacheConfig(cacheNames = "alipay")
 public interface AlipayService {
 
     /**
@@ -31,7 +27,6 @@ public interface AlipayService {
      * 查询配置
      * @return AlipayConfig
      */
-    @Cacheable(key = "'1'")
     AlipayConfig find();
 
     /**
@@ -39,6 +34,5 @@ public interface AlipayService {
      * @param alipayConfig 支付宝配置
      * @return AlipayConfig
      */
-    @CachePut(key = "'1'")
     AlipayConfig update(AlipayConfig alipayConfig);
 }

@@ -10,11 +10,6 @@ import static com.perye.dokit.utils.StringUtils.*;
 import static org.junit.Assert.*;
 
 public class StringUtilsTest {
-    @Test
-    public void testInString() {
-        assertTrue(inString("?", "?"));
-        assertFalse(inString("?", new String[]{}));
-    }
 
     @Test
     public void testToCamelCase() {

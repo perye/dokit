@@ -7,7 +7,6 @@ import com.perye.dokit.service.DeptService;
 import com.perye.dokit.service.RoleService;
 import com.perye.dokit.service.UserService;
 import com.perye.dokit.utils.SecurityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,14 +20,18 @@ import java.util.Set;
 @Component
 public class DataScope {
     private final String[] scopeType = {"全部", "本级", "自定义"};
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private RoleService roleService;
+    private final UserService userService;
 
-    @Autowired
-    private DeptService deptService;
+    private final RoleService roleService;
+
+    private final DeptService deptService;
+
+    public DataScope(UserService userService, RoleService roleService, DeptService deptService) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.deptService = deptService;
+    }
 
     public Set<Long> getDeptIds() {
 
@@ -72,7 +75,7 @@ public class DataScope {
         deptList.forEach(dept -> {
                     if (dept!=null && dept.getEnabled()){
                         List<Dept> depts = deptService.findByPid(dept.getId());
-                        if(deptList!=null && deptList.size()!=0){
+                        if(deptList.size() != 0){
                             list.addAll(getDeptChildren(depts));
                         }
                         list.add(dept.getId());

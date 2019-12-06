@@ -13,6 +13,7 @@ import com.perye.dokit.service.VerificationCodeService;
 import com.perye.dokit.vo.EmailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,11 @@ import java.util.concurrent.TimeUnit;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class VerificationCodeServiceImpl implements VerificationCodeService {
 
-    @Autowired
-    private VerificationCodeRepository verificationCodeRepository;
+    private final VerificationCodeRepository verificationCodeRepository;
+
+    public VerificationCodeServiceImpl(VerificationCodeRepository verificationCodeRepository) {
+        this.verificationCodeRepository = verificationCodeRepository;
+    }
 
     @Value("${code.expiration}")
     private Integer expiration;
@@ -36,8 +40,8 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public EmailVo sendEmail(VerificationCode code) {
-        EmailVo emailVo = null;
-        String content = "";
+        EmailVo emailVo;
+        String content;
         VerificationCode verificationCode = verificationCodeRepository.findByScenesAndTypeAndValueAndStatusIsTrue(code.getScenes(),code.getType(),code.getValue());
         // 如果不存在有效的验证码，就创建一个新的
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));

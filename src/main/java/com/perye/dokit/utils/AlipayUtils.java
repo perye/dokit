@@ -20,6 +20,7 @@ public class AlipayUtils {
 
     /**
      * 生成订单号
+     * @return String
      */
     public String getOrderCode() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -37,6 +38,9 @@ public class AlipayUtils {
 
     /**
      * 校验签名
+     * @param request HttpServletRequest
+     * @param alipay 阿里云配置
+     * @return boolean
      */
     public boolean rsaCheck(HttpServletRequest request, AlipayConfig alipay){
 
@@ -64,8 +68,5 @@ public class AlipayUtils {
         }
     }
 
-    public boolean isEmpty(String str){
-        return StrUtil.isEmpty(str);
-    }
 }
 

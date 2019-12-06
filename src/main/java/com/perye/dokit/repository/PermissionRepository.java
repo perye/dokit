@@ -6,19 +6,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface PermissionRepository extends JpaRepository<Permission, Long>, JpaSpecificationExecutor {
+public interface PermissionRepository extends JpaRepository<Permission, Long>, JpaSpecificationExecutor<Permission> {
 
-    /**
-     * findByName
-     * @param name
-     * @return
-     */
     Permission findByName(String name);
 
-    /**
-     * findByPid
-     * @param pid
-     * @return
-     */
     List<Permission> findByPid(long pid);
 }

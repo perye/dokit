@@ -1,14 +1,16 @@
 package com.perye.dokit.task;
 
 import com.perye.dokit.service.VisitsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VisitsTask {
 
-    @Autowired
-    private VisitsService visitsService;
+    private final VisitsService visitsService;
+
+    public VisitsTask(VisitsService visitsService) {
+        this.visitsService = visitsService;
+    }
 
     public void run(){
         visitsService.save();

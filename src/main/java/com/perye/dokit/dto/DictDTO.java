@@ -9,13 +9,9 @@ public class DictDTO implements Serializable {
 
     private Long id;
 
-    /**
-     * 字典名称
-     */
+    // 字典名称
     private String name;
 
-    /**
-     * 描述
-     */
+    // 字典名称
     private String remark;
 }

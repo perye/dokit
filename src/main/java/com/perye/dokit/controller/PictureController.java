@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pictures")
-@Api(tags = "免费图床管理")
+@Api(tags = "工具：免费图床管理")
 public class PictureController {
 
     private final PictureService pictureService;
@@ -32,7 +32,7 @@ public class PictureController {
     @Log("查询图片")
     @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_SELECT')")
     @GetMapping()
-    @ApiOperation(value = "查询图片")
+    @ApiOperation("查询图片")
     public ResponseEntity getRoles(PictureQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(pictureService.queryAll(criteria,pageable), HttpStatus.OK);
     }
@@ -40,7 +40,7 @@ public class PictureController {
     @Log("上传图片")
     @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_UPLOAD')")
     @PostMapping
-    @ApiOperation(value = "上传图片")
+    @ApiOperation("上传图片")
     public ResponseEntity upload(@RequestParam MultipartFile file){
         String userName = SecurityUtils.getUsername();
         Picture picture = pictureService.upload(file,userName);
@@ -54,14 +54,14 @@ public class PictureController {
     @Log("删除图片")
     @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
     @DeleteMapping(value = "/{id}")
-    @ApiOperation(value = "删除图片")
+    @ApiOperation("删除图片")
     public ResponseEntity delete(@PathVariable Long id) {
         pictureService.delete(pictureService.findById(id));
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @Log("多选删除图片")
-    @ApiOperation(value = "多选删除图片")
+    @ApiOperation("多选删除图片")
     @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
     @DeleteMapping
     public ResponseEntity deleteAll(@RequestBody Long[] ids) {

@@ -3,7 +3,6 @@ package com.perye.dokit.service.impl;
 import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.vo.RedisVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,59 +12,64 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class RedisServiceImpl implements RedisService {
 
-    @Autowired
-    RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
+
+    public RedisServiceImpl(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Value("${loginCode.expiration}")
     private Long expiration;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Page<RedisVo> findByKey(String key, Pageable pageable){
         List<RedisVo> redisVos = new ArrayList<>();
         if(!"*".equals(key)){
             key = "*" + key + "*";
         }
-        for (Object s : redisTemplate.keys(key)) {
+        for (Object s : Objects.requireNonNull(redisTemplate.keys(key))) {
             // 过滤掉权限的缓存
-            if (s.toString().indexOf("role::loadPermissionByUser") != -1 || s.toString().indexOf("user::loadUserByUsername") != -1) {
+            if (s.toString().contains("role::loadPermissionByUser") || s.toString().contains("user::loadUserByUsername")) {
                 continue;
             }
-            RedisVo redisVo = new RedisVo(s.toString(),redisTemplate.opsForValue().get(s.toString()).toString());
+            RedisVo redisVo = new RedisVo(s.toString(), Objects.requireNonNull(redisTemplate.opsForValue().get(s.toString())).toString());
             redisVos.add(redisVo);
         }
-        Page<RedisVo> page = new PageImpl<RedisVo>(
+        return  new PageImpl<RedisVo>(
                 PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(),redisVos),
                 pageable,
                 redisVos.size());
-        return page;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void delete(String key) {
         redisTemplate.delete(key);
     }
 
     @Override
     public void flushdb() {
-        redisTemplate.getConnectionFactory().getConnection().flushDb();
+        Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().flushDb();
     }
 
     @Override
     public String getCodeVal(String key) {
         try {
-            String value = redisTemplate.opsForValue().get(key).toString();
-            return value;
+            return Objects.requireNonNull(redisTemplate.opsForValue().get(key)).toString();
         }catch (Exception e){
             return "";
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void saveCode(String key, Object val) {
         redisTemplate.opsForValue().set(key,val);
         redisTemplate.expire(key,expiration, TimeUnit.MINUTES);

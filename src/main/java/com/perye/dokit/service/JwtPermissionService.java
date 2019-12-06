@@ -3,7 +3,6 @@ package com.perye.dokit.service;
 import com.perye.dokit.dto.UserDTO;
 import com.perye.dokit.entity.Role;
 import com.perye.dokit.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,13 +16,15 @@ import java.util.stream.Collectors;
 @CacheConfig(cacheNames = "role")
 public class JwtPermissionService {
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
+    public JwtPermissionService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
     /**
      * key的名称如有修改，请同步修改 UserServiceImpl 中的 update 方法
-     * @param user
-     * @return
+     * @param user 用户信息
+     * @return Collection
      */
     @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
     public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDTO user) {

@@ -47,11 +47,7 @@ jwt:
   secret: dokit
   # token 过期时间 6个小时
   expiration: 21000000
-  auth:
-    # 授权路径
-    path: /login
-    # 获取用户信息
-    account: /info
+
 
 #是否允许生成代码，生产环境设置为false
 generator:
@@ -63,8 +59,8 @@ swagger:
 
 # 文件存储路径
 file:
-  path: /Volumes/perye/file/dokit
-  avatar: /Volumes/perye/file/dokit/avatar
+  path: /Volumes/perye/file/dokit/
+  avatar: /Volumes/perye/file/dokit/avatar/
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5

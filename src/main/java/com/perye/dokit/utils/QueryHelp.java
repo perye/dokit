@@ -110,7 +110,8 @@ public class QueryHelp {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return cb.and(list.toArray(new Predicate[list.size()]));
+        int size = list.size();
+        return cb.and(list.toArray(new Predicate[size]));
     }
 
     private static <T, R> Expression<T> getExpression(String attributeName, Join join, Root<R> root) {
@@ -121,7 +122,7 @@ public class QueryHelp {
         }
     }
 
-    public static boolean isBlank(final CharSequence cs) {
+    private static boolean isBlank(final CharSequence cs) {
         int strLen;
         if (cs == null || (strLen = cs.length()) == 0) {
             return true;

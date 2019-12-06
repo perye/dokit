@@ -11,6 +11,9 @@ import com.perye.dokit.service.AlipayService;
 import com.perye.dokit.utils.AlipayUtils;
 import com.perye.dokit.vo.TradeVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = "alipay")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class AlipayServiceImpl implements AlipayService {
 
-    @Autowired
-    AlipayUtils alipayUtils;
+    private final AlipayRepository alipayRepository;
 
-    @Autowired
-    private AlipayRepository alipayRepository;
+    public AlipayServiceImpl(AlipayRepository alipayRepository) {
+        this.alipayRepository = alipayRepository;
+    }
 
     @Override
     public String toPayAsPC(AlipayConfig alipay, TradeVo trade) throws Exception {
@@ -35,7 +39,7 @@ public class AlipayServiceImpl implements AlipayService {
         }
         AlipayClient alipayClient = new DefaultAlipayClient(alipay.getGatewayUrl(), alipay.getAppID(), alipay.getPrivateKey(), alipay.getFormat(), alipay.getCharset(), alipay.getPublicKey(), alipay.getSignType());
 
-        double money = Double.parseDouble(trade.getTotalAmount());
+//        double money = Double.parseDouble(trade.getTotalAmount());
 
         // 创建API对应的request(电脑网页版)
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
@@ -89,12 +93,14 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
+    @Cacheable(key = "'1'")
     public AlipayConfig find() {
         Optional<AlipayConfig> alipayConfig = alipayRepository.findById(1L);
         return alipayConfig.orElseGet(AlipayConfig::new);
     }
 
     @Override
+    @CachePut(key = "'1'")
     @Transactional(rollbackFor = Exception.class)
     public AlipayConfig update(AlipayConfig alipayConfig) {
         return alipayRepository.save(alipayConfig);

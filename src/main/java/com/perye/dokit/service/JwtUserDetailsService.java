@@ -5,7 +5,6 @@ import com.perye.dokit.dto.JobSmallDTO;
 import com.perye.dokit.dto.UserDTO;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.security.JwtUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -17,12 +16,14 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class JwtUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private JwtPermissionService permissionService;
+    private final JwtPermissionService permissionService;
 
+    public JwtUserDetailsService(UserService userService, JwtPermissionService permissionService) {
+        this.userService = userService;
+        this.permissionService = permissionService;
+    }
     @Override
     public UserDetails loadUserByUsername(String username){
 

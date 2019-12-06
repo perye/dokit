@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface QuartzJobRepository extends JpaRepository<QuartzJob,Long>, JpaSpecificationExecutor {
+public interface QuartzJobRepository extends JpaRepository<QuartzJob,Long>, JpaSpecificationExecutor<QuartzJob> {
 
     /**
      * 查询启用的任务
-     * @return
+     * @return List
      */
     List<QuartzJob> findByIsPauseIsFalse();
 }

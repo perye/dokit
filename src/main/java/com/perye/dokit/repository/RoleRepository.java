@@ -8,13 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Set;
 
-public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificationExecutor {
+public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificationExecutor<Role> {
 
-    /**
-     * findByName
-     * @param name
-     * @return
-     */
     Role findByName(String name);
 
     Set<Role> findByUsers_Id(Long id);
