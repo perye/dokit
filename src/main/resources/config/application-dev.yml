@@ -63,8 +63,8 @@ swagger:
 
 # 文件存储路径
 file:
-  path: C:\dokit\file\
-  avatar: C:\dokit\avatar\
+  path: /Volumes/perye/file/dokit
+  avatar: /Volumes/perye/file/dokit/avatar
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5

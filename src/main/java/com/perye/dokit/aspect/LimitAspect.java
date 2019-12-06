@@ -12,7 +12,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -25,9 +24,14 @@ import java.lang.reflect.Method;
 @Component
 public class LimitAspect {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+
+    private final RedisTemplate redisTemplate;
+
     private static final Logger logger = LoggerFactory.getLogger(LimitAspect.class);
+
+    public LimitAspect(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Pointcut("@annotation(com.perye.dokit.annotation.Limit)")
     public void pointcut() {
@@ -42,12 +46,10 @@ public class LimitAspect {
         LimitType limitType = limit.limitType();
         String key = limit.key();
         if (StringUtils.isEmpty(key)) {
-            switch (limitType) {
-                case IP:
-                    key = StringUtils.getIP(request);
-                    break;
-                default:
-                    key = method.getName();
+            if (limitType == LimitType.IP) {
+                key = StringUtils.getIP(request);
+            } else {
+                key = method.getName();
             }
         }
         ImmutableList keys = ImmutableList.of(StringUtils.join(limit.prefix(), "_", key, "_", request.getRequestURI().replaceAll("/","_")));

@@ -23,17 +23,20 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class LocalStorageServiceImpl implements LocalStorageService {
 
-    @Autowired
-    private LocalStorageRepository localStorageRepository;
+    private final LocalStorageRepository localStorageRepository;
 
-    @Autowired
-    private LocalStorageMapper localStorageMapper;
+    private final LocalStorageMapper localStorageMapper;
 
     @Value("${file.path}")
     private String path;
 
     @Value("${file.maxSize}")
     private long maxSize;
+
+    public LocalStorageServiceImpl(LocalStorageRepository localStorageRepository, LocalStorageMapper localStorageMapper) {
+        this.localStorageRepository = localStorageRepository;
+        this.localStorageMapper = localStorageMapper;
+    }
 
     @Override
     public Object queryAll(LocalStorageQueryCriteria criteria, Pageable pageable){

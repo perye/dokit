@@ -2,9 +2,11 @@ package com.perye.dokit.redis;
 
 import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSON;
+import com.perye.dokit.utils.StringUtils;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 重写序列化器
@@ -13,15 +15,11 @@ public class StringRedisSerializer implements RedisSerializer<Object> {
 
     private final Charset charset;
 
-    private final String target = "\"";
-
-    private final String replacement = "";
-
-    public StringRedisSerializer() {
-        this(Charset.forName("UTF8"));
+    StringRedisSerializer() {
+        this(StandardCharsets.UTF_8);
     }
 
-    public StringRedisSerializer(Charset charset) {
+    private StringRedisSerializer(Charset charset) {
         Assert.notNull(charset, "Charset must not be null!");
         this.charset = charset;
     }
@@ -34,10 +32,10 @@ public class StringRedisSerializer implements RedisSerializer<Object> {
     @Override
     public byte[] serialize(Object object) {
         String string = JSON.toJSONString(object);
-        if (string == null) {
+        if (StringUtils.isBlank(string)) {
             return null;
         }
-        string = string.replace(target, replacement);
+        string = string.replace("\"", "");
         return string.getBytes(charset);
     }
 }

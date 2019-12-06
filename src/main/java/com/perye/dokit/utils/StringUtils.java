@@ -25,7 +25,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
      * @param strs 字符串组
      * @return 包含返回true
      */
-    public static boolean inString(String str, String... strs) {
+    static boolean inString(String str, String... strs) {
         if (str != null) {
             for (String s : strs) {
                 if (str.equals(trim(s))) {
@@ -90,7 +90,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
      * toCapitalizeCamelCase("hello_world") == "HelloWorld"
      * toUnderScoreCase("helloWorld") = "hello_world"
      */
-    public static String toUnderScoreCase(String s) {
+    static String toUnderScoreCase(String s) {
         if (s == null) {
             return null;
         }
@@ -123,8 +123,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
 
     /**
      * 获取ip地址
-     * @param request
-     * @return
      */
     public static String getIP(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
@@ -143,32 +141,16 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
 
     /**
      * 根据ip获取详细地址
-     * @param ip
-     * @return
      */
     public static String getCityInfo(String ip) {
         try {
             String path = "ip2region/ip2region.db";
             String name = "ip2region.db";
-            int algorithm = DbSearcher.BTREE_ALGORITHM;
             DbConfig config = new DbConfig();
             File file = FileUtil.inputStreamToFile(new ClassPathResource(path).getStream(), name);
             DbSearcher searcher = new DbSearcher(config, file.getPath());
             Method method = null;
-            switch (algorithm) {
-                case DbSearcher.BTREE_ALGORITHM:
-                    method = searcher.getClass().getMethod("btreeSearch", String.class);
-                    break;
-                case DbSearcher.BINARY_ALGORITHM:
-                    method = searcher.getClass().getMethod("binarySearch", String.class);
-                    break;
-                case DbSearcher.MEMORY_ALGORITYM:
-                    method = searcher.getClass().getMethod("memorySearch", String.class);
-                    break;
-                default:
-                    method = searcher.getClass().getMethod("memorySearch", String.class);
-                    break;
-            }
+            method = searcher.getClass().getMethod("btreeSearch", String.class);
             DataBlock dataBlock = null;
             dataBlock = (DataBlock) method.invoke(searcher, ip);
             String address = dataBlock.getRegion().replace("0|","");
