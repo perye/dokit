@@ -39,8 +39,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity handleException(Throwable e){
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
-        ApiError apiError = new ApiError(BAD_REQUEST.value(),e.getMessage());
-        return buildResponseEntity(apiError);
+        return buildResponseEntity(ApiError.error(e.getMessage()));
     }
 
     /**
@@ -52,8 +51,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity handleAccessDeniedException(AccessDeniedException e){
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
-        ApiError apiError = new ApiError(FORBIDDEN.value(),e.getMessage());
-        return buildResponseEntity(apiError);
+        return buildResponseEntity(ApiError.error(FORBIDDEN.value(),e.getMessage()));
     }
 
     /**
@@ -65,8 +63,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> badRequestException(BadRequestException e) {
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
-        ApiError apiError = new ApiError(e.getStatus(),e.getMessage());
-        return buildResponseEntity(apiError);
+        return buildResponseEntity(ApiError.error(e.getStatus(),e.getMessage()));
     }
 
     /**
@@ -78,8 +75,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> entityExistException(EntityExistException e) {
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
-        ApiError apiError = new ApiError(BAD_REQUEST.value(),e.getMessage());
-        return buildResponseEntity(apiError);
+        return buildResponseEntity(ApiError.error(e.getMessage()));
     }
 
     /**
@@ -91,8 +87,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> entityNotFoundException(EntityNotFoundException e) {
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
-        ApiError apiError = new ApiError(NOT_FOUND.value(),e.getMessage());
-        return buildResponseEntity(apiError);
+        return buildResponseEntity(ApiError.error(NOT_FOUND.value(),e.getMessage()));
     }
 
     /**
@@ -105,8 +100,8 @@ public class GlobalExceptionHandler {
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
         String[] str = Objects.requireNonNull(e.getBindingResult().getAllErrors().get(0).getCodes())[1].split("\\.");
-        ApiError apiError = new ApiError(BAD_REQUEST.value(), str[1] + ":" + e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-        return buildResponseEntity(apiError);
+        String message = str[1] + ":" + e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        return buildResponseEntity(ApiError.error(message));
     }
 
 }

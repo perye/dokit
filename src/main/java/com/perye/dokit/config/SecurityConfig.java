@@ -67,7 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        String loginPath = "login";
         httpSecurity
 
                 // 禁用 CSRF
@@ -89,8 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).anonymous()
 
-                .antMatchers( HttpMethod.POST,"/auth/"+ loginPath).anonymous()
-                .antMatchers("/auth/vCode").anonymous()
+                .antMatchers(HttpMethod.POST,"/auth/login").anonymous()
+                .antMatchers(HttpMethod.GET,"/auth/code").anonymous()
                 // 支付宝回调
                 .antMatchers("/api/aliPay/return").anonymous()
                 .antMatchers("/api/aliPay/notify").anonymous()

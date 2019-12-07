@@ -1,7 +1,10 @@
 package com.perye.dokit.redis;
 
+import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.perye.dokit.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -19,6 +22,10 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 @Slf4j
@@ -109,3 +116,70 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 }
 
+/**
+ * Value 序列化
+ *
+ * @author /
+ * @param <T>
+ */
+class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
+
+    private Class<T> clazz;
+
+    FastJsonRedisSerializer(Class<T> clazz) {
+        super();
+        this.clazz = clazz;
+    }
+
+    @Override
+    public byte[] serialize(T t) throws SerializationException {
+        if (t == null) {
+            return new byte[0];
+        }
+        return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public T deserialize(byte[] bytes) throws SerializationException {
+        if (bytes == null || bytes.length <= 0) {
+            return null;
+        }
+        String str = new String(bytes, StandardCharsets.UTF_8);
+        return JSON.parseObject(str, clazz);
+    }
+
+}
+
+/**
+ * 重写序列化器
+ *
+ * @author /
+ */
+class StringRedisSerializer implements RedisSerializer<Object> {
+
+    private final Charset charset;
+
+    StringRedisSerializer() {
+        this(StandardCharsets.UTF_8);
+    }
+
+    private StringRedisSerializer(Charset charset) {
+        Assert.notNull(charset, "Charset must not be null!");
+        this.charset = charset;
+    }
+
+    @Override
+    public String deserialize(byte[] bytes) {
+        return (bytes == null ? null : new String(bytes, charset));
+    }
+
+    @Override
+    public byte[] serialize(Object object) {
+        String string = JSON.toJSONString(object);
+        if (StringUtils.isBlank(string)) {
+            return null;
+        }
+        string = string.replace("\"", "");
+        return string.getBytes(charset);
+    }
+}

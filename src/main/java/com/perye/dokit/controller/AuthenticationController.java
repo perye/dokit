@@ -10,6 +10,7 @@ import com.perye.dokit.security.ImgResult;
 import com.perye.dokit.security.JwtUser;
 import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.*;
+import com.wf.captcha.ArithmeticCaptcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -95,25 +96,17 @@ public class AuthenticationController {
     }
 
     @ApiOperation("获取验证码")
-    @GetMapping(value = "/vCode")
-    public ImgResult getCode() throws IOException {
-
-        //生成随机字串
-        String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+    @GetMapping(value = "/code")
+    public ImgResult getCode(){
+        // 算术类型 https://gitee.com/whvse/EasyCaptcha
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(111, 36);
+        // 几位数运算，默认是两位
+        captcha.setLen(2);
+        // 获取运算的结果：5
+        String result = captcha.text();
         String uuid = IdUtil.simpleUUID();
-        redisService.saveCode(uuid,verifyCode);
-        // 生成图片
-        int w = 111, h = 36;
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        VerifyCodeUtils.outputImage(w, h, stream, verifyCode);
-        try {
-            return new ImgResult(Base64.encode(stream.toByteArray()),uuid);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            stream.close();
-        }
+        redisService.saveCode(uuid,result);
+        return new ImgResult(captcha.toBase64(),uuid);
     }
 }
 
