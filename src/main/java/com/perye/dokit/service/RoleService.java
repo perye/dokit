@@ -23,8 +23,6 @@ public interface RoleService {
 
     Integer findByRoles(Set<Role> roles);
 
-    void updatePermission(Role resources, RoleDTO roleDTO);
-
     void updateMenu(Role resources, RoleDTO roleDTO);
 
     void untiedMenu(Long id);
@@ -35,6 +33,5 @@ public interface RoleService {
 
     List<RoleDTO> queryAll(RoleQueryCriteria criteria);
 
-    void untiedPermission(Long id);
 }
 

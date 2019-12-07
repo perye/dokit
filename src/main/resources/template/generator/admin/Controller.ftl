@@ -28,7 +28,7 @@ public class ${className}Controller {
     @Log("查询${className}")
     @ApiOperation("查询${className}")
     @GetMapping()
-    @PreAuthorize("hasAnyRole('ADMIN','${upperCaseClassName}_ALL','${upperCaseClassName}_SELECT')")
+    @PreAuthorize("@dokit.check('${changeClassName}:list'")
     public ResponseEntity get${className}s(${className}QueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -36,7 +36,7 @@ public class ${className}Controller {
     @Log("新增${className}")
     @ApiOperation("新增${className}")
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','${upperCaseClassName}_ALL','${upperCaseClassName}_CREATE')")
+    @PreAuthorize("@dokit.check('${changeClassName}:add')")
     public ResponseEntity create(@Validated @RequestBody ${className} resources){
         return new ResponseEntity<>(${changeClassName}Service.create(resources),HttpStatus.CREATED);
     }
@@ -44,7 +44,7 @@ public class ${className}Controller {
     @Log("修改${className}")
     @ApiOperation("修改${className}")
     @PutMapping
-    @PreAuthorize("hasAnyRole('ADMIN','${upperCaseClassName}_ALL','${upperCaseClassName}_EDIT')")
+    @PreAuthorize("@dokit.check('${changeClassName}:edit')")
     public ResponseEntity update(@Validated @RequestBody ${className} resources){
     ${changeClassName}Service.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -53,7 +53,7 @@ public class ${className}Controller {
     @Log("删除${className}")
     @ApiOperation("删除${className}")
     @DeleteMapping(value = "/{${pkChangeColName}}")
-    @PreAuthorize("hasAnyRole('ADMIN','${upperCaseClassName}_ALL','${upperCaseClassName}_DELETE')")
+    @PreAuthorize("@dokit.check('${changeClassName}:del')")
     public ResponseEntity delete(@PathVariable ${pkColumnType} ${pkChangeColName}){
     ${changeClassName}Service.delete(${pkChangeColName});
         return new ResponseEntity(HttpStatus.OK);

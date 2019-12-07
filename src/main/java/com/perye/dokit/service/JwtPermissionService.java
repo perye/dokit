@@ -1,8 +1,10 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.UserDTO;
+import com.perye.dokit.entity.Menu;
 import com.perye.dokit.entity.Role;
 import com.perye.dokit.repository.RoleRepository;
+import com.perye.dokit.utils.StringUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,8 +35,13 @@ public class JwtPermissionService {
 
         Set<Role> roles = roleRepository.findByUsers_Id(user.getId());
 
-        return roles.stream().flatMap(role -> role.getPermissions().stream())
-                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+        Set<String> permissions = roles.stream().filter(role -> StringUtils.isNotBlank(role.getPermission())).map(Role::getPermission).collect(Collectors.toSet());
+        permissions.addAll(
+                roles.stream().flatMap(role -> role.getMenus().stream())
+                        .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
+                        .map(Menu::getPermission).collect(Collectors.toSet())
+        );
+        return permissions.stream().map(permission -> new SimpleGrantedAuthority(permission))
                 .collect(Collectors.toList());
     }
 }

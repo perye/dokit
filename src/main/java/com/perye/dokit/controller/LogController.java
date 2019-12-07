@@ -27,7 +27,7 @@ public class LogController {
 
     @GetMapping
     @ApiOperation("日志查询")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("@dokit.check()")
     public ResponseEntity getLogs(LogQueryCriteria criteria, Pageable pageable){
         criteria.setLogType("INFO");
         return new ResponseEntity<>(logService.queryAll(criteria,pageable), HttpStatus.OK);
@@ -43,7 +43,7 @@ public class LogController {
 
     @GetMapping(value = "/error")
     @ApiOperation("错误日志查询")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("@dokit.check()")
     public ResponseEntity getErrorLogs(LogQueryCriteria criteria, Pageable pageable){
         criteria.setLogType("ERROR");
         return new ResponseEntity<>(logService.queryAll(criteria,pageable), HttpStatus.OK);
@@ -51,7 +51,7 @@ public class LogController {
 
     @GetMapping(value = "/error/{id}")
     @ApiOperation("日志异常详情查询")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("@dokit.check()")
     public ResponseEntity getErrorLogs(@PathVariable Long id){
         return new ResponseEntity<>(logService.findByErrDetail(id), HttpStatus.OK);
     }

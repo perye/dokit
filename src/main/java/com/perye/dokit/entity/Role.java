@@ -41,13 +41,13 @@ public class Role{
     @Column
     private String remark;
 
+    // 权限
+    @Column(name = "permission")
+    private String permission;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
-
-    @ManyToMany
-    @JoinTable(name = "roles_permissions", joinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "permission_id",referencedColumnName = "id")})
-    private Set<Permission> permissions;
 
     @ManyToMany
     @JoinTable(name = "roles_menus", joinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "menu_id",referencedColumnName = "id")})

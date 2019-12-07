@@ -30,7 +30,7 @@ public class PictureController {
     }
 
     @Log("查询图片")
-    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_SELECT')")
+    @PreAuthorize("@dokit.check('pictures:list')")
     @GetMapping()
     @ApiOperation("查询图片")
     public ResponseEntity getRoles(PictureQueryCriteria criteria, Pageable pageable){
@@ -38,7 +38,7 @@ public class PictureController {
     }
 
     @Log("上传图片")
-    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_UPLOAD')")
+    @PreAuthorize("@dokit.check('pictures:add')")
     @PostMapping
     @ApiOperation("上传图片")
     public ResponseEntity upload(@RequestParam MultipartFile file){
@@ -52,7 +52,7 @@ public class PictureController {
     }
 
     @Log("删除图片")
-    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
+    @PreAuthorize("@dokit.check('pictures:del')")
     @DeleteMapping(value = "/{id}")
     @ApiOperation("删除图片")
     public ResponseEntity delete(@PathVariable Long id) {
@@ -62,7 +62,7 @@ public class PictureController {
 
     @Log("多选删除图片")
     @ApiOperation("多选删除图片")
-    @PreAuthorize("hasAnyRole('ADMIN','PICTURE_ALL','PICTURE_DELETE')")
+    @PreAuthorize("@dokit.check('pictures:del')")
     @DeleteMapping
     public ResponseEntity deleteAll(@RequestBody Long[] ids) {
         pictureService.deleteAll(ids);
