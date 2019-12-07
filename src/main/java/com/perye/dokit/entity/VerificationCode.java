@@ -2,11 +2,9 @@ package com.perye.dokit.entity;
 
 import com.perye.dokit.base.BaseEntity;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
 
 @Setter
 @Getter

@@ -1,13 +1,11 @@
 package com.perye.dokit.entity;
 
 import com.perye.dokit.base.BaseEntity;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
@@ -44,6 +42,8 @@ public class Log  extends BaseEntity {
 
     @Column(name = "address")
     private String address;
+
+    private String browser;
 
     // 请求耗时
     private Long time;

@@ -3,13 +3,10 @@ package com.perye.dokit.entity;
 import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -33,7 +30,7 @@ public class User extends BaseEntity {
     private UserAvatar userAvatar;
 
     @NotBlank
-    @Pattern(regexp = "([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}",message = "格式错误")
+    @Pattern(regexp = "([a-z0-9A-Z]+[-|.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}",message = "格式错误")
     private String email;
 
     @NotBlank

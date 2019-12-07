@@ -2,13 +2,10 @@ package com.perye.dokit.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.perye.dokit.base.BaseDTO;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Getter

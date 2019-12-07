@@ -7,7 +7,6 @@ import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.DictDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,10 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @Api(tags = "系统：字典详情管理")
@@ -39,8 +36,7 @@ public class DictDetailController {
     @ApiOperation("查询字典详情")
     @GetMapping
     public ResponseEntity getDictDetails(DictDetailQueryCriteria criteria,
-                                         @PageableDefault(value = 10, sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
-        String[] names = criteria.getDictName().split(",");
+                                         @PageableDefault(sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity<>(dictDetailService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -48,7 +44,7 @@ public class DictDetailController {
     @ApiOperation("查询多个字典详情")
     @GetMapping(value = "/map")
     public ResponseEntity getDictDetailMaps(DictDetailQueryCriteria criteria,
-                                            @PageableDefault(value = 10, sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
+                                            @PageableDefault(sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
         String[] names = criteria.getDictName().split(",");
         Map<String,Object> map = new HashMap<>(names.length);
         for (String name : names) {

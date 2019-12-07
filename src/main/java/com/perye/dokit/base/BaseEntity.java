@@ -28,8 +28,6 @@ public class BaseEntity implements Serializable {
     @UpdateTimestamp
     private Timestamp updateTime;
 
-    public @interface New {}
-
     public @interface Update {}
 
     @Override

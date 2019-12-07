@@ -4,8 +4,8 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.exception.BadRequestException;
-import com.perye.dokit.security.AuthenticationInfo;
-import com.perye.dokit.security.AuthorizationUser;
+import com.perye.dokit.security.AuthInfo;
+import com.perye.dokit.security.AuthUser;
 import com.perye.dokit.security.ImgResult;
 import com.perye.dokit.security.JwtUser;
 import com.perye.dokit.service.RedisService;
@@ -15,7 +15,6 @@ import com.wf.captcha.base.Captcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +22,7 @@ import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -61,7 +58,7 @@ public class AuthenticationController {
     @Log("用户登录")
     @ApiOperation("登录授权")
     @PostMapping(value = "/login")
-    public ResponseEntity login(@Validated @RequestBody AuthorizationUser authorizationUser){
+    public ResponseEntity login(@Validated @RequestBody AuthUser authorizationUser){
 
         // 查询验证码
         String code = redisService.getCodeVal(authorizationUser.getUuid());
@@ -87,7 +84,7 @@ public class AuthenticationController {
         final String token = jwtTokenUtil.generateToken(jwtUser);
 
         // 返回 token
-        return ResponseEntity.ok(new AuthenticationInfo(token,jwtUser));
+        return ResponseEntity.ok(new AuthInfo(token,jwtUser));
     }
 
     @ApiOperation("获取用户信息")

@@ -2,13 +2,11 @@ package com.perye.dokit.entity;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.perye.dokit.base.BaseEntity;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Getter

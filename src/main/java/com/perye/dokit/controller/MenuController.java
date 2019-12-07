@@ -45,7 +45,8 @@ public class MenuController {
     public ResponseEntity buildMenus(){
         UserDTO user = userService.findByName(SecurityUtils.getUsername());
         List<MenuDTO> menuDTOList = menuService.findByRoles(roleService.findByUsers_Id(user.getId()));
-        return new ResponseEntity<>(menuService.buildMenus((List<MenuDTO>) menuService.buildTree(menuDTOList).get("content")),HttpStatus.OK);
+        List<MenuDTO> menuDTOS = (List<MenuDTO>) menuService.buildTree(menuDTOList).get("content");
+        return new ResponseEntity<>(menuService.buildMenus(menuDTOS),HttpStatus.OK);
     }
 
     @ApiOperation("返回全部的菜单")

@@ -1,11 +1,9 @@
 package com.perye.dokit.dto;
 
 import com.perye.dokit.base.BaseDTO;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 
 @Getter
 @Setter

@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Getter
 @AllArgsConstructor
-public class AuthenticationInfo implements Serializable {
+public class AuthInfo implements Serializable {
 
     private final String token;
 

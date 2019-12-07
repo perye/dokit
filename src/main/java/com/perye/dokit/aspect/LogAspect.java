@@ -13,8 +13,9 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -25,8 +26,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogAspect {
 
-    @Autowired
-    private LogService logService;
+    private final LogService logService;
+
+    public LogAspect(LogService logService) {
+        this.logService = logService;
+    }
 
     private long currentTime = 0L;
 
@@ -49,7 +53,8 @@ public class LogAspect {
         currentTime = System.currentTimeMillis();
         result = proceedingJoinPoint.proceed();
         Log log = new Log("INFO", System.currentTimeMillis() - currentTime);
-        logService.save(getUsername(), StringUtils.getIp(RequestHolder.getHttpServletRequest()), (ProceedingJoinPoint) proceedingJoinPoint, log);
+        HttpServletRequest request = RequestHolder.getHttpServletRequest();
+        logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request),proceedingJoinPoint, log);
         return result;
     }
 
@@ -62,7 +67,8 @@ public class LogAspect {
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         Log log = new Log("ERROR", System.currentTimeMillis() - currentTime);
         log.setExceptionDetail(ThrowableUtil.getStackTrace(e).getBytes());
-        logService.save(getUsername(), StringUtils.getIp(RequestHolder.getHttpServletRequest()), (ProceedingJoinPoint)joinPoint, log);
+        HttpServletRequest request = RequestHolder.getHttpServletRequest();
+        logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request), (ProceedingJoinPoint)joinPoint, log);
     }
 
     public String getUsername() {

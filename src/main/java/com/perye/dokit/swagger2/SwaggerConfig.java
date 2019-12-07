@@ -4,6 +4,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicates;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,7 @@ public class SwaggerConfig {
     private Boolean enabled;
 
     @Bean
+    @SuppressWarnings("all")
     public Docket createRestApi() {
         ParameterBuilder ticketPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
@@ -91,7 +93,8 @@ class SwaggerDataConfig {
     }
 
     @ApiModel
-    static class Page {
+    @Data
+    private static class Page {
         @ApiModelProperty("页码 (0..N)")
         private Integer page;
 
@@ -101,28 +104,5 @@ class SwaggerDataConfig {
         @ApiModelProperty("以下列格式排序标准：property[,asc | desc]。 默认排序顺序为升序。 支持多种排序条件：如：id,asc")
         private List<String> sort;
 
-        public Integer getPage() {
-            return page;
-        }
-
-        public void setPage(Integer page) {
-            this.page = page;
-        }
-
-        public Integer getSize() {
-            return size;
-        }
-
-        public void setSize(Integer size) {
-            this.size = size;
-        }
-
-        public List<String> getSort() {
-            return sort;
-        }
-
-        public void setSort(List<String> sort) {
-            this.sort = sort;
-        }
     }
 }

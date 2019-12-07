@@ -4,12 +4,8 @@ import com.perye.dokit.base.BaseEntity;
 import lombok.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.io.Serializable;
 
 @Entity
 @Getter

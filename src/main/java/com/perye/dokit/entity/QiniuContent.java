@@ -20,7 +20,7 @@ public class QiniuContent implements Serializable {
     private Long id;
 
     // 文件名
-    @Column(name = "name", unique = false)
+    @Column(name = "name")
     private String key;
 
     // 空间名

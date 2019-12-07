@@ -1,17 +1,13 @@
 package com.perye.dokit.entity;
 
 import com.perye.dokit.base.BaseEntity;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.io.Serializable;
 
 @Entity
 @Getter
