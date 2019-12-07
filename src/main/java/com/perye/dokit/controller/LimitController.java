@@ -3,6 +3,7 @@ package com.perye.dokit.controller;
 import com.perye.dokit.annotation.Limit;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class LimitController {
     @Limit(key = "test", period = 60, count = 10, name = "testLimit", prefix = "limit")
     @GetMapping
     @ApiOperation("测试")
+    @PreAuthorize("@dokit.check('anonymous')")
     public int testLimit() {
         return ATOMIC_INTEGER.incrementAndGet();
     }

@@ -2,6 +2,7 @@ package com.perye.dokit.controller;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
+import com.perye.dokit.annotation.AnonymousAccess;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.security.AuthInfo;
@@ -63,6 +64,7 @@ public class AuthenticationController {
      */
     @Log("用户登录")
     @ApiOperation("登录授权")
+    @AnonymousAccess
     @PostMapping(value = "/login")
     public ResponseEntity login(@Validated @RequestBody AuthUser authorizationUser, HttpServletRequest request){
 
@@ -104,6 +106,7 @@ public class AuthenticationController {
     }
 
     @ApiOperation("获取验证码")
+    @AnonymousAccess
     @GetMapping(value = "/code")
     public ImgResult getCode() throws IOException, FontFormatException {
         // 类型 https://gitee.com/whvse/EasyCaptcha
@@ -133,6 +136,7 @@ public class AuthenticationController {
     }
 
     @ApiOperation("退出登录")
+    @AnonymousAccess
     @DeleteMapping(value = "/logout")
     public ResponseEntity logout(HttpServletRequest request){
         onlineUserService.logout(jwtTokenUtil.getToken(request));
