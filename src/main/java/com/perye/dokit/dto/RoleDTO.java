@@ -1,13 +1,17 @@
 package com.perye.dokit.dto;
 
+import com.perye.dokit.base.BaseDTO;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
-@Data
-public class RoleDTO implements Serializable {
+@Getter
+@Setter
+public class RoleDTO  extends BaseDTO {
 
     private Long id;
 
@@ -25,5 +29,4 @@ public class RoleDTO implements Serializable {
 
     private Set<DeptDTO> depts;
 
-    private Timestamp createTime;
 }

@@ -1,18 +1,16 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
 import lombok.Data;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.sql.Timestamp;
 
 @Data
 @Entity
 @Table(name = "quartz_job")
-public class QuartzJob implements Serializable {
+public class QuartzJob extends BaseEntity {
 
     public static final String JOB_KEY = "JOB_KEY";
 
@@ -53,10 +51,4 @@ public class QuartzJob implements Serializable {
     @NotBlank
     private String remark;
 
-    // 创建日期
-    @UpdateTimestamp
-    @Column(name = "update_time")
-    private Timestamp updateTime;
-
-    public interface Update{}
 }

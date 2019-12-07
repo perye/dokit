@@ -1,19 +1,21 @@
 package com.perye.dokit.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import com.perye.dokit.base.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="dept")
-public class Dept implements Serializable {
+public class Dept  extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,9 +38,4 @@ public class Dept implements Serializable {
     @ManyToMany(mappedBy = "depts")
     private Set<Role> roles;
 
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
-
-    public @interface Update {}
 }

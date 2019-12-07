@@ -1,12 +1,16 @@
 package com.perye.dokit.dto;
 
+import com.perye.dokit.base.BaseDTO;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Data
-public class LocalStorageDTO implements Serializable {
+@Getter
+@Setter
+public class LocalStorageDTO extends BaseDTO {
 
     // ID
     private Long id;
@@ -28,9 +32,4 @@ public class LocalStorageDTO implements Serializable {
     // 操作人
     private String operate;
 
-    // 创建日期
-    private Timestamp createTime;
-
-    // 修改日期
-    private Timestamp updateTime;
 }

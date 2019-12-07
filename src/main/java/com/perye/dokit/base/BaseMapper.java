@@ -1,8 +1,8 @@
-package com.perye.dokit.mapper;
+package com.perye.dokit.base;
 
 import java.util.List;
 
-public interface EntityMapper<D, E> {
+public interface BaseMapper<D, E> {
 
     /**
      * DTO转Entity

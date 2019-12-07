@@ -1,10 +1,9 @@
 package com.perye.dokit.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.perye.dokit.base.BaseEntity;
+import lombok.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,13 +12,12 @@ import java.sql.Timestamp;
 import java.io.Serializable;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="local_storage")
-@AllArgsConstructor
 @NoArgsConstructor
-public class LocalStorage implements Serializable {
+public class LocalStorage extends BaseEntity {
 
-    // ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -53,15 +51,6 @@ public class LocalStorage implements Serializable {
     @Column(name = "operate")
     private String operate;
 
-    // 创建日期
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
-
-    // 修改日期
-    @Column(name = "update_time")
-    @UpdateTimestamp
-    private Timestamp updateTime;
 
     public LocalStorage(String realName,String name, String suffix, String path, String type, String size, String operate) {
         this.realName = realName;

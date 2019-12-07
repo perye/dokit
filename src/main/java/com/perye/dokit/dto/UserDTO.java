@@ -1,16 +1,20 @@
 package com.perye.dokit.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.perye.dokit.base.BaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
-@Data
-public class UserDTO implements Serializable {
+@Getter
+@Setter
+public class UserDTO extends BaseDTO {
 
     @ApiModelProperty(hidden = true)
     private Long id;
@@ -27,8 +31,6 @@ public class UserDTO implements Serializable {
 
     @JsonIgnore
     private String password;
-
-    private Timestamp createTime;
 
     private Date lastPasswordResetTime;
 

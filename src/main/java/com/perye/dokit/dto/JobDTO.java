@@ -1,14 +1,18 @@
 package com.perye.dokit.dto;
 
+import com.perye.dokit.base.BaseDTO;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class JobDTO implements Serializable {
+public class JobDTO  extends BaseDTO {
 
     // ID
     private Long id;
@@ -25,9 +29,6 @@ public class JobDTO implements Serializable {
 
     // 如果分公司存在相同部门，则显示上级部门名称
     private String deptSuperiorName;
-
-    // 创建日期
-    private Timestamp createTime;
 
     public JobDTO(String name, Boolean enabled) {
         this.name = name;

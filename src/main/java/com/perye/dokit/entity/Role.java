@@ -1,6 +1,7 @@
 package com.perye.dokit.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,7 +20,7 @@ import java.util.Set;
 @Table(name = "role")
 @Getter
 @Setter
-public class Role implements Serializable {
+public class Role extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,20 +58,6 @@ public class Role implements Serializable {
     @JoinTable(name = "roles_depts", joinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "dept_id",referencedColumnName = "id")})
     private Set<Dept> depts;
 
-    @CreationTimestamp
-    @Column(name = "create_time")
-    private Timestamp createTime;
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", remark='" + remark + '\'' +
-                ", createDateTime=" + createTime +
-                '}';
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,6 +71,5 @@ public class Role implements Serializable {
         return Objects.hash(id);
     }
 
-    public interface Update{}
 }
 

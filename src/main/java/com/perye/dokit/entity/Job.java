@@ -1,6 +1,9 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -11,10 +14,10 @@ import java.sql.Timestamp;
 import java.io.Serializable;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="job")
-public class Job implements Serializable {
-
+public class Job extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +43,6 @@ public class Job implements Serializable {
     @JoinColumn(name = "dept_id")
     private Dept dept;
 
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
 
-    public @interface Update {}
+
 }

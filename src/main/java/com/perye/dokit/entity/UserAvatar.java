@@ -1,17 +1,21 @@
 package com.perye.dokit.entity;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.perye.dokit.base.BaseEntity;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "user_avatar")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class UserAvatar {
+@Table(name = "user_avatar")
+public class UserAvatar  extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

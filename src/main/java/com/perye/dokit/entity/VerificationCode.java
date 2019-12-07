@@ -1,20 +1,20 @@
 package com.perye.dokit.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.perye.dokit.base.BaseEntity;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
-@Data
+@Setter
+@Getter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "verification_code")
-public class VerificationCode {
+public class VerificationCode extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,10 +37,6 @@ public class VerificationCode {
     @NotBlank
     private String value;
 
-    // 创建日期
-    @CreationTimestamp
-    @Column(name = "create_time")
-    private Timestamp createTime;
 
     public VerificationCode(String code, String scenes, @NotBlank String type, @NotBlank String value) {
         this.code = code;

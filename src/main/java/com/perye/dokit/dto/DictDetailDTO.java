@@ -1,11 +1,15 @@
 package com.perye.dokit.dto;
 
+import com.perye.dokit.base.BaseDTO;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
-@Data
-public class DictDetailDTO implements Serializable {
+@Getter
+@Setter
+public class DictDetailDTO  extends BaseDTO {
 
     private Long id;
 

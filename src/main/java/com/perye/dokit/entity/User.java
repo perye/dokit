@@ -1,5 +1,6 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name="user")
-public class User implements Serializable {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +44,6 @@ public class User implements Serializable {
 
     private String password;
 
-    @CreationTimestamp
-    @Column(name = "create_time")
-    private Timestamp createTime;
-
     @Column(name = "last_password_reset_time")
     private Date lastPasswordResetTime;
 
@@ -62,18 +59,4 @@ public class User implements Serializable {
     @JoinColumn(name = "dept_id")
     private Dept dept;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", enabled=" + enabled +
-                ", password='" + password + '\'' +
-                ", createTime=" + createTime +
-                ", lastPasswordResetTime=" + lastPasswordResetTime +
-                '}';
-    }
-
-    public @interface Update {}
 }
