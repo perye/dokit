@@ -11,6 +11,7 @@ import com.perye.dokit.security.JwtUser;
 import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.*;
 import com.wf.captcha.*;
+import com.wf.captcha.base.Captcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -97,12 +99,12 @@ public class AuthenticationController {
 
     @ApiOperation("获取验证码")
     @GetMapping(value = "/code")
-    public ImgResult getCode(){
+    public ImgResult getCode() throws IOException, FontFormatException {
         // 类型 https://gitee.com/whvse/EasyCaptcha
 
         // 算术类型
-//        ArithmeticCaptcha captcha = new ArithmeticCaptcha(111, 36);
-//        captcha.setLen(2);
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(111, 36);
+        captcha.setLen(2);
 
         // png类型
 //        SpecCaptcha captcha = new SpecCaptcha(130, 48);
@@ -111,11 +113,13 @@ public class AuthenticationController {
 //        GifCaptcha captcha = new GifCaptcha(130, 48);
 
         // 中文类型
-        ChineseCaptcha captcha = new ChineseCaptcha(130, 48);
+//        ChineseCaptcha captcha = new ChineseCaptcha(130, 48);
 
         // 中文gif类型
 //        ChineseGifCaptcha captcha = new ChineseGifCaptcha(130, 48);
 
+        // 设置内置字体
+        captcha.setFont(Captcha.FONT_2);
         String result = captcha.text();
         String uuid = IdUtil.simpleUUID();
         redisService.saveCode(uuid,result);
