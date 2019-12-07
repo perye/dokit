@@ -10,7 +10,7 @@ import com.perye.dokit.security.ImgResult;
 import com.perye.dokit.security.JwtUser;
 import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.*;
-import com.wf.captcha.ArithmeticCaptcha;
+import com.wf.captcha.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -98,11 +98,24 @@ public class AuthenticationController {
     @ApiOperation("获取验证码")
     @GetMapping(value = "/code")
     public ImgResult getCode(){
-        // 算术类型 https://gitee.com/whvse/EasyCaptcha
-        ArithmeticCaptcha captcha = new ArithmeticCaptcha(111, 36);
-        // 几位数运算，默认是两位
-        captcha.setLen(2);
-        // 获取运算的结果：5
+        // 类型 https://gitee.com/whvse/EasyCaptcha
+
+        // 算术类型
+//        ArithmeticCaptcha captcha = new ArithmeticCaptcha(111, 36);
+//        captcha.setLen(2);
+
+        // png类型
+//        SpecCaptcha captcha = new SpecCaptcha(130, 48);
+
+        // gif类型
+//        GifCaptcha captcha = new GifCaptcha(130, 48);
+
+        // 中文类型
+        ChineseCaptcha captcha = new ChineseCaptcha(130, 48);
+
+        // 中文gif类型
+//        ChineseGifCaptcha captcha = new ChineseGifCaptcha(130, 48);
+
         String result = captcha.text();
         String uuid = IdUtil.simpleUUID();
         redisService.saveCode(uuid,result);
