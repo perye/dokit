@@ -1,12 +1,14 @@
 package com.perye.dokit.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ import java.util.Set;
 @Table(name = "role")
 @Getter
 @Setter
-public class Role extends BaseEntity {
+public class Role{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +69,12 @@ public class Role extends BaseEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Column(name = "create_time")
+    @CreationTimestamp
+    private Timestamp createTime;
+
+    public @interface Update {}
 
 }
 

@@ -1,15 +1,16 @@
 package com.perye.dokit.dto;
 
-import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Timestamp;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class JobDTO  extends BaseDTO {
+public class JobDTO{
 
     // ID
     private Long id;
@@ -31,4 +32,6 @@ public class JobDTO  extends BaseDTO {
         this.name = name;
         this.enabled = enabled;
     }
+
+    private Timestamp createTime;
 }

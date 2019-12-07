@@ -1,14 +1,14 @@
 package com.perye.dokit.dto;
 
-import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Getter
 @Setter
-public class RoleDTO  extends BaseDTO {
+public class RoleDTO {
 
     private Long id;
 
@@ -25,5 +25,7 @@ public class RoleDTO  extends BaseDTO {
     private Set<MenuDTO> menus;
 
     private Set<DeptDTO> depts;
+
+    private Timestamp createTime;
 
 }

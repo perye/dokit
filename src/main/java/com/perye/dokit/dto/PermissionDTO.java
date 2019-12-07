@@ -1,14 +1,14 @@
 package com.perye.dokit.dto;
 
-import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
 @Setter
-public class PermissionDTO  extends BaseDTO {
+public class PermissionDTO{
 
     private Long id;
 
@@ -19,5 +19,7 @@ public class PermissionDTO  extends BaseDTO {
     private String alias;
 
     private List<PermissionDTO> children;
+
+    private Timestamp createTime;
 
 }

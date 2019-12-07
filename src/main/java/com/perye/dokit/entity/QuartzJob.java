@@ -1,18 +1,19 @@
 package com.perye.dokit.entity;
 
-import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "quartz_job")
-public class QuartzJob extends BaseEntity {
+public class QuartzJob{
 
     public static final String JOB_KEY = "JOB_KEY";
 
@@ -52,5 +53,11 @@ public class QuartzJob extends BaseEntity {
     @Column(name = "remark")
     @NotBlank
     private String remark;
+
+    @Column(name = "create_time")
+    @CreationTimestamp
+    private Timestamp createTime;
+
+    public @interface Update {}
 
 }

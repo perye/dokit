@@ -1,13 +1,14 @@
 package com.perye.dokit.dto;
 
-import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.sql.Timestamp;
 
 
 @Getter
 @Setter
-public class LocalStorageDTO extends BaseDTO {
+public class LocalStorageDTO{
 
     // ID
     private Long id;
@@ -28,5 +29,7 @@ public class LocalStorageDTO extends BaseDTO {
 
     // 操作人
     private String operate;
+
+    private Timestamp createTime;
 
 }

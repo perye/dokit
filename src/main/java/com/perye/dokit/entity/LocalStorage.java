@@ -1,18 +1,19 @@
 package com.perye.dokit.entity;
 
-import com.perye.dokit.base.BaseEntity;
 import lombok.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
 @Table(name="local_storage")
 @NoArgsConstructor
-public class LocalStorage extends BaseEntity {
+public class LocalStorage{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +48,9 @@ public class LocalStorage extends BaseEntity {
     @Column(name = "operate")
     private String operate;
 
+    @Column(name = "create_time")
+    @CreationTimestamp
+    private Timestamp createTime;
 
     public LocalStorage(String realName,String name, String suffix, String path, String type, String size, String operate) {
         this.realName = realName;

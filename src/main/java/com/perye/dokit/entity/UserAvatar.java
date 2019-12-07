@@ -1,19 +1,20 @@
 package com.perye.dokit.entity;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "user_avatar")
-public class UserAvatar  extends BaseEntity {
+public class UserAvatar{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +32,11 @@ public class UserAvatar  extends BaseEntity {
         this.path = path;
         this.size = size;
     }
+
+    @Column(name = "create_time")
+    @CreationTimestamp
+    private Timestamp createTime;
+
+    public @interface Update {}
 }
 

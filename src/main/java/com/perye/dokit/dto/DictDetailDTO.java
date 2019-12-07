@@ -1,13 +1,14 @@
 package com.perye.dokit.dto;
 
-import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.sql.Timestamp;
 
 
 @Getter
 @Setter
-public class DictDetailDTO  extends BaseDTO {
+public class DictDetailDTO{
 
     private Long id;
 
@@ -19,4 +20,6 @@ public class DictDetailDTO  extends BaseDTO {
 
     // 排序
     private String sort;
+
+    private Timestamp createTime;
 }

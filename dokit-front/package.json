@@ -1,9 +1,9 @@
 {
-  "name": "eladmin",
-  "version": "2.2.0",
+  "name": "dokit",
+  "version": "1.0.0",
   "license": "Apache-2.0",
-  "description": "eladmin 前端代码",
-  "author": "jie <elunez@qq.com>",
+  "description": "dokit",
+  "author": "",
   "scripts": {
     "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "build": "cross-env NODE_ENV=production env_config=prod node build/build.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/elunez/eladmin-qd"
+    "url": "https://github.com/perye/dokit"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.0.38",

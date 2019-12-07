@@ -1,14 +1,14 @@
 package com.perye.dokit.dto;
 
-import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
 @Setter
-public class MenuDTO  extends BaseDTO {
+public class MenuDTO{
 
     private Long id;
 
@@ -33,5 +33,7 @@ public class MenuDTO  extends BaseDTO {
     private String icon;
 
     private List<MenuDTO> children;
+
+    private Timestamp createTime;
 
 }

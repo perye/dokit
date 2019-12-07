@@ -1,19 +1,20 @@
 package com.perye.dokit.entity;
 
-import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Table(name="dict")
-public class Dict extends BaseEntity {
+public class Dict{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +29,13 @@ public class Dict extends BaseEntity {
     @Column(name = "remark")
     private String remark;
 
+    @Column(name = "create_time")
+    @CreationTimestamp
+    private Timestamp createTime;
+
     @OneToMany(mappedBy = "dict",cascade={CascadeType.PERSIST,CascadeType.REMOVE})
     private List<DictDetail> dictDetails;
+
+    public @interface Update {}
 
 }

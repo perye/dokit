@@ -1,12 +1,14 @@
 package com.perye.dokit.entity;
 
-import com.perye.dokit.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name="user")
-public class User extends BaseEntity {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,5 +57,11 @@ public class User extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "dept_id")
     private Dept dept;
+
+    @Column(name = "create_time")
+    @CreationTimestamp
+    private Timestamp createTime;
+
+    public @interface Update {}
 
 }

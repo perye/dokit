@@ -38,6 +38,9 @@ import java.io.IOException;
 @Api(tags = "系统：系统授权接口")
 public class AuthenticationController {
 
+    @Value("${jwt.codeKey}")
+    private String codeKey;
+
     private final JwtTokenUtil jwtTokenUtil;
 
     private final RedisService redisService;
@@ -124,7 +127,7 @@ public class AuthenticationController {
         // 设置内置字体
         captcha.setFont(Captcha.FONT_2);
         String result = captcha.text();
-        String uuid = IdUtil.simpleUUID();
+        String uuid = codeKey + IdUtil.simpleUUID();
         redisService.saveCode(uuid,result);
         return new ImgResult(captcha.toBase64(),uuid);
     }
