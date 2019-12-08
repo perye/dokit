@@ -87,6 +87,8 @@
     import { del, download${className} } from '@/api/${changeClassName}'
     <#if hasTimestamp>
     import { parseTime, downloadFile } from '@/utils/index'
+    <#else >
+    import { downloadFile } from '@/utils/index'
     </#if>
     import eForm from './form'
     export default {

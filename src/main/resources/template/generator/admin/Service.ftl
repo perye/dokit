@@ -6,6 +6,8 @@ import ${package}.dto.${className}QueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 public interface ${className}Service {

@@ -4,7 +4,6 @@ import com.perye.dokit.aop.log.Log;
 import ${package}.entity.${className};
 import ${package}.service.${className}Service;
 import ${package}.dto.${className}QueryCriteria;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +11,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 @Api(tags = "${className}管理")
