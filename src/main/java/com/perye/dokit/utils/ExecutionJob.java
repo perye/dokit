@@ -1,5 +1,6 @@
 package com.perye.dokit.utils;
 
+import com.perye.dokit.config.thread.ThreadPoolExecutorUtil;
 import com.perye.dokit.entity.QuartzJob;
 import com.perye.dokit.entity.QuartzLog;
 import com.perye.dokit.repository.QuartzLogRepository;
@@ -12,14 +13,15 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Async
 public class ExecutionJob extends QuartzJobBean {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    // 建议自定义线程池实现方式，该处仅供参考
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    // 该处仅供参考
+    private final static ThreadPoolExecutor executor = ThreadPoolExecutorUtil.getPoll();
 
     @Override
     @SuppressWarnings("unchecked")
@@ -41,7 +43,7 @@ public class ExecutionJob extends QuartzJobBean {
             logger.info("任务准备执行，任务名称：{}", quartzJob.getJobName());
             QuartzRunnable task = new QuartzRunnable(quartzJob.getBeanName(), quartzJob.getMethodName(),
                     quartzJob.getParams());
-            Future<?> future = executorService.submit(task);
+            Future<?> future = executor.submit(task);
             future.get();
             long times = System.currentTimeMillis() - startTime;
             log.setTime(times);

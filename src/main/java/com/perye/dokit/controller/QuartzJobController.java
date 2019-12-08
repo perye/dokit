@@ -44,7 +44,7 @@ public class QuartzJobController {
     @Log("导出任务数据")
     @ApiOperation("导出任务数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('timing:list')")
+    @PreAuthorize("@dokit.check('timing:list')")
     public void download(HttpServletResponse response, JobQueryCriteria criteria) throws IOException {
         quartzJobService.download(quartzJobService.queryAll(criteria), response);
     }
@@ -52,7 +52,7 @@ public class QuartzJobController {
     @Log("导出日志数据")
     @ApiOperation("导出日志数据")
     @GetMapping(value = "/download/log")
-    @PreAuthorize("@el.check('timing:list')")
+    @PreAuthorize("@dokit.check('timing:list')")
     public void downloadLog(HttpServletResponse response, JobQueryCriteria criteria) throws IOException {
         quartzJobService.downloadLog(quartzJobService.queryAllLog(criteria), response);
     }
