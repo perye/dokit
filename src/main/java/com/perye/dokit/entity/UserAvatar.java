@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
@@ -14,7 +15,7 @@ import java.sql.Timestamp;
 @Setter
 @NoArgsConstructor
 @Table(name = "user_avatar")
-public class UserAvatar{
+public class UserAvatar implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

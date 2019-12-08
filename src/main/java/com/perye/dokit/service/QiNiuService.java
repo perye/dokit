@@ -7,9 +7,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
 public interface QiNiuService {
 
     Object queryAll(QiniuQueryCriteria criteria, Pageable pageable);
+
+    List<QiniuContent> queryAll(QiniuQueryCriteria criteria);
+
 
     /**
      * 查配置
@@ -73,5 +80,13 @@ public interface QiNiuService {
      * @param type 类型
      */
     void update(String type);
+
+
+    /**
+     * 导出数据
+     * @param queryAll /
+     * @param response /
+     */
+    void downloadList(List<QiniuContent> queryAll, HttpServletResponse response) throws IOException;
 }
 

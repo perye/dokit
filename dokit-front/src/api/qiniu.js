@@ -29,6 +29,15 @@ export function download(id) {
   })
 }
 
+export function downloadQiNiu(params) {
+  return request({
+    url: 'api/qiNiuContent/download/list',
+    method: 'get',
+    params,
+    responseType: 'blob'
+  })
+}
+
 export function sync() {
   return request({
     url: 'api/qiNiuContent/synchronize',

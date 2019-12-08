@@ -37,3 +37,13 @@ export function edit(data) {
     data
   })
 }
+
+
+export function downloadMenu(params) {
+  return request({
+    url: 'api/menus/download',
+    method: 'get',
+    params,
+    responseType: 'blob'
+  })
+}

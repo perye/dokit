@@ -39,4 +39,6 @@ public interface ${className}Service {
     void update(${className} resources);
 
     void delete(${pkColumnType} ${pkChangeColName});
+
+    void download(List<${className}DTO> all, HttpServletResponse response) throws IOException;
 }

@@ -1,6 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import cn.hutool.core.lang.Dict;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import com.perye.dokit.dto.LogQueryCriteria;
 import com.perye.dokit.entity.Log;
@@ -8,6 +9,7 @@ import com.perye.dokit.mapper.LogErrorMapper;
 import com.perye.dokit.mapper.LogSmallMapper;
 import com.perye.dokit.repository.LogRepository;
 import com.perye.dokit.service.LogService;
+import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.StringUtils;
@@ -20,7 +22,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -46,6 +54,11 @@ public class LogServiceImpl implements LogService {
             return PageUtil.toPage(page.map(logErrorMapper::toDto));
         }
         return page;
+    }
+
+    @Override
+    public List<Log> queryAll(LogQueryCriteria criteria) {
+        return logRepository.findAll(((root, criteriaQuery, cb) -> QueryHelp.getPredicate(root, criteria, cb)));
     }
 
     @Override
@@ -107,6 +120,25 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public Object findByErrDetail(Long id) {
-        return Dict.create().set("exception",logRepository.findExceptionById(id).getExceptionDetail());
+        byte[] details = logRepository.findExceptionById(id).getExceptionDetail();
+        return Dict.create().set("exception",new String(ObjectUtil.isNotNull(details) ? details : "".getBytes()));
+    }
+
+    @Override
+    public void download(List<Log> logs, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Log log : logs) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("用户名", log.getUsername());
+            map.put("IP", log.getRequestIp());
+            map.put("IP来源", log.getAddress());
+            map.put("描述", log.getDescription());
+            map.put("浏览器", log.getBrowser());
+            map.put("请求耗时/毫秒", log.getTime());
+            map.put("异常详情", new String(ObjectUtil.isNotNull(log.getExceptionDetail()) ? log.getExceptionDetail() : "".getBytes()));
+            map.put("创建日期", log.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
     }
 }

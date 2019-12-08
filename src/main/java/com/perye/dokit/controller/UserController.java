@@ -59,7 +59,7 @@ public class UserController {
     @ApiOperation("导出用户数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@dokit.check('user:list')")
-    public void update(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
+    public void download(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
         userService.download(userService.queryAll(criteria), response);
     }
 

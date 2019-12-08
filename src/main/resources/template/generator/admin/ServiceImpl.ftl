@@ -11,6 +11,7 @@ import com.perye.dokit.exception.EntityExistException;
     </#list>
 </#if>
 import com.perye.dokit.utils.ValidationUtil;
+import com.perye.dokit.utils.FileUtil;
 import ${package}.repository.${className}Repository;
 import ${package}.service.${className}Service;
 import ${package}.dto.${className}DTO;
@@ -35,6 +36,10 @@ import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @Service
 @CacheConfig(cacheNames = "${changeClassName}")
@@ -123,4 +128,24 @@ public class ${className}ServiceImpl implements ${className}Service {
     public void delete(${pkColumnType} ${pkChangeColName}) {
         ${changeClassName}Repository.deleteById(${pkChangeColName});
     }
+
+    @Override
+    public void download(List<${className}DTO> all, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (${className}DTO ${changeClassName} : all) {
+        Map<String,Object> map = new LinkedHashMap<>();
+        <#list columns as column>
+            <#if column.columnKey != 'PRI'>
+                <#if column.columnComment != ''>
+                    map.put("${column.columnComment}", ${changeClassName}.get${column.capitalColumnName}());
+                <#else>
+                    map.put(" ${column.changeColumnName}",  ${changeClassName}.get${column.capitalColumnName}());
+                </#if>
+            </#if>
+        </#list>
+        list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
+        }
+
  }

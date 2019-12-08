@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/redis")
 @Api(tags = "系统：Redis缓存管理")
@@ -29,6 +32,14 @@ public class RedisController {
     @PreAuthorize("@dokit.check('redis:list')")
     public ResponseEntity getRedis(String key, Pageable pageable){
         return new ResponseEntity<>(redisService.findByKey(key,pageable), HttpStatus.OK);
+    }
+
+    @Log("导出数据")
+    @ApiOperation("导出数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check('redis:list')")
+    public void download(HttpServletResponse response, String key) throws IOException {
+        redisService.download(redisService.findByKey(key), response);
     }
 
     @Log("删除Redis缓存")

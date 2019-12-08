@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/auth/online")
 @Api(tags = "系统：在线用户管理")
@@ -27,6 +30,14 @@ public class OnlineController {
     @PreAuthorize("@dokit.check()")
     public ResponseEntity getAll(String filter, Pageable pageable){
         return new ResponseEntity<>(onlineUserService.getAll(filter, pageable), HttpStatus.OK);
+    }
+
+    @Log("导出数据")
+    @ApiOperation("导出数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check()")
+    public void download(HttpServletResponse response, String filter) throws IOException {
+        onlineUserService.download(onlineUserService.getAll(filter), response);
     }
 
     @Log("踢出用户")

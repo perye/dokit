@@ -1,18 +1,17 @@
 package com.perye.dokit.entity;
 
-import com.perye.dokit.base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
-@Setter
-@Getter
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "verification_code")
-public class VerificationCode extends BaseEntity {
+public class VerificationCode implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.perye.dokit.controller;
 
+import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.dto.LogQueryCriteria;
 import com.perye.dokit.service.LogService;
 import com.perye.dokit.utils.SecurityUtils;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/logs")
 @Api(tags = "监控：日志管理")
@@ -23,6 +27,14 @@ public class LogController {
     private final LogService logService;
     public LogController(LogService logService) {
         this.logService = logService;
+    }
+
+    @Log("导出数据")
+    @ApiOperation("导出数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check()")
+    public void download(HttpServletResponse response, LogQueryCriteria criteria) throws IOException {
+        logService.download(logService.queryAll(criteria), response);
     }
 
     @GetMapping

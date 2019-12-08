@@ -5,13 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
 @Getter
 @Setter
-public class UserDTO{
+public class UserDTO implements Serializable {
 
     @ApiModelProperty(hidden = true)
     private Long id;

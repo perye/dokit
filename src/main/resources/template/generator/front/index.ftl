@@ -22,6 +22,16 @@
           @click="add">新增
         </el-button>
       </div>
+        <!-- 导出 -->
+        <div style="display: inline-block;">
+            <el-button
+                    :loading="downloadLoading"
+                    size="mini"
+                    class="filter-item"
+                    type="warning"
+                    icon="el-icon-download"
+                    @click="download">导出</el-button>
+        </div>
     </div>
     <!--表单组件-->
     <eForm ref="form" :is-add="isAdd"/>
@@ -74,9 +84,9 @@
 <script>
     import checkPermission from '@/utils/permission'
     import initData from '@/mixins/initData'
-    import { del } from '@/api/${changeClassName}'
+    import { del, download${className} } from '@/api/${changeClassName}'
     <#if hasTimestamp>
-    import { parseTime } from '@/utils/index'
+    import { parseTime, downloadFile } from '@/utils/index'
     </#if>
     import eForm from './form'
     export default {
@@ -151,6 +161,17 @@
                 </#if>
             }
                 _this.dialog = true
+            },
+            // 导出
+            download() {
+                this.beforeInit()
+                this.downloadLoading = true
+                download${className}(this.params).then(result => {
+                    downloadFile(result, '${className}列表', 'xlsx')
+                    this.downloadLoading = false
+                }).catch(() => {
+                    this.downloadLoading = false
+                })
             }
         }
     }

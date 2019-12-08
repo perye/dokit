@@ -1,15 +1,14 @@
 package com.perye.dokit.service.impl;
 
+import com.perye.dokit.dto.JobQueryCriteria;
 import com.perye.dokit.dto.QuartzJobQueryCriteria;
 import com.perye.dokit.entity.QuartzJob;
+import com.perye.dokit.entity.QuartzLog;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.repository.QuartzJobRepository;
 import com.perye.dokit.repository.QuartzLogRepository;
 import com.perye.dokit.service.QuartzJobService;
-import com.perye.dokit.utils.PageUtil;
-import com.perye.dokit.utils.QuartzManage;
-import com.perye.dokit.utils.QueryHelp;
-import com.perye.dokit.utils.ValidationUtil;
+import com.perye.dokit.utils.*;
 import org.quartz.CronExpression;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,7 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @Service(value = "quartzJobService")
 @CacheConfig(cacheNames = "quartzJob")
@@ -46,6 +48,16 @@ public class QuartzJobServiceImpl implements QuartzJobService {
     @Override
     public Object queryAllLog(QuartzJobQueryCriteria criteria, Pageable pageable){
         return PageUtil.toPage(quartzLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable));
+    }
+
+    @Override
+    public List<QuartzJob> queryAll(JobQueryCriteria criteria) {
+        return quartzJobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
+    }
+
+    @Override
+    public List<QuartzLog> queryAllLog(JobQueryCriteria criteria) {
+        return quartzLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
     }
 
     @Override
@@ -115,6 +127,43 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         }
         quartzManage.deleteJob(quartzJob);
         quartzJobRepository.delete(quartzJob);
+    }
+
+    @Override
+    public void download(List<QuartzJob> quartzJobs, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (QuartzJob quartzJob : quartzJobs) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("任务名称", quartzJob.getJobName());
+            map.put("Bean名称", quartzJob.getBeanName());
+            map.put("执行方法", quartzJob.getMethodName());
+            map.put("参数", quartzJob.getParams());
+            map.put("表达式", quartzJob.getCronExpression());
+            map.put("状态", quartzJob.getIsPause() ? "暂停中" : "运行中");
+            map.put("描述", quartzJob.getRemark());
+            map.put("创建日期", quartzJob.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void downloadLog(List<QuartzLog> queryAllLog, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (QuartzLog quartzLog : queryAllLog) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("任务名称", quartzLog.getJobName());
+            map.put("Bean名称", quartzLog.getBeanName());
+            map.put("执行方法", quartzLog.getMethodName());
+            map.put("参数", quartzLog.getParams());
+            map.put("表达式", quartzLog.getCronExpression());
+            map.put("异常详情", quartzLog.getExceptionDetail());
+            map.put("耗时/毫秒", quartzLog.getTime());
+            map.put("状态", quartzLog.getIsSuccess() ? "成功" : "失败");
+            map.put("创建日期", quartzLog.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
     }
 }
 

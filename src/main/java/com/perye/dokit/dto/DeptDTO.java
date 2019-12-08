@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
 @Setter
-public class DeptDTO{
+public class DeptDTO implements Serializable {
 
     // ID
     private Long id;

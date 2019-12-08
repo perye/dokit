@@ -6,6 +6,8 @@ import com.perye.dokit.dto.RoleSmallDTO;
 import com.perye.dokit.entity.Role;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +34,9 @@ public interface RoleService {
     Object queryAll(RoleQueryCriteria criteria, Pageable pageable);
 
     List<RoleDTO> queryAll(RoleQueryCriteria criteria);
+
+    void download(List<RoleDTO> queryAll, HttpServletResponse response) throws IOException;
+
 
 }
 

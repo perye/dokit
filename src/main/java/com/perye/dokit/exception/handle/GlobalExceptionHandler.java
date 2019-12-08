@@ -100,8 +100,10 @@ public class GlobalExceptionHandler {
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
         String[] str = Objects.requireNonNull(e.getBindingResult().getAllErrors().get(0).getCodes())[1].split("\\.");
-        String message = str[1] + ":" + e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        return buildResponseEntity(ApiError.error(message));
+        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        if("不能为空".equals(message)){
+            message = str[1] + ":" + message;
+        }        return buildResponseEntity(ApiError.error(message));
     }
 
 }

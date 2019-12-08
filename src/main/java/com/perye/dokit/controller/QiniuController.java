@@ -17,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +46,13 @@ public class QiniuController {
         qiNiuService.update(qiniuConfig);
         qiNiuService.update(qiniuConfig.getType());
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Log("导出数据")
+    @ApiOperation("导出数据")
+    @GetMapping(value = "/download/list")
+    public void download(HttpServletResponse response, QiniuQueryCriteria criteria) throws IOException {
+        qiNiuService.downloadList(qiNiuService.queryAll(criteria), response);
     }
 
     @Log("查询文件")

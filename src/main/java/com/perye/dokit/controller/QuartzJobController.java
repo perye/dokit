@@ -1,6 +1,7 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.dto.JobQueryCriteria;
 import com.perye.dokit.dto.QuartzJobQueryCriteria;
 import com.perye.dokit.entity.QuartzJob;
 import com.perye.dokit.exception.BadRequestException;
@@ -14,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -35,6 +39,22 @@ public class QuartzJobController {
     @PreAuthorize("@dokit.check('timing:list')")
     public ResponseEntity getJobs(QuartzJobQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(quartzJobService.queryAll(criteria,pageable), HttpStatus.OK);
+    }
+
+    @Log("导出任务数据")
+    @ApiOperation("导出任务数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@el.check('timing:list')")
+    public void download(HttpServletResponse response, JobQueryCriteria criteria) throws IOException {
+        quartzJobService.download(quartzJobService.queryAll(criteria), response);
+    }
+
+    @Log("导出日志数据")
+    @ApiOperation("导出日志数据")
+    @GetMapping(value = "/download/log")
+    @PreAuthorize("@el.check('timing:list')")
+    public void downloadLog(HttpServletResponse response, JobQueryCriteria criteria) throws IOException {
+        quartzJobService.downloadLog(quartzJobService.queryAllLog(criteria), response);
     }
 
     @ApiOperation("查询任务执行日志")

@@ -45,46 +45,57 @@
 </template>
 
 <script>
-import initData from '@/mixins/initData'
-import { parseTime } from '@/utils/index'
-import Search from './search'
-export default {
-  name: 'Log',
-  components: { Search },
-  mixins: [initData],
-  created() {
-    this.$nextTick(() => {
-      this.init()
-    })
-  },
-  methods: {
-    parseTime,
-    beforeInit() {
-      this.url = 'api/logs'
-      const sort = 'id,desc'
-      const query = this.query
-      const value = query.value
-      this.params = { page: this.page, size: this.size, sort: sort }
-      if (value) { this.params['blurry'] = value }
-      return true
+    import initData from '@/mixins/initData'
+    import {parseTime} from '@/utils/index'
+    import Search from './search'
+
+    export default {
+        name: 'Log',
+        components: {Search},
+        mixins: [initData],
+        created() {
+            this.$nextTick(() => {
+                this.init()
+            })
+        },
+        methods: {
+            parseTime,
+            beforeInit() {
+                this.url = 'api/logs'
+                const sort = 'id,desc'
+                const query = this.query
+                const value = query.value
+                this.params = {page: this.page, size: this.size, sort: sort}
+                if (value) {
+                    this.params['blurry'] = value
+                }
+                this.params['logType'] = 'INFO'
+                if (query.date) {
+                    this.params['startTime'] = query.date[0]
+                    this.params['endTime'] = query.date[1]
+                }
+                return true
+            }
+        }
     }
-  }
-}
 </script>
 
 <style scoped>
   .demo-table-expand {
     font-size: 0;
   }
+
   .demo-table-expand label {
     width: 70px;
     color: #99a9bf;
   }
+
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
     width: 100%;
   }
+
   .demo-table-expand .el-form-item__content {
     font-size: 12px;
   }

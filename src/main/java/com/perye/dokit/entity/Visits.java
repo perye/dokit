@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -12,7 +13,7 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @Table(name = "visits")
-public class Visits{
+public class Visits implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,11 +1,14 @@
 package com.perye.dokit.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.perye.dokit.dto.DictDTO;
+import com.perye.dokit.dto.DictDetailDTO;
 import com.perye.dokit.dto.DictQueryCriteria;
 import com.perye.dokit.entity.Dict;
 import com.perye.dokit.mapper.DictMapper;
 import com.perye.dokit.repository.DictRepository;
 import com.perye.dokit.service.DictService;
+import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
@@ -18,7 +21,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 @CacheConfig(cacheNames = "dict")
@@ -36,10 +42,17 @@ public class DictServiceImpl implements DictService {
 
     @Override
     @Cacheable
-    public Object queryAll(DictQueryCriteria dict, Pageable pageable){
+    public Map<String, Object> queryAll(DictQueryCriteria dict, Pageable pageable){
         Page<Dict> page = dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, dict, cb), pageable);
         return PageUtil.toPage(page.map(dictMapper::toDto));
     }
+
+    @Override
+    public List<DictDTO> queryAll(DictQueryCriteria dict) {
+        List<Dict> list = dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, dict, cb));
+        return dictMapper.toDto(list);
+    }
+
 
     @Override
     @Cacheable(key = "#p0")
@@ -71,5 +84,32 @@ public class DictServiceImpl implements DictService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         dictRepository.deleteById(id);
+    }
+
+    @Override
+    public void download(List<DictDTO> dictDTOS, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (DictDTO dictDTO : dictDTOS) {
+            if(CollectionUtil.isNotEmpty(dictDTO.getDictDetails())){
+                for (DictDetailDTO dictDetail : dictDTO.getDictDetails()) {
+                    Map<String,Object> map = new LinkedHashMap<>();
+                    map.put("字典名称", dictDTO.getName());
+                    map.put("字典描述", dictDTO.getRemark());
+                    map.put("字典标签", dictDetail.getLabel());
+                    map.put("字典值", dictDetail.getValue());
+                    map.put("创建日期", dictDetail.getCreateTime());
+                    list.add(map);
+                }
+            } else {
+                Map<String,Object> map = new LinkedHashMap<>();
+                map.put("字典名称", dictDTO.getName());
+                map.put("字典描述", dictDTO.getRemark());
+                map.put("字典标签", null);
+                map.put("字典值", null);
+                map.put("创建日期", dictDTO.getCreateTime());
+                list.add(map);
+            }
+        }
+        FileUtil.downloadExcel(list, response);
     }
 }

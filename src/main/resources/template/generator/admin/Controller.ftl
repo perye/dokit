@@ -25,10 +25,18 @@ public class ${className}Controller {
         this.${changeClassName}Service = ${changeClassName}Service;
     }
 
+    @Log("导出数据")
+    @ApiOperation("导出数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check('${changeClassName}:list')")
+    public void download(HttpServletResponse response, ${className}QueryCriteria criteria) throws IOException {
+        ${changeClassName}Service.download(${changeClassName}Service.queryAll(criteria), response);
+    }
+
     @Log("查询${className}")
     @ApiOperation("查询${className}")
     @GetMapping()
-    @PreAuthorize("@dokit.check('${changeClassName}:list'")
+    @PreAuthorize("@dokit.check('${changeClassName}:list')")
     public ResponseEntity get${className}s(${className}QueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria,pageable),HttpStatus.OK);
     }

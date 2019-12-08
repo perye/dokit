@@ -78,6 +78,11 @@
                 if (value) {
                     this.params['blurry'] = value
                 }
+                this.params['logType'] = 'ERROR'
+                if (query.date) {
+                    this.params['startTime'] = query.date[0]
+                    this.params['endTime'] = query.date[1]
+                }
                 return true
             },
             info(id) {

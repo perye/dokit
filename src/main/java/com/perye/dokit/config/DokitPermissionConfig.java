@@ -17,11 +17,8 @@ public class DokitPermissionConfig {
             return true;
         }
         List<String> dokitPermissions = SecurityUtils.getUserDetails().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        List<String> list = Arrays.stream(permissions).filter(dokitPermissions::contains).map(s -> s).collect(Collectors.toList());
-        if(dokitPermissions.contains("admin") || list.size() != 0){
-            return true;
-        }
-        return false;
+        List<String> list = Arrays.stream(permissions).filter(dokitPermissions::contains).collect(Collectors.toList());
+        return dokitPermissions.contains("admin") || list.size() != 0;
     }
 
 }

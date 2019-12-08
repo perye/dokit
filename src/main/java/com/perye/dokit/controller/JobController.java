@@ -16,6 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Set;
 
 @RestController
@@ -32,6 +34,14 @@ public class JobController {
     public JobController(JobService jobService, DataScope dataScope) {
         this.jobService = jobService;
         this.dataScope = dataScope;
+    }
+
+    @Log("导出岗位数据")
+    @ApiOperation("导出岗位数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check('job:list')")
+    public void download(HttpServletResponse response, JobQueryCriteria criteria) throws IOException {
+        jobService.download(jobService.queryAll(criteria), response);
     }
 
     @Log("查询岗位")

@@ -9,6 +9,7 @@ import com.perye.dokit.mapper.RoleMapper;
 import com.perye.dokit.mapper.RoleSmallMapper;
 import com.perye.dokit.repository.RoleRepository;
 import com.perye.dokit.service.RoleService;
+import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
@@ -21,6 +22,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -136,6 +140,21 @@ public class RoleServiceImpl implements RoleService {
             roleDTOS.add(findById(role.getId()));
         }
         return Collections.min(roleDTOS.stream().map(RoleDTO::getLevel).collect(Collectors.toList()));
+    }
+
+    @Override
+    public void download(List<RoleDTO> roles, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (RoleDTO role : roles) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("角色名称", role.getName());
+            map.put("默认权限", role.getPermission());
+            map.put("角色级别", role.getLevel());
+            map.put("描述", role.getRemark());
+            map.put("创建日期", role.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
     }
 }
 

@@ -6,14 +6,15 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
-@Table(name="local_storage")
+@Table(name = "local_storage")
 @NoArgsConstructor
-public class LocalStorage{
+public class LocalStorage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +53,7 @@ public class LocalStorage{
     @CreationTimestamp
     private Timestamp createTime;
 
-    public LocalStorage(String realName,String name, String suffix, String path, String type, String size, String operate) {
+    public LocalStorage(String realName, String name, String suffix, String path, String type, String size, String operate) {
         this.realName = realName;
         this.name = name;
         this.suffix = suffix;
@@ -62,7 +63,7 @@ public class LocalStorage{
         this.operate = operate;
     }
 
-    public void copy(LocalStorage source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+    public void copy(LocalStorage source) {
+        BeanUtil.copyProperties(source, this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }
