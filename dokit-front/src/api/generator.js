@@ -7,3 +7,12 @@ export function generator(data, tableName) {
     method: 'post'
   })
 }
+
+
+export function save(data) {
+  return request({
+    url: 'api/generator',
+    data,
+    method: 'put'
+  })
+}

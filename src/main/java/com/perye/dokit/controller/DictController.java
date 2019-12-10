@@ -40,6 +40,14 @@ public class DictController {
 
     @Log("查询字典")
     @ApiOperation("查询字典")
+    @GetMapping(value = "/all")
+    @PreAuthorize("@dokit.check('dict:list')")
+    public ResponseEntity all(){
+        return new ResponseEntity<>(dictService.queryAll(new DictQueryCriteria()),HttpStatus.OK);
+    }
+
+    @Log("查询字典")
+    @ApiOperation("查询字典")
     @GetMapping
     @PreAuthorize("@dokit.check('dict:list')")
     public ResponseEntity getDicts(DictQueryCriteria resources, Pageable pageable){

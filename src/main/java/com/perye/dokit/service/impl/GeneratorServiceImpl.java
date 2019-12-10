@@ -1,13 +1,15 @@
 package com.perye.dokit.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.perye.dokit.entity.ColumnInfo;
 import com.perye.dokit.entity.GenConfig;
 import com.perye.dokit.exception.BadRequestException;
+import com.perye.dokit.repository.ColumnInfoRepository;
 import com.perye.dokit.service.GeneratorService;
 import com.perye.dokit.utils.GenUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.StringUtils;
-import com.perye.dokit.vo.ColumnInfo;
 import com.perye.dokit.vo.TableInfo;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,12 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     @PersistenceContext
     private EntityManager em;
+
+    private final ColumnInfoRepository columnInfoRepository;
+
+    public GeneratorServiceImpl(ColumnInfoRepository columnInfoRepository) {
+        this.columnInfoRepository = columnInfoRepository;
+    }
 
     @Override
     @SuppressWarnings("all")
@@ -47,20 +55,49 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     @Override
+    public List<ColumnInfo> getColumns(String tableName) {
+        List<ColumnInfo> columnInfos = columnInfoRepository.findByTableNameOrderByIdAsc(tableName);
+        if(CollectionUtil.isNotEmpty(columnInfos)){
+            return columnInfos;
+        } else {
+            columnInfos = query(tableName);
+            return columnInfoRepository.saveAll(columnInfos);
+        }
+    }
+
     @SuppressWarnings("all")
-    public Object getColumns(String name) {
+    public List<ColumnInfo> query(String tableName){
         // 使用预编译防止sql注入
         String sql = "select column_name, is_nullable, data_type, column_comment, column_key, extra from information_schema.columns " +
                 "where table_name = ? and table_schema = (select database()) order by ordinal_position";
         Query query = em.createNativeQuery(sql);
-        query.setParameter(1, StringUtils.isNotBlank(name) ? name : null);
+        query.setParameter(1,tableName);
         List result = query.getResultList();
         List<ColumnInfo> columnInfos = new ArrayList<>();
         for (Object obj : result) {
             Object[] arr = (Object[]) obj;
-            columnInfos.add(new ColumnInfo(arr[0],arr[1],arr[2],arr[3],arr[4],arr[5],null,"true"));
+            columnInfos.add(
+                    new ColumnInfo(
+                            tableName,
+                            arr[0].toString(),
+                            arr[1].equals("NO"),
+                            arr[2].toString(),
+                            ObjectUtil.isNotNull(arr[3]) ? arr[3].toString() : null,
+                            ObjectUtil.isNotNull(arr[4]) ? arr[4].toString() : null,
+                            ObjectUtil.isNotNull(arr[5]) ? arr[5].toString() : null)
+            );
         }
-        return PageUtil.toPage(columnInfos,columnInfos.size());
+        return columnInfos;
+    }
+
+    @Override
+    public void sync(List<ColumnInfo> columnInfos) {
+
+    }
+
+    @Override
+    public void save(List<ColumnInfo> columnInfos) {
+        columnInfoRepository.saveAll(columnInfos);
     }
 
     @Override

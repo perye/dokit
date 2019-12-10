@@ -1,31 +1,44 @@
 package com.perye.dokit.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 /**
  * 代码生成配置
  */
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "gen_config")
 public class GenConfig {
+
+    public GenConfig(String tableName) {
+        this.cover = false;
+        this.tableName = tableName;
+    }
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     // 包路径
+    @NotBlank
     private String pack;
 
     // 前端文件路径
+    @NotBlank
     private String path;
 
     // 前端文件路径
     @Column(name = "api_path")
     private String apiPath;
+
+    @NotBlank
+    private String tableName;
 
     // 作者
     private String author;

@@ -23,7 +23,13 @@
       </el-table-column>
       <el-table-column label="操作" width="140px" align="center" fixed="right">
         <template slot-scope="scope">
-          <Generator :name="scope.row.tableName"/>
+          <el-button size="mini" style="margin-right: 2px" type="text">预览</el-button>
+          <el-button size="mini" style="margin-left: -1px;margin-right: 2px" type="text">
+            <router-link :to="'/sys-tools/generator/config/' + scope.row.tableName">
+              编辑
+            </router-link>
+          </el-button>
+          <el-button type="text" style="margin-left: -1px" size="mini">生成</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,23 +47,18 @@
 <script>
 import initData from '@/mixins/initData'
 import { parseTime } from '@/utils/index'
-import Generator from './generator'
 export default {
   name: 'GeneratorIndex',
-  components: { Generator },
   mixins: [initData],
   data() {
     return {
       loading: false, dialog: false,
-      form: { author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '' },
+      form: { author: '', pack: '', path: '',  cover: 'false', apiPath: '', prefix: '' },
       rules: {
         author: [
           { required: true, message: '作者不能为空', trigger: 'blur' }
         ],
         pack: [
-          { required: true, message: '包路径不能为空', trigger: 'blur' }
-        ],
-        moduleName: [
           { required: true, message: '包路径不能为空', trigger: 'blur' }
         ],
         path: [

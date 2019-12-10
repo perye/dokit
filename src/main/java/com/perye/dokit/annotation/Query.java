@@ -5,6 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * @author perye
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Query {
@@ -39,6 +42,8 @@ public @interface Query {
         , LESS_THAN_NQ
         // 包含
         , IN
+        // 不等于
+        ,NOT_EQUAL
     }
 
     // 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询

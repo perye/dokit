@@ -21,16 +21,16 @@ public class GenConfigController {
         this.genConfigService = genConfigService;
     }
 
-    @GetMapping()
     @ApiOperation("查询")
-    public ResponseEntity get(){
-        return new ResponseEntity<>(genConfigService.find(), HttpStatus.OK);
+    @GetMapping(value = "/{tableName}")
+    public ResponseEntity get(@PathVariable String tableName){
+        return new ResponseEntity<>(genConfigService.find(tableName), HttpStatus.OK);
     }
 
     @ApiOperation("修改")
     @PutMapping
     public ResponseEntity emailConfig(@Validated @RequestBody GenConfig genConfig){
-        return new ResponseEntity<>(genConfigService.update(genConfig),HttpStatus.OK);
+        return new ResponseEntity<>(genConfigService.update(genConfig.getTableName(), genConfig),HttpStatus.OK);
     }
 }
 

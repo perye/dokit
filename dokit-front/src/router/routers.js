@@ -69,9 +69,23 @@ export const constantRouterMap = [
         path: 'center',
         component: () => import('@/views/system/user/center'),
         name: '个人中心',
-        meta: { title: '个人中心', icon: 'user' }
+        meta: { title: '个人中心' }
       }
     ]
+  // },
+  // {
+  //   path: '/generator',
+  //   component: Layout,
+  //   hidden: true,
+  //   redirect: 'noredirect',
+  //   children: [
+  //     {
+  //       path: 'config/:tableName',
+  //       component: () => import('@/views/generator/config'),
+  //       name: 'GeneratorIndex',
+  //       meta: { title: '生成配置' }
+  //     }
+  //   ]
   }
   // { path: '*', redirect: '/404', hidden: true }
 ]

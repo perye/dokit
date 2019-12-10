@@ -5,6 +5,7 @@
       <!-- 搜索 -->
       <el-input
         v-model="query.value"
+        :default-time="['00:00:00','23:59:59']"
         clearable
         placeholder="输入内容模糊搜索"
         style="width: 200px;"
