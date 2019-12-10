@@ -6,6 +6,7 @@ import com.perye.dokit.utils.EncryptUtils;
 import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 @SuppressWarnings({"unchecked","all"})
 public class OnlineUserService {
 
@@ -86,6 +88,31 @@ public class OnlineUserService {
     public void logout(String token) {
         String key = onlineKey + token;
         redisTemplate.delete(key);
+    }
+
+    /**
+     * 检测用户是否在之前已经登录，已经登录踢下线
+     * @param userName
+     */
+    public void checkLoginOnUser(String userName, String igoreToken){
+        List<OnlineUser> onlineUsers = getAll(userName);
+        if(onlineUsers ==null || onlineUsers.isEmpty()){
+            return;
+        }
+        for(OnlineUser onlineUser:onlineUsers){
+            if(onlineUser.getUserName().equals(userName)){
+                try {
+                    String token =EncryptUtils.desDecrypt(onlineUser.getKey());
+                    if(StringUtils.isNotBlank(igoreToken)&&!igoreToken.equals(token)){
+                        this.kickOut(onlineUser.getKey());
+                    }else if(StringUtils.isBlank(igoreToken)){
+                        this.kickOut(onlineUser.getKey());
+                    }
+                } catch (Exception e) {
+                    log.error("checkUser is error",e);
+                }
+            }
+        }
     }
 
 

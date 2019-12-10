@@ -42,6 +42,9 @@ public class AuthenticationController {
     @Value("${jwt.codeKey}")
     private String codeKey;
 
+    @Value("${single.login:true}")
+    private Boolean singleLogin;
+
     private final JwtTokenUtil jwtTokenUtil;
 
     private final RedisService redisService;
@@ -93,6 +96,11 @@ public class AuthenticationController {
 
         // 保存在线信息
         onlineUserService.save(jwtUser, token, request);
+
+        if(singleLogin){
+            //踢掉之前已经登录的token
+            onlineUserService.checkLoginOnUser(authUser.getUsername(),token);
+        }
 
         // 返回 token
         return ResponseEntity.ok(new AuthInfo(token,jwtUser));
