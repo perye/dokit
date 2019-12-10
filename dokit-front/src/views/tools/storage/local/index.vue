@@ -78,9 +78,9 @@
             fit="contain"
             lazy
             style="width: 60px; height: 40px">
-              <div slot="error">
-                <span>不支持预览</span>
-              </div>
+            <div slot="error">
+              <span>不支持预览</span>
+            </div>
           </el-image>
         </template>
       </el-table-column>
@@ -257,5 +257,10 @@ export default {
 </script>
 
 <style scoped>
-
+  /deep/ .el-image__error, .el-image__placeholder{
+    background: none;
+  }
+  /deep/ .el-image-viewer__wrapper{
+    top: 55px;
+  }
 </style>
