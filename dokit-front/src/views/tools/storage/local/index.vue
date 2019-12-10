@@ -78,8 +78,8 @@
             fit="contain"
             lazy
             style="width: 60px; height: 40px">
-            <div slot="error">
-              <span>不支持预览</span>
+            <div slot="error"  >
+              <span style="line-height: 50px">不支持预览</span>
             </div>
           </el-image>
         </template>
