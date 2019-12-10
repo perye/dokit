@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             HandlerMethod handlerMethod = infoEntry.getValue();
             AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
             PreAuthorize preAuthorize = handlerMethod.getMethodAnnotation(PreAuthorize.class);
-            if (null != preAuthorize && preAuthorize.value().contains("anonymous")) {
+            if (null != preAuthorize && preAuthorize.value().toLowerCase().contains("anonymous")) {
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
             } else if (null != anonymousAccess && null == preAuthorize) {
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
