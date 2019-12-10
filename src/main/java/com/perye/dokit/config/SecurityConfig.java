@@ -59,7 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(jwtUserDetailsService)
                 .passwordEncoder(passwordEncoderBean());
     }
-
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         // Remove the ROLE_ prefix
