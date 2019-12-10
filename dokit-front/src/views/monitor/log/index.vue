@@ -47,6 +47,7 @@
 <script>
     import initData from '@/mixins/initData'
     import {parseTime} from '@/utils/index'
+    import { delAllInfo } from '@/api/log'
     import Search from './search'
 
     export default {
@@ -75,6 +76,32 @@
                     this.params['endTime'] = query.date[1]
                 }
                 return true
+            },
+            confirmDelAll() {
+                this.delAllLoading = true
+                delAllInfo().then(res => {
+                    this.delAllLoading = false
+                    this.$children.forEach(children => {
+                        if (children.$refs.del_all) {
+                            children.$refs.del_all.doClose()
+                        }
+                    })
+                    this.dleChangePage()
+                    this.init()
+                    this.$notify({
+                        title: '删除成功',
+                        type: 'success',
+                        duration: 2500
+                    })
+                }).catch(err => {
+                    this.delAllLoading = false
+                    this.$children.forEach(children => {
+                        if (children.$refs.del_all) {
+                            children.$refs.del_all.doClose()
+                        }
+                    })
+                    console.log(err.response.data.message)
+                })
             }
         }
     }
@@ -84,18 +111,15 @@
   .demo-table-expand {
     font-size: 0;
   }
-
   .demo-table-expand label {
     width: 70px;
     color: #99a9bf;
   }
-
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
     width: 100%;
   }
-
   .demo-table-expand .el-form-item__content {
     font-size: 12px;
   }

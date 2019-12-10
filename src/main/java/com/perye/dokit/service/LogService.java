@@ -35,4 +35,16 @@ public interface LogService {
     void download(List<Log> queryAll, HttpServletResponse response) throws IOException;
 
 
+    void downloadError(List<Log> queryAll, HttpServletResponse response) throws IOException;
+
+    /**
+     * 删除所有错误日志
+     */
+    void delAllByError();
+
+    /**
+     * 删除所有INFO日志
+     */
+    void delAllByInfo();
+
 }

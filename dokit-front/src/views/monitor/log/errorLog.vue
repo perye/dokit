@@ -50,7 +50,7 @@
 <script>
     import initData from '@/mixins/initData'
     import {parseTime} from '@/utils/index'
-    import {getErrDetail} from '@/api/log'
+    import { getErrDetail, delAllError } from '@/api/log'
     import Search from './search'
 
     export default {
@@ -91,6 +91,32 @@
                     this.errorInfo = res.exception
                     console.log(this.errorInfo);
                 })
+            },
+            confirmDelAll() {
+                this.delAllLoading = true
+                delAllError().then(res => {
+                    this.delAllLoading = false
+                    this.$children.forEach(children => {
+                        if (children.$refs.del_all) {
+                            children.$refs.del_all.doClose()
+                        }
+                    })
+                    this.dleChangePage()
+                    this.init()
+                    this.$notify({
+                        title: '删除成功',
+                        type: 'success',
+                        duration: 2500
+                    })
+                }).catch(err => {
+                    this.delAllLoading = false
+                    this.$children.forEach(children => {
+                        if (children.$refs.del_all) {
+                            children.$refs.del_all.doClose()
+                        }
+                    })
+                    console.log(err.response.data.message)
+                })
             }
         }
     }
@@ -116,5 +142,13 @@
   }
   .demo-table-expand .el-form-item__content {
     font-size: 12px;
+  }
+  /deep/ .el-dialog__body {
+    padding: 0 20px 10px 20px !important;
+  }
+  .java.hljs {
+    color: #444;
+    background: #ffffff !important;
+    height: 630px !important;
   }
 </style>

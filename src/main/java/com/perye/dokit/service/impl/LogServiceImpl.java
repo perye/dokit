@@ -133,6 +133,27 @@ public class LogServiceImpl implements LogService {
             map.put("IP", log.getRequestIp());
             map.put("IP来源", log.getAddress());
             map.put("描述", log.getDescription());
+            map.put("请求方法", log.getMethod());
+            map.put("请求参数", log.getParams());
+            map.put("浏览器", log.getBrowser());
+            map.put("请求耗时/毫秒", log.getTime());
+            map.put("创建日期", log.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void downloadError(List<Log> logs, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Log log : logs) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("用户名", log.getUsername());
+            map.put("IP", log.getRequestIp());
+            map.put("IP来源", log.getAddress());
+            map.put("描述", log.getDescription());
+            map.put("请求方法", log.getMethod());
+            map.put("请求参数", log.getParams());
             map.put("浏览器", log.getBrowser());
             map.put("请求耗时/毫秒", log.getTime());
             map.put("异常详情", new String(ObjectUtil.isNotNull(log.getExceptionDetail()) ? log.getExceptionDetail() : "".getBytes()));
@@ -140,5 +161,17 @@ public class LogServiceImpl implements LogService {
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delAllByError() {
+        logRepository.deleteByLogType("ERROR");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delAllByInfo() {
+        logRepository.deleteByLogType("INFO");
     }
 }
