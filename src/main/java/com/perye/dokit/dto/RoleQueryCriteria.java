@@ -4,6 +4,7 @@ import com.perye.dokit.annotation.Query;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 public class RoleQueryCriteria {
@@ -13,9 +14,6 @@ public class RoleQueryCriteria {
     private String blurry;
 
 
-    @Query(type = Query.Type.GREATER_THAN,propName = "createTime")
-    private Timestamp startTime;
-
-    @Query(type = Query.Type.LESS_THAN,propName = "createTime")
-    private Timestamp endTime;
+    @Query(type = Query.Type.BETWEEN)
+    private List<Timestamp> createTime;
 }

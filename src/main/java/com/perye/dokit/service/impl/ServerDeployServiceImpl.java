@@ -47,11 +47,18 @@ public class ServerDeployServiceImpl implements ServerDeployService {
     }
 
     @Override
-    public ServerDeployDTO findById(String id) {
+    public ServerDeployDTO findById(Long id) {
         Optional<ServerDeploy> server = serverDeployRepository.findById(id);
         ValidationUtil.isNull(server,"ServerDeploy","id",id);
         return serverDeployMapper.toDto(server.get());
     }
+
+    @Override
+    public ServerDeployDTO findByIp(String ip) {
+        ServerDeploy deploy = serverDeployRepository.findByIp(ip);
+        return serverDeployMapper.toDto(deploy);
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -71,7 +78,7 @@ public class ServerDeployServiceImpl implements ServerDeployService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(String id) {
+    public void delete(Long id) {
         serverDeployRepository.deleteById(id);
     }
 }

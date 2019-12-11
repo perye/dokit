@@ -35,8 +35,8 @@ public class Server implements Serializable {
     /**
      * IP地址
      */
-    @Column(name = "ip",nullable = false)
-    private String ip;
+    @Column(name = "address",nullable = false)
+    private String address;
 
     /**
      * 访问端口

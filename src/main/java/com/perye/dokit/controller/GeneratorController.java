@@ -31,6 +31,12 @@ public class GeneratorController {
     @Value("${generator.enabled}")
     private Boolean generatorEnabled;
 
+    @ApiOperation("查询数据库数据")
+    @GetMapping(value = "/tables/all")
+    public ResponseEntity getTables(){
+        return new ResponseEntity<>(generatorService.getTables(), HttpStatus.OK);
+    }
+
 
     @ApiOperation("查询数据库数据")
     @GetMapping(value = "/tables")
@@ -59,13 +65,17 @@ public class GeneratorController {
     }
 
     @ApiOperation("生成代码")
-    @PostMapping
-    public ResponseEntity generator(@RequestBody List<ColumnInfo> columnInfos, @RequestParam String tableName){
+    @PostMapping(value = "/{tableName}/{type}")
+    public ResponseEntity generator(@PathVariable String tableName, @PathVariable Integer type){
         if(!generatorEnabled){
             throw new BadRequestException("此环境不允许生成代码！");
         }
-        generatorService.generator(columnInfos,genConfigService.find(tableName),tableName);
-        return new ResponseEntity(HttpStatus.OK);
+        switch (type){
+            // 生成代码
+            case 0: generatorService.generator(genConfigService.find(tableName), generatorService.getColumns(tableName));
+                break;
+            default: break;
+        }        return new ResponseEntity(HttpStatus.OK);
     }
 }
 

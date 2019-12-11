@@ -51,7 +51,7 @@ public class QuartzJobController {
 
     @Log("导出日志数据")
     @ApiOperation("导出日志数据")
-    @GetMapping(value = "/download/log")
+    @GetMapping(value = "/logs/download")
     @PreAuthorize("@dokit.check('timing:list')")
     public void downloadLog(HttpServletResponse response, JobQueryCriteria criteria) throws IOException {
         quartzJobService.downloadLog(quartzJobService.queryAllLog(criteria), response);

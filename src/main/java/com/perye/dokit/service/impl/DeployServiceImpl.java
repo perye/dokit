@@ -56,9 +56,6 @@ public class DeployServiceImpl implements DeployService {
     private DeployHistoryService deployHistoryService;
 
     @Autowired
-    private ServerAccountService serverAccountService;
-
-    @Autowired
     private DatabaseService databaseService;
 
 
@@ -141,7 +138,7 @@ public class DeployServiceImpl implements DeployService {
         ScpClientUtil scpClientUtil = getScpClientUtil(ip);
         log.info(msg);
         sendMsg(msg, MsgType.INFO);
-        msg = String.format("上传文件到服务器:%s<br>目录:%s下", fileSavePath, ip, uploadPath);
+        msg = String.format("上传文件到服务器:%s<br>目录:%s下", ip, uploadPath);
         sendMsg(msg, MsgType.INFO);
         scpClientUtil.putFile(fileSavePath, uploadPath);
         if (flag) {
@@ -381,34 +378,22 @@ public class DeployServiceImpl implements DeployService {
     }
 
     private ExecuteShellUtil getExecuteShellUtil(String ip) {
-        ServerDeployDTO serverDeployDTO = serverDeployService.findById(ip);
+        ServerDeployDTO serverDeployDTO = serverDeployService.findByIp(ip);
         if (serverDeployDTO == null) {
             sendMsg("IP对应服务器信息不存在：" + ip, MsgType.ERROR);
             throw new BadRequestException("IP对应服务器信息不存在：" + ip);
         }
-        String accountId = serverDeployDTO.getAccountId();
-        ServerAccountDTO serverAccountDTO = serverAccountService.findById(accountId);
-        if (serverAccountDTO == null) {
-            sendMsg("IP对账号信息不存在：" + ip, MsgType.ERROR);
-            throw new BadRequestException("IP对账号信息不存在：" + ip);
-        }
-        return new ExecuteShellUtil(ip, serverAccountDTO.getAccount(), serverAccountDTO.getPassword());
+        return new ExecuteShellUtil(ip, serverDeployDTO.getAccount(), serverDeployDTO.getPassword());
     }
 
 
     private ScpClientUtil getScpClientUtil(String ip) {
-        ServerDeployDTO serverDeployDTO = serverDeployService.findById(ip);
+        ServerDeployDTO serverDeployDTO = serverDeployService.findByIp(ip);
         if (serverDeployDTO == null) {
             sendMsg("IP对应服务器信息不存在：" + ip, MsgType.ERROR);
             throw new BadRequestException("IP对应服务器信息不存在：" + ip);
         }
-        String accountId = serverDeployDTO.getAccountId();
-        ServerAccountDTO serverAccountDTO = serverAccountService.findById(accountId);
-        if (serverAccountDTO == null) {
-            sendMsg("IP对账号信息不存在：" + ip, MsgType.ERROR);
-            throw new BadRequestException("IP对账号信息不存在：" + ip);
-        }
-        return ScpClientUtil.getInstance(ip, 22, serverAccountDTO.getAccount(), serverAccountDTO.getPassword());
+        return ScpClientUtil.getInstance(ip, serverDeployDTO.getPort(), serverDeployDTO.getAccount(), serverDeployDTO.getPassword());
     }
 
     public void sendResultMsg(boolean result, StringBuilder sb) {

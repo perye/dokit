@@ -11,11 +11,6 @@ import lombok.Data;
 @Data
 public class ServerQueryCriteria{
 
-    // 模糊
-    @Query(type = Query.Type.INNER_LIKE)
-    private String name;
-
-    // 模糊
-    @Query(type = Query.Type.INNER_LIKE)
-    private String ip;
+    @Query(blurry = "name,address")
+    private String blurry;
 }

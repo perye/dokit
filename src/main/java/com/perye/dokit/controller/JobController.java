@@ -48,8 +48,7 @@ public class JobController {
     @ApiOperation("查询岗位")
     @GetMapping
     @PreAuthorize("@dokit.check('job:list','user:list')")
-    public ResponseEntity getJobs(JobQueryCriteria criteria,
-                                  Pageable pageable){
+    public ResponseEntity getJobs(JobQueryCriteria criteria, Pageable pageable){
         // 数据权限
         criteria.setDeptIds(dataScope.getDeptIds());
         return new ResponseEntity<>(jobService.queryAll(criteria, pageable),HttpStatus.OK);

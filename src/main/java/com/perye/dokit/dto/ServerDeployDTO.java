@@ -3,6 +3,7 @@ package com.perye.dokit.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @author perye
@@ -12,13 +13,17 @@ import java.io.Serializable;
 @Data
 public class ServerDeployDTO implements Serializable {
 
-    /**
-     * 服务器IP
-     */
-    private String id;
+    private Long id;
 
-    /**
-     * 服务器账号
-     */
-    private String accountId;
+    private String name;
+
+    private String ip;
+
+    private Integer port;
+
+    private String account;
+
+    private String password;
+
+    private Timestamp createTime;
 }

@@ -5,7 +5,7 @@
       <el-col style="margin-bottom: 10px">
         <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
-            <span class="role-span">字段配置</span>
+            <span class="role-span">字段配置：{{ tableName }}</span>
             <el-button
               :loading="columnLoading"
               icon="el-icon-check"
@@ -16,7 +16,6 @@
           </div>
           <el-form size="small" label-width="90px">
             <el-table v-loading="loading" :data="data" :max-height="tableHeight" size="small" style="width: 100%;margin-bottom: 15px">
-              <el-table-column prop="tableName" label="表名"/>
               <el-table-column prop="columnName" label="字段名称"/>
               <el-table-column prop="columnType" label="字段类型"/>
               <el-table-column prop="remark" label="字段描述">
@@ -24,17 +23,17 @@
                   <el-input v-model="data[scope.$index].remark" size="mini" class="edit-input"/>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="必填">
+              <el-table-column align="center" label="必填" width="70px">
                 <template slot-scope="scope">
                   <el-checkbox v-model="data[scope.$index].notNull"/>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="列表">
+              <el-table-column align="center" label="列表" width="70px">
                 <template slot-scope="scope">
                   <el-checkbox v-model="data[scope.$index].listShow"/>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="表单">
+              <el-table-column align="center" label="表单" width="70px">
                 <template slot-scope="scope">
                   <el-checkbox v-model="data[scope.$index].formShow"/>
                 </template>
@@ -54,9 +53,6 @@
                     <el-option
                       label="下拉框"
                       value="Select"/>
-                    <el-option
-                      label="复选框"
-                      value="Checkbox"/>
                     <el-option
                       label="日期框"
                       value="Date"/>
@@ -81,6 +77,21 @@
                     <el-option
                       label="Like"
                       value="Like"/>
+                    <el-option
+                      label="DateRange"
+                      value="DateRange"/>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column label="日期注解">
+                <template slot-scope="scope">
+                  <el-select v-model="data[scope.$index].dateAnnotation" filterable class="edit-input" clearable size="mini" placeholder="请选择">
+                    <el-option
+                      label="自动创建时间"
+                      value="CreationTimestamp"/>
+                    <el-option
+                      label="自动更新时间"
+                      value="UpdateTimestamp"/>
                   </el-select>
                 </template>
               </el-table-column>
@@ -88,18 +99,6 @@
                 <template slot-scope="scope">
                   <el-select v-model="data[scope.$index].dictName" filterable class="edit-input" clearable size="mini" placeholder="请选择">
                     <el-option v-for="item in dicts" :key="item.id" :label="item.remark === '' ? item.name : item.remark" :value="item.name"/>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column label="实体关联">
-                <template slot-scope="scope">
-                  <el-select v-model="data[scope.$index].joinName" filterable class="edit-input" clearable size="mini" placeholder="请选择">
-                    <el-option
-                      label="模糊查询"
-                      value="1"/>
-                    <el-option
-                      label="精确查询"
-                      value="2"/>
                   </el-select>
                 </template>
               </el-table-column>
@@ -145,7 +144,7 @@
                 <el-radio-button label="true">是</el-radio-button>
                 <el-radio-button label="false">否</el-radio-button>
               </el-radio-group>
-              <span style="color: #C0C0C0;margin-left: 10px;">危险选型，请考虑后选择</span>
+              <span style="color: #C0C0C0;margin-left: 10px;">谨防误操作，请慎重选择</span>
             </el-form-item>
           </el-form>
         </el-card>

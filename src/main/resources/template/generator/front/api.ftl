@@ -8,6 +8,14 @@ export function add(data) {
   })
 }
 
+export function delAll(ids) {
+  return request({
+    url: 'api/${changeClassName}/',
+    method: 'delete',
+    data: ids
+  })
+}
+
 export function del(${pkChangeColName}) {
   return request({
     url: 'api/${changeClassName}/' + ${pkChangeColName},

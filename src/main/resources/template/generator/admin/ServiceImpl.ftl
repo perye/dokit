@@ -130,14 +130,22 @@ public class ${className}ServiceImpl implements ${className}Service {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
+    public void deleteAll(${pkColumnType}[] ids) {
+        for (${pkColumnType} id : ids) {
+            ${changeClassName}Repository.deleteById(${pkChangeColName});
+        }
+    }
+
+    @Override
     public void download(List<${className}DTO> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (${className}DTO ${changeClassName} : all) {
         Map<String,Object> map = new LinkedHashMap<>();
         <#list columns as column>
             <#if column.columnKey != 'PRI'>
-                <#if column.columnComment != ''>
-                    map.put("${column.columnComment}", ${changeClassName}.get${column.capitalColumnName}());
+                <#if column.remark != ''>
+                    map.put("${column.remark}", ${changeClassName}.get${column.capitalColumnName}());
                 <#else>
                     map.put(" ${column.changeColumnName}",  ${changeClassName}.get${column.capitalColumnName}());
                 </#if>

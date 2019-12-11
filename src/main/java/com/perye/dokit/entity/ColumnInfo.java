@@ -1,6 +1,6 @@
 package com.perye.dokit.entity;
 
-import lombok.AllArgsConstructor;
+import com.perye.dokit.utils.GenUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -60,8 +60,9 @@ public class ColumnInfo {
     // 字典名称
     private String dictName;
 
-    // 关联表名
-    private String joinName;
+    // 日期注解
+    private String dateAnnotation;
+
 
     public ColumnInfo(String tableName, String columnName, Boolean notNull, String columnType, String remark, String keyType, String extra) {
         this.tableName = tableName;
@@ -69,8 +70,10 @@ public class ColumnInfo {
         this.columnType = columnType;
         this.keyType = keyType;
         this.extra = extra;
-        this.remark = remark;
         this.notNull = notNull;
+        if(GenUtil.PK.equalsIgnoreCase(keyType) && GenUtil.EXTRA.equalsIgnoreCase(extra)){
+            this.notNull = false;
+        }
         this.listShow = true;
         this.formShow = true;
     }

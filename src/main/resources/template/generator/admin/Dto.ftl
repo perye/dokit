@@ -19,8 +19,8 @@ import java.io.Serializable;
 public class ${className}DTO implements Serializable {
 <#if columns??>
     <#list columns as column>
-        <#if column.columnComment != ''>
-    // ${column.columnComment}
+        <#if column.remark != ''>
+        // ${column.remark}
         </#if>
         <#if column.columnKey = 'PRI'>
             <#if !auto && pkColumnType = 'Long'>

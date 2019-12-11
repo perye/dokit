@@ -44,6 +44,8 @@ public @interface Query {
         , IN
         // 不等于
         ,NOT_EQUAL
+        // between
+        ,BETWEEN
     }
 
     // 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询
