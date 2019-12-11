@@ -11,10 +11,10 @@ export default {
   },
   methods: {
     fixBugIniOS() {
-      const $submenu = this.$refs.submenu
-      if ($submenu) {
-        const handleMouseleave = $submenu.handleMouseleave
-        $submenu.handleMouseleave = (e) => {
+      const $subMenu = this.$refs.subMenu
+      if ($subMenu) {
+        const handleMouseleave = $subMenu.handleMouseleave
+        $subMenu.handleMouseleave = (e) => {
           if (this.device === 'mobile') {
             return
           }

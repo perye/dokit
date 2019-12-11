@@ -298,7 +298,7 @@ public class GenUtil {
         }
 
         if ("index".equals(templateName)) {
-            return path  + File.separator + "index.vue";
+            return path  + File.separator + "ScrollPane.vue";
         }
 
         if ("eForm".equals(templateName)) {

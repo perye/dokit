@@ -1,21 +1,22 @@
 <template>
   <div class="app-container">
     <!--表单组件-->
-    <eForm ref="form" :is-add="isAdd"/>
+    <eForm ref="form" :is-add="isAdd" />
     <!--工具栏-->
     <div class="head-container">
       <!-- 搜索 -->
-      <el-input v-model="query.value" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
+      <el-input v-model="query.value" clearable size="small" placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
       <el-date-picker
         v-model="query.date"
         :default-time="['00:00:00','23:59:59']"
         type="daterange"
         range-separator=":"
-        class="el-range-editor--small filter-item"
+        class="el-range-editor--small date-item"
         style="height: 30.5px;width: 220px"
         value-format="yyyy-MM-dd HH:mm:ss"
         start-placeholder="开始日期"
-        end-placeholder="结束日期"/>
+        end-placeholder="结束日期"
+      />
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
       <!-- 新增 -->
       <div v-permission="['admin','roles:add']" style="display: inline-block;margin: 0px 2px;">
@@ -24,7 +25,8 @@
           size="mini"
           type="primary"
           icon="el-icon-plus"
-          @click="add">新增</el-button>
+          @click="add"
+        >新增</el-button>
       </div>
       <!-- 导出 -->
       <div style="display: inline-block;">
@@ -34,7 +36,8 @@
           class="filter-item"
           type="warning"
           icon="el-icon-download"
-          @click="download">导出</el-button>
+          @click="download"
+        >导出</el-button>
       </div>
     </div>
     <el-row :gutter="15">
@@ -45,11 +48,11 @@
             <span class="role-span">角色列表</span>
           </div>
           <el-table v-loading="loading" :data="data" highlight-current-row size="small" style="width: 100%;" @current-change="handleCurrentChange">
-            <el-table-column prop="name" label="名称"/>
-            <el-table-column prop="dataScope" label="数据权限"/>
-            <el-table-column prop="permission" label="角色权限"/>
-            <el-table-column prop="level" label="角色级别"/>
-            <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述"/>
+            <el-table-column prop="name" label="名称" />
+            <el-table-column prop="dataScope" label="数据权限" />
+            <el-table-column prop="permission" label="角色权限" />
+            <el-table-column prop="level" label="角色级别" />
+            <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
             <el-table-column :show-overflow-tooltip="true" width="130px" prop="createTime" label="创建日期">
               <template slot-scope="scope">
                 <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -57,18 +60,19 @@
             </el-table-column>
             <el-table-column v-if="checkPermission(['admin','roles:edit','roles:del'])" label="操作" width="130px" align="center" fixed="right">
               <template slot-scope="scope">
-                <el-button v-permission="['admin','roles:edit']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+                <el-button v-permission="['admin','roles:edit']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)" />
                 <el-popover
-                  v-permission="['admin','roles:del']"
                   :ref="scope.row.id"
+                  v-permission="['admin','roles:del']"
                   placement="top"
-                  width="180">
+                  width="180"
+                >
                   <p>确定删除本条数据吗？</p>
                   <div style="text-align: right; margin: 0">
                     <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
                     <el-button :loading="delLoading" type="primary" size="mini" @click="subDelete(scope.row.id)">确定</el-button>
                   </div>
-                  <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini"/>
+                  <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
                 </el-popover>
               </template>
             </el-table-column>
@@ -80,7 +84,8 @@
             style="margin-top: 8px;"
             layout="total, prev, pager, next, sizes"
             @size-change="sizeChange"
-            @current-change="pageChange"/>
+            @current-change="pageChange"
+          />
         </el-card>
       </el-col>
       <!-- 授权 -->
@@ -98,7 +103,8 @@
               size="mini"
               style="float: right; padding: 6px 9px"
               type="primary"
-              @click="saveMenu">保存</el-button>
+              @click="saveMenu"
+            >保存</el-button>
           </div>
           <el-tree
             ref="menu"
@@ -108,7 +114,8 @@
             check-strictly
             accordion
             show-checkbox
-            node-key="id"/>
+            node-key="id"
+          />
         </el-card>
 
       </el-col>
@@ -135,8 +142,8 @@ export default {
         children: 'children',
         label: 'label'
       },
-        currentId: 0, menuLoading: false, showButton: false,
-        delLoading: false, menus: [], menuIds: []
+      currentId: 0, menuLoading: false, showButton: false,
+      delLoading: false, menus: [], menuIds: []
     }
   },
   created() {
@@ -156,10 +163,10 @@ export default {
       const value = query.value
       this.params = { page: this.page, size: this.size, sort: sort }
       if (value) { this.params['blurry'] = value }
-        if (query.date) {
-            this.params['startTime'] = query.date[0]
-            this.params['endTime'] = query.date[1]
-        }
+      if (query.date) {
+        this.params['startTime'] = query.date[0]
+        this.params['endTime'] = query.date[1]
+      }
       // 清空菜单的选中
       this.$refs.menu.setCheckedKeys([])
       return true
@@ -200,7 +207,7 @@ export default {
         this.menuIds = []
         // 菜单数据需要特殊处理
         val.menus.forEach(function(data, index) {
-            _this.menuIds.push(data.id)
+          _this.menuIds.push(data.id)
         })
       }
     },
@@ -209,13 +216,13 @@ export default {
       const role = { id: this.currentId, menus: [] }
       // 得到半选的父节点数据，保存起来
       this.$refs.menu.getHalfCheckedNodes().forEach(function(data, index) {
-          const menu = { id: data.id }
-          role.menus.push(menu)
+        const menu = { id: data.id }
+        role.menus.push(menu)
       })
       // 得到已选中的 key 值
       this.$refs.menu.getCheckedKeys().forEach(function(data, index) {
-          const menu = { id: data }
-          role.menus.push(menu)
+        const menu = { id: data }
+        role.menus.push(menu)
       })
       editMenu(role).then(res => {
         this.$notify({
@@ -249,7 +256,7 @@ export default {
       this.isAdd = false
       const _this = this.$refs.form
       _this.deptIds = []
-        _this.form = { id: data.id, name: data.name, remark: data.remark, depts: data.depts, dataScope: data.dataScope, level: data.level, permission: data.permission }
+      _this.form = { id: data.id, name: data.name, remark: data.remark, depts: data.depts, dataScope: data.dataScope, level: data.level, permission: data.permission }
       if (_this.form.dataScope === '自定义') {
         _this.getDepts()
       }
@@ -258,15 +265,15 @@ export default {
       }
       _this.dialog = true
     },
-      download() {
-          this.beforeInit()
-          this.downloadLoading = true
-          downloadRole(this.params).then(result => {
-              downloadFile(result, '角色列表', 'xlsx')
-              this.downloadLoading = false
-          }).catch(() => {
-              this.downloadLoading = false
-          })
+    download() {
+      this.beforeInit()
+      this.downloadLoading = true
+      downloadRole(this.params).then(result => {
+        downloadFile(result, '角色列表', 'xlsx')
+        this.downloadLoading = false
+      }).catch(() => {
+        this.downloadLoading = false
+      })
     }
   }
 }

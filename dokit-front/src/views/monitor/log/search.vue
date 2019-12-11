@@ -13,11 +13,12 @@
       :default-time="['00:00:00','23:59:59']"
       type="daterange"
       range-separator=":"
-      class="el-range-editor--small filter-item"
+      class="el-range-editor--small date-item"
       style="height: 30.5px;width: 220px"
       value-format="yyyy-MM-dd HH:mm:ss"
       start-placeholder="开始日期"
-      end-placeholder="结束日期"/>
+      end-placeholder="结束日期"
+    />
     <el-button
       class="filter-item"
       size="mini"
@@ -33,7 +34,8 @@
         class="filter-item"
         type="warning"
         icon="el-icon-download"
-        @click="download">导出</el-button>
+        @click="download"
+      >导出</el-button>
       <el-button
         slot="reference"
         v-popover:del_all
@@ -70,22 +72,22 @@ export default {
       required: true
     }
   },
-    data() {
-        return {
-            downloadLoading: false
-        }
-    },
-    methods: {
-        download() {
-            this.$parent.beforeInit()
-            this.downloadLoading = true
-            downloadLog(this.$parent.params).then(result => {
-                downloadFile(result, '系统日志列表', 'xlsx')
-                this.downloadLoading = false
-            }).catch(() => {
-                this.downloadLoading = false
-            })
-        }
+  data() {
+    return {
+      downloadLoading: false
+    }
+  },
+  methods: {
+    download() {
+      this.$parent.beforeInit()
+      this.downloadLoading = true
+      downloadLog(this.$parent.params).then(result => {
+        downloadFile(result, '系统日志列表', 'xlsx')
+        this.downloadLoading = false
+      }).catch(() => {
+        this.downloadLoading = false
+      })
+    }
   }
 }
 </script>

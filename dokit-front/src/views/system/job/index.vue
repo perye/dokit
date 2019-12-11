@@ -3,19 +3,20 @@
     <!--工具栏-->
     <div class="head-container">
       <!-- 搜索 -->
-      <el-input v-model="query.value" clearable placeholder="输入岗位名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery"/>
+      <el-input v-model="query.value" clearable size="small" placeholder="输入岗位名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
       <el-date-picker
         v-model="query.date"
         :default-time="['00:00:00','23:59:59']"
         type="daterange"
         range-separator=":"
-        class="el-range-editor--small filter-item"
+        class="el-range-editor--small date-item"
         style="height: 30.5px;width: 220px"
         value-format="yyyy-MM-dd HH:mm:ss"
         start-placeholder="开始日期"
-        end-placeholder="结束日期"/>
+        end-placeholder="结束日期"
+      />
       <el-select v-model="query.enabled" clearable placeholder="状态" class="filter-item" style="width: 90px" @change="toQuery">
-        <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+        <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
       <!-- 新增 -->
@@ -25,7 +26,8 @@
           size="mini"
           type="primary"
           icon="el-icon-plus"
-          @click="add">新增</el-button>
+          @click="add"
+        >新增</el-button>
       </div>
       <!-- 导出 -->
       <div style="display: inline-block;">
@@ -35,14 +37,15 @@
           class="filter-item"
           type="warning"
           icon="el-icon-download"
-          @click="download">导出</el-button>
+          @click="download"
+        >导出</el-button>
       </div>
     </div>
     <!--表单组件-->
-    <eForm ref="form" :is-add="isAdd" :dicts="dict.job_status"/>
+    <eForm ref="form" :is-add="isAdd" :dicts="dict.job_status" />
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
-      <el-table-column prop="name" label="名称"/>
+      <el-table-column prop="name" label="名称" />
       <el-table-column label="所属部门">
         <template slot-scope="scope">
           <div>{{ scope.row.deptSuperiorName ? scope.row.deptSuperiorName + ' / ' : '' }}{{ scope.row.dept.name }}</div>
@@ -59,7 +62,8 @@
             v-model="scope.row.enabled"
             active-color="#409EFF"
             inactive-color="#F56C6C"
-            @change="changeEnabled(scope.row, scope.row.enabled,)"/>
+            @change="changeEnabled(scope.row, scope.row.enabled,)"
+          />
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建日期">
@@ -69,18 +73,19 @@
       </el-table-column>
       <el-table-column v-if="checkPermission(['admin','job:edit','job:del'])" label="操作" width="130px" align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button v-permission="['admin','job:edit']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)"/>
+          <el-button v-permission="['admin','job:edit']" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)" />
           <el-popover
-            v-permission="['admin','job:del']"
             :ref="scope.row.id"
+            v-permission="['admin','job:del']"
             placement="top"
-            width="180">
+            width="180"
+          >
             <p>确定删除本条数据吗？</p>
             <div style="text-align: right; margin: 0">
               <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
               <el-button :loading="delLoading" type="primary" size="mini" @click="subDelete(scope.row.id)">确定</el-button>
             </div>
-            <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini"/>
+            <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
           </el-popover>
         </template>
       </el-table-column>
@@ -92,7 +97,8 @@
       style="margin-top: 8px;"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
-      @current-change="pageChange"/>
+      @current-change="pageChange"
+    />
   </div>
 </template>
 
@@ -133,10 +139,10 @@ export default {
       const value = query.value
       const enabled = query.enabled
       if (value) { this.params['name'] = value }
-        if (query.date) {
-            this.params['startTime'] = query.date[0]
-            this.params['endTime'] = query.date[1]
-        }
+      if (query.date) {
+        this.params['startTime'] = query.date[0]
+        this.params['endTime'] = query.date[1]
+      }
       if (enabled !== '' && enabled !== null) { this.params['enabled'] = enabled }
       return true
     },
@@ -178,36 +184,36 @@ export default {
       _this.deptId = data.dept.id
       _this.dialog = true
     },
-      // 改变状态
-      changeEnabled(data, val) {
-          this.$confirm('此操作将 "' + this.dict.label.job_status[val] + '" ' + data.name + '岗位, 是否继续？', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-          }).then(() => {
-              edit(data).then(res => {
-                  this.$notify({
-                      title: this.dict.label.job_status[val] + '成功',
-                      type: 'success',
-                      duration: 2500
-                  })
-              }).catch(err => {
-                  data.enabled = !data.enabled
-                  console.log(err.response.data.message)
-              })
-          }).catch(() => {
-              data.enabled = !data.enabled
+    // 改变状态
+    changeEnabled(data, val) {
+      this.$confirm('此操作将 "' + this.dict.label.job_status[val] + '" ' + data.name + '岗位, 是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        edit(data).then(res => {
+          this.$notify({
+            title: this.dict.label.job_status[val] + '成功',
+            type: 'success',
+            duration: 2500
           })
-      },
-      download() {
-          this.beforeInit()
-          this.downloadLoading = true
-          downloadJob(this.params).then(result => {
-              downloadFile(result, '岗位列表', 'xlsx')
-              this.downloadLoading = false
-          }).catch(() => {
-              this.downloadLoading = false
-          })
+        }).catch(err => {
+          data.enabled = !data.enabled
+          console.log(err.response.data.message)
+        })
+      }).catch(() => {
+        data.enabled = !data.enabled
+      })
+    },
+    download() {
+      this.beforeInit()
+      this.downloadLoading = true
+      downloadJob(this.params).then(result => {
+        downloadFile(result, '岗位列表', 'xlsx')
+        this.downloadLoading = false
+      }).catch(() => {
+        this.downloadLoading = false
+      })
     }
   }
 }

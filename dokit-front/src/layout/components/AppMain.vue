@@ -2,11 +2,11 @@
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
-        <router-view :key="key"/>
+        <router-view :key="key" />
       </keep-alive>
     </transition>
     <div v-if="$store.state.settings.showFooter" id="el-main-footer">
-      <span v-html="$store.state.settings.footerTxt"/>
+      <span v-html="$store.state.settings.footerTxt" />
       <span> ⋅ </span>
       <a href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
     </div>
@@ -21,7 +21,7 @@ export default {
       return this.$store.state.tagsView.cachedViews
     },
     key() {
-      return this.$route.fullPath
+      return this.$route.path
     }
   }
 }
@@ -29,27 +29,31 @@ export default {
 
 <style lang="scss" scoped>
   .app-main {
-    z-index: 88;
-    /*84 = navbar + tags-view = 50 +34 */
-    min-height: calc(100vh - 84px);
+    /* 50= navbar  50  */
+    min-height: calc(100vh - 50px);
     width: 100%;
     position: relative;
     overflow: hidden;
-    padding-bottom: 12px;
   }
-
   .fixed-header+.app-main {
     padding-top: 50px;
   }
-
   .hasTagsView {
-    .app-main {
-      min-height: calc(100vh - 84px);
-    }
+  .app-main {
+    min-height: calc(100vh - 84px);
+  }
 
-    .fixed-header+.app-main {
-      padding-top: 85px;
-    }
+  .fixed-header+.app-main {
+    padding-top: 84px;
+  }
   }
 </style>
 
+<style lang="scss">
+  // fix css style bug in open el-dialog
+  .el-popup-parent--hidden {
+    .fixed-header {
+      padding-right: 15px;
+    }
+  }
+</style>
