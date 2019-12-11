@@ -152,21 +152,23 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
             DataBlock dataBlock;
             dataBlock = (DataBlock) method.invoke(searcher, ip);
             String address = dataBlock.getRegion().replace("0|","");
-            if(address.charAt(address.length()-1) == '|'){
+            char symbol = '|';
+            if(address.charAt(address.length()-1) == symbol){
                 address = address.substring(0,address.length() - 1);
             }
             return address.equals(DoKitConstant.REGION)?"内网IP":address;
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
-            if (searcher != null) {
+            if(searcher!=null){
                 try {
                     searcher.close();
                 } catch (IOException ignored) {
                 }
             }
+
         }
-            return "";
+        return "";
     }
 
     /**
