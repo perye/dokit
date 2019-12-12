@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import logoImg from '@/assets/logo/logo.png'
+import logoImg from '@/assets/images/logo.png'
 import { mapState } from 'vuex'
 export default {
   name: 'SidebarLogo',
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       title: 'dokit 后台管理',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      logo: logoImg
     }
   }
 }
@@ -55,7 +55,7 @@ export default {
         width: 32px;
         height: 32px;
         vertical-align: middle;
-        margin-right: 12px;
+        margin-right: 6px;
       }
       & .sidebar-title {
         display: inline-block;

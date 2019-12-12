@@ -7,7 +7,7 @@
         <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" @change="themeChange" />
       </div>
       <div class="drawer-item">
-        <span>打开标签</span>
+        <span>显示标签</span>
         <el-switch v-model="tagsView" class="drawer-switch" />
       </div>
       <div class="drawer-item">

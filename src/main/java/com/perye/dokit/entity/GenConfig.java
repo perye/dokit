@@ -25,6 +25,9 @@ public class GenConfig {
     @Column(name = "id")
     private Long id;
 
+    /** 接口名称 **/
+    private String apiAlias;
+
     // 包路径
     @NotBlank
     private String pack;

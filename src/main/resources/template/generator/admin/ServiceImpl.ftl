@@ -14,7 +14,7 @@ import com.perye.dokit.utils.ValidationUtil;
 import com.perye.dokit.utils.FileUtil;
 import ${package}.repository.${className}Repository;
 import ${package}.service.${className}Service;
-import ${package}.dto.${className}DTO;
+import ${package}.dto.${className}Dto;
 import ${package}.dto.${className}QueryCriteria;
 import ${package}.mapper.${className}Mapper;
 import org.springframework.stereotype.Service;
@@ -64,13 +64,13 @@ public class ${className}ServiceImpl implements ${className}Service {
 
     @Override
     @Cacheable
-    public List<${className}DTO> queryAll(${className}QueryCriteria criteria){
+    public List<${className}Dto> queryAll(${className}QueryCriteria criteria){
         return ${changeClassName}Mapper.toDto(${changeClassName}Repository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Cacheable(key = "#p0")
-    public ${className}DTO findById(${pkColumnType} ${pkChangeColName}) {
+    public ${className}Dto findById(${pkColumnType} ${pkChangeColName}) {
         ${className} ${changeClassName} = ${changeClassName}Repository.findById(${pkChangeColName}).orElseGet(${className}::new);
         ValidationUtil.isNull(${changeClassName}.get${pkCapitalColName}(),"${className}","${pkChangeColName}",${pkChangeColName});
         return ${changeClassName}Mapper.toDto(${changeClassName});
@@ -79,7 +79,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public ${className}DTO create(${className} resources) {
+    public ${className}Dto create(${className} resources) {
     <#if !auto && pkColumnType = 'Long'>
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
         resources.set${pkCapitalColName}(snowflake.nextId());
@@ -138,9 +138,9 @@ public class ${className}ServiceImpl implements ${className}Service {
     }
 
     @Override
-    public void download(List<${className}DTO> all, HttpServletResponse response) throws IOException {
+    public void download(List<${className}Dto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (${className}DTO ${changeClassName} : all) {
+        for (${className}Dto ${changeClassName} : all) {
         Map<String,Object> map = new LinkedHashMap<>();
         <#list columns as column>
             <#if column.columnKey != 'PRI'>

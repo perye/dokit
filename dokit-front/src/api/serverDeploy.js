@@ -22,3 +22,4 @@ export function edit(data) {
     data
   })
 }
+export default { add, edit, del }

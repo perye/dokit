@@ -6,18 +6,11 @@ import 'normalize.css/normalize.css'
 
 import Element from 'element-ui'
 import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
-
-// 数据字典
 import dict from './components/Dict'
-
-// 权限指令
 import permission from './components/Permission'
+import 'mavon-editor/dist/css/index.css'
 import './assets/styles/element-variables.scss'
-// global css
-import './assets/styles/index.scss'
-
-// 代码高亮
+import './assets/styles/index.scss' // global css
 import VueHighlightJS from 'vue-highlightjs'
 import 'highlight.js/styles/atom-one-dark.css'
 
@@ -33,7 +26,7 @@ Vue.use(mavonEditor)
 Vue.use(permission)
 Vue.use(dict)
 Vue.use(Element, {
-  size: Cookies.get('size') || 'small' // set element-ui default size
+  size: Cookies.get('size') || 'medium' // set element-ui default size
 })
 
 Vue.config.productionTip = false

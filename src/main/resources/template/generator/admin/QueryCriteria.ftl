@@ -7,7 +7,7 @@ import lombok.Data;
 <#if queryHasBigDecimal>
     import java.math.BigDecimal;
 </#if>
-<#if dateRanges??>
+<#if betweens??>
     import java.util.List;
 </#if>
 <#if queryColumns??>
@@ -47,9 +47,9 @@ public class ${className}QueryCriteria{
         </#if>
     </#list>
 </#if>
-<#if dateRanges??>
-    <#list dateRanges as column>
-
+<#if betweens??>
+    <#list betweens as column>
+        /** BETWEEN */
         @Query(type = Query.Type.BETWEEN)
         private List<${column.columnType}> createTime;
     </#list>

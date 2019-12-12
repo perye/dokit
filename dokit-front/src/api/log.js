@@ -7,16 +7,6 @@ export function getErrDetail(id) {
   })
 }
 
-
-export function downloadLog(params) {
-  return request({
-    url: 'api/logs/download',
-    method: 'get',
-    params,
-    responseType: 'blob'
-  })
-}
-
 export function delAllError() {
   return request({
     url: 'api/logs/del/error',

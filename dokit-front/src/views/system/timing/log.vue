@@ -2,14 +2,14 @@
   <el-dialog :visible.sync="dialog" append-to-body title="执行日志" width="88%">
     <!-- 搜索 -->
     <div class="head-container">
-      <el-input v-model="query.value" clearable size="small" placeholder="输入任务名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+      <el-input v-model="query.jobName" clearable size="small" placeholder="输入任务名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
       <el-date-picker
-        v-model="query.date"
+        v-model="query.createTime"
         :default-time="['00:00:00','23:59:59']"
         type="daterange"
         range-separator=":"
-        class="el-range-editor--small date-item"
-        style="height: 30.5px;width: 220px"
+        size="small"
+        class="date-item"
         value-format="yyyy-MM-dd HH:mm:ss"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
@@ -26,7 +26,7 @@
           class="filter-item"
           type="warning"
           icon="el-icon-download"
-          @click="download"
+          @click="downloadMethod"
         >导出</el-button>
       </div>
     </div>
@@ -55,9 +55,7 @@
       </el-table-column>
     </el-table>
     <el-dialog :visible.sync="errorDialog" append-to-body title="异常详情" width="85%">
-      <span>
-        {{ errorInfo }}
-      </span>
+      <pre v-highlightjs="errorInfo"><code class="java" /></pre>
     </el-dialog>
     <!--分页组件-->
     <el-pagination
@@ -73,16 +71,12 @@
 </template>
 
 <script>
-import checkPermission from '@/utils/permission'
-import initData from '@/mixins/initData'
-import { downloadLogs } from '@/api/timing'
-import { parseTime, downloadFile } from '@/utils/index'
+import crud from '@/mixins/crud'
 export default {
-  mixins: [initData],
+  mixins: [crud],
   data() {
     return {
       errorInfo: '', errorDialog: false,
-      dialog: false, delLoading: false,
       enabledTypeOptions: [
         { key: 'true', display_name: '成功' },
         { key: 'false', display_name: '失败' }
@@ -90,47 +84,32 @@ export default {
     }
   },
   methods: {
-    parseTime,
-    checkPermission,
     doInit() {
       this.$nextTick(() => {
         this.init()
       })
     },
-    toQuery() {
-      this.page = 0
-      this.doInit()
-    },
+    // 获取数据前设置好接口地址
     beforeInit() {
       this.url = 'api/jobs/logs'
-      const sort = 'id,desc'
-      const query = this.query
-      const value = query.value
-      const isSuccess = query.isSuccess
       this.size = 6
-      this.params = { page: this.page, size: this.size, sort: sort }
-      if (value) { this.params['jobName'] = value }
-      if (query.date) {
-        this.params['startTime'] = query.date[0]
-        this.params['endTime'] = query.date[1]
-      }
-      if (isSuccess !== '' && isSuccess !== null) { this.params['isSuccess'] = isSuccess }
       return true
     },
+    // 异常详情
     info(errorInfo) {
       this.errorInfo = errorInfo
       this.errorDialog = true
-    },
-    download() {
-      this.beforeInit()
-      this.downloadLoading = true
-      downloadLogs(this.params).then(result => {
-        downloadFile(result, '任务日志列表', 'xlsx')
-        this.downloadLoading = false
-      }).catch(() => {
-        this.downloadLoading = false
-      })
     }
   }
 }
 </script>
+
+<style scoped>
+  .java.hljs{
+    color: #444;
+    background: #ffffff !important;
+  }
+  /deep/ .el-dialog__body{
+    padding: 0 20px 10px 20px !important;
+  }
+</style>

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@Api(tags = "${className}管理")
+@Api(tags = "${apiAlias}管理")
 @RestController
 @RequestMapping("/api/${changeClassName}")
 public class ${className}Controller {
@@ -35,24 +35,24 @@ public class ${className}Controller {
         ${changeClassName}Service.download(${changeClassName}Service.queryAll(criteria), response);
     }
 
-    @Log("查询${className}")
-    @ApiOperation("查询${className}")
+    @Log("查询${apiAlias}")
+    @ApiOperation("查询${apiAlias}")
     @GetMapping()
     @PreAuthorize("@dokit.check('${changeClassName}:list')")
     public ResponseEntity get${className}s(${className}QueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增${className}")
-    @ApiOperation("新增${className}")
+    @Log("新增${apiAlias}")
+    @ApiOperation("新增${apiAlias}")
     @PostMapping
     @PreAuthorize("@dokit.check('${changeClassName}:add')")
     public ResponseEntity create(@Validated @RequestBody ${className} resources){
         return new ResponseEntity<>(${changeClassName}Service.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改${className}")
-    @ApiOperation("修改${className}")
+    @Log("修改${apiAlias}")
+    @ApiOperation("修改${apiAlias}")
     @PutMapping
     @PreAuthorize("@dokit.check('${changeClassName}:edit')")
     public ResponseEntity update(@Validated @RequestBody ${className} resources){
@@ -60,8 +60,8 @@ public class ${className}Controller {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除${className}")
-    @ApiOperation("删除${className}")
+    @Log("删除${apiAlias}")
+    @ApiOperation("删除${apiAlias}")
     @DeleteMapping(value = "/{${pkChangeColName}}")
     @PreAuthorize("@dokit.check('${changeClassName}:del')")
     public ResponseEntity delete(@PathVariable ${pkColumnType} ${pkChangeColName}){
@@ -70,9 +70,9 @@ public class ${className}Controller {
     }
 
 
-    @Log("多选删除${className}")
-    @ApiOperation("多选删除${className}")
-    @PreAuthorize("@el.check('${changeClassName}:del')")
+    @Log("多选删除${apiAlias}")
+    @ApiOperation("多选删除${apiAlias}")
+    @PreAuthorize("@dokit.check('${changeClassName}:del')")
     @DeleteMapping
     public ResponseEntity deleteAll(@RequestBody ${pkColumnType}[] ids) {
     ${changeClassName}Service.deleteAll(ids);

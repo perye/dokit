@@ -56,13 +56,14 @@ public class GenUtil {
         List<String> templateNames = new ArrayList<>();
         templateNames.add("api");
         templateNames.add("index");
-        templateNames.add("eForm");
         return templateNames;
     }
 
     public static void generatorCode(List<ColumnInfo> columnInfos, GenConfig genConfig) throws IOException {
         // 存储模版字段数据
         Map<String,Object> genMap = new HashMap<>(16);
+        // 接口别名
+        genMap.put("apiAlias",genConfig.getApiAlias());
         // 包名称
         genMap.put("package",genConfig.getPack());
         // 作者
@@ -107,8 +108,8 @@ public class GenUtil {
         List<Map<String,Object>> queryColumns = new ArrayList<>();
         // 存储字典信息
         List<String> dicts = new ArrayList<>();
-        // 存储 DateRange 信息
-        List<Map<String,Object>> dateRanges = new ArrayList<>();
+        // 存储 between 信息
+        List<Map<String,Object>> betweens = new ArrayList<>();
         // 存储不为空的字段信息
         List<Map<String,Object>> isNotNullColumns = new ArrayList<>();
         for (ColumnInfo column : columnInfos) {
@@ -188,8 +189,8 @@ public class GenUtil {
                     // 查询中存储 BigDecimal 类型
                     genMap.put("queryHasBigDecimal",true);
                 }
-                if("DateRange".equalsIgnoreCase(column.getQueryType())){
-                    dateRanges.add(listMap);
+                if("between".equalsIgnoreCase(column.getQueryType())){
+                    betweens.add(listMap);
                 } else {
                     // 添加到查询列表中
                     queryColumns.add(listMap);
@@ -205,7 +206,7 @@ public class GenUtil {
         // 保存字段列表
         genMap.put("dicts",dicts);
         // 保存查询列表
-        genMap.put("dateRanges",dateRanges);
+        genMap.put("betweens",betweens);
         // 保存非空字段信息
         genMap.put("isNotNullColumns",isNotNullColumns);
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));
@@ -270,7 +271,7 @@ public class GenUtil {
         }
 
         if ("Dto".equals(templateName)) {
-            return packagePath + "dto" + File.separator + className + "DTO.java";
+            return packagePath + "dto" + File.separator + className + "Dto.java";
         }
 
         if ("QueryCriteria".equals(templateName)) {

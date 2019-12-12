@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 
 @Data
-public class ${className}DTO implements Serializable {
+public class ${className}Dto implements Serializable {
 <#if columns??>
     <#list columns as column>
         <#if column.remark != ''>

@@ -36,6 +36,7 @@
           </div>
         </el-card>
       </el-col>
+      <!-- 用户日志 -->
       <el-col :xs="24" :sm="24" :md="16" :lg="18" :xl="19">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
@@ -87,12 +88,12 @@ import updateEmail from './center/updateEmail'
 import { getToken } from '@/utils/auth'
 import store from '@/store'
 import { parseTime } from '@/utils/index'
-import initData from '@/mixins/initData'
+import crud from '@/mixins/crud'
 import Avatar from '@/assets/images/avatar.png'
 export default {
   name: 'Center',
   components: { updatePass, updateEmail },
-  mixins: [initData],
+  mixins: [crud],
   data() {
     return {
       Avatar: Avatar,
@@ -122,8 +123,6 @@ export default {
     },
     beforeInit() {
       this.url = 'api/logs/user'
-      const sort = 'id,desc'
-      this.params = { page: this.page, size: this.size, sort: sort }
       return true
     },
     handleSuccess(response, file, fileList) {
@@ -143,6 +142,7 @@ export default {
         duration: 2500
       })
     },
+    // 刷新日志
     refresh() {
       this.ico = 'el-icon-loading'
       // this.$refs.log.init()
