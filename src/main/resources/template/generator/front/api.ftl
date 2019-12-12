@@ -32,4 +32,3 @@ export function edit(data) {
 }
 
 export default { add, edit, del, delAll }
-}

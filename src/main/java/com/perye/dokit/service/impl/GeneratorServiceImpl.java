@@ -2,11 +2,13 @@ package com.perye.dokit.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.perye.dokit.entity.ColumnInfo;
 import com.perye.dokit.entity.GenConfig;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.repository.ColumnInfoRepository;
 import com.perye.dokit.service.GeneratorService;
+import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.GenUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.StringUtils;
@@ -18,6 +20,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -132,6 +137,21 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
         List<Map<String,Object>> genList =  GenUtil.preview(columns, genConfig);
         return new ResponseEntity<>(genList, HttpStatus.OK);
+    }
+
+    @Override
+    public void download(GenConfig genConfig, List<ColumnInfo> columns, HttpServletRequest request, HttpServletResponse response) {
+        if(genConfig.getId() == null){
+            throw new BadRequestException("请先配置生成器");
+        }
+        try {
+            File file = new File(GenUtil.download(columns, genConfig));
+            String zipPath = file.getPath()  + ".zip";
+            ZipUtil.zip(file.getPath(), zipPath);
+            FileUtil.downloadFile(request, response, new File(zipPath), true);
+        } catch (IOException e) {
+            throw new BadRequestException("打包失败");
+        }
     }
 }
 
