@@ -2,6 +2,7 @@ package com.perye.dokit.service;
 
 import com.perye.dokit.entity.ColumnInfo;
 import com.perye.dokit.entity.GenConfig;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
@@ -47,8 +48,15 @@ public interface GeneratorService {
      * 代码生成
      * @param genConfig 配置信息
      * @param columns 字段信息
+     */
+    void generator(GenConfig genConfig, List<ColumnInfo> columns);
+
+    /**
+     * 预览
+     * @param genConfig 配置信息
+     * @param columns 字段信息
      * @return /
      */
-    Object generator(GenConfig genConfig, List<ColumnInfo> columns);
+    ResponseEntity preview(GenConfig genConfig, List<ColumnInfo> columns);
 }
 

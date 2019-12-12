@@ -20,7 +20,10 @@ import javax.persistence.*;
 </#if>
 import java.io.Serializable;
 
-
+/**
+* @author ${author}
+* @date ${date}
+*/
 @Entity
 @Data
 @Table(name="${tableName}")
@@ -29,12 +32,12 @@ public class ${className} implements Serializable {
     <#list columns as column>
 
         <#if column.remark != ''>
-            // ${column.remark}
+            /** ${column.remark} */
         </#if>
         <#if column.columnKey = 'PRI'>
-    @Id
+            @Id
             <#if auto>
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+                @GeneratedValue(strategy = GenerationType.IDENTITY)
             </#if>
         </#if>
         @Column(name = "${column.columnName}"<#if column.columnKey = 'UNI'>,unique = true</#if><#if column.istNotNull && column.columnKey != 'PRI'>,nullable = false</#if>)
@@ -56,7 +59,7 @@ public class ${className} implements Serializable {
     </#list>
 </#if>
 
-    public void copy(${className} source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
+public void copy(${className} source){
+BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+}
 }
