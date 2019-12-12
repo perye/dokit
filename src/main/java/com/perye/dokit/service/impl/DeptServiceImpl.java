@@ -1,6 +1,6 @@
 package com.perye.dokit.service.impl;
 
-import com.perye.dokit.dto.DeptDTO;
+import com.perye.dokit.dto.DeptDto;
 import com.perye.dokit.dto.DeptQueryCriteria;
 import com.perye.dokit.entity.Dept;
 import com.perye.dokit.exception.BadRequestException;
@@ -39,13 +39,13 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     @Cacheable
-    public List<DeptDTO> queryAll(DeptQueryCriteria criteria) {
+    public List<DeptDto> queryAll(DeptQueryCriteria criteria) {
         return deptMapper.toDto(deptRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Cacheable(key = "#p0")
-    public DeptDTO findById(Long id) {
+    public DeptDto findById(Long id) {
         Dept dept = deptRepository.findById(id).orElseGet(Dept::new);
         ValidationUtil.isNull(dept.getId(),"Dept","id",id);
         return deptMapper.toDto(dept);
@@ -64,17 +64,17 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     @Cacheable
-    public Object buildTree(List<DeptDTO> deptDTOS) {
-        Set<DeptDTO> trees = new LinkedHashSet<>();
-        Set<DeptDTO> depts= new LinkedHashSet<>();
-        List<String> deptNames = deptDTOS.stream().map(DeptDTO::getName).collect(Collectors.toList());
+    public Object buildTree(List<DeptDto> deptDtos) {
+        Set<DeptDto> trees = new LinkedHashSet<>();
+        Set<DeptDto> depts= new LinkedHashSet<>();
+        List<String> deptNames = deptDtos.stream().map(DeptDto::getName).collect(Collectors.toList());
         boolean isChild;
-        for (DeptDTO deptDTO : deptDTOS) {
+        for (DeptDto deptDTO : deptDtos) {
             isChild = false;
             if ("0".equals(deptDTO.getPid().toString())) {
                 trees.add(deptDTO);
             }
-            for (DeptDTO it : deptDTOS) {
+            for (DeptDto it : deptDtos) {
                 if (it.getPid().equals(deptDTO.getId())) {
                     isChild = true;
                     if (deptDTO.getChildren() == null) {
@@ -93,18 +93,18 @@ public class DeptServiceImpl implements DeptService {
             trees = depts;
         }
 
-        Integer totalElements = deptDTOS.size();
+        Integer totalElements = deptDtos.size();
 
         Map<String,Object> map = new HashMap<>();
         map.put("totalElements",totalElements);
-        map.put("content",CollectionUtils.isEmpty(trees)?deptDTOS:trees);
+        map.put("content",CollectionUtils.isEmpty(trees)? deptDtos :trees);
         return map;
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public DeptDTO create(Dept resources) {
+    public DeptDto create(Dept resources) {
         return deptMapper.toDto(deptRepository.save(resources));
     }
 
@@ -129,9 +129,9 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public void download(List<DeptDTO> deptDTOs, HttpServletResponse response) throws IOException {
+    public void download(List<DeptDto> deptDtos, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (DeptDTO deptDTO : deptDTOs) {
+        for (DeptDto deptDTO : deptDtos) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("部门名称", deptDTO.getName());
             map.put("部门状态", deptDTO.getEnabled() ? "启用" : "停用");

@@ -3,6 +3,9 @@ package com.perye.dokit.dto;
 import com.perye.dokit.annotation.Query;
 import lombok.Data;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 /**
  * @author perye
  * @email peryedev@gmail.com
@@ -14,13 +17,10 @@ public class DeployQueryCriteria{
     /**
      * 模糊
      */
-    @Query(type = Query.Type.EQUAL)
-    private String appId;
+    @Query(type = Query.Type.INNER_LIKE, propName = "name", joinName = "app")
+    private String appName;
 
-    /**
-     * 模糊
-     */
-    @Query(type = Query.Type.INNER_LIKE)
-    private String ip;
+    @Query(type = Query.Type.BETWEEN)
+    private List<Timestamp> createTime;
 
 }

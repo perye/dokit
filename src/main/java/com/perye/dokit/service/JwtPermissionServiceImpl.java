@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.UserDTO;
+import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.entity.Menu;
 import com.perye.dokit.entity.Role;
 import com.perye.dokit.repository.RoleRepository;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 
 @Service
 @CacheConfig(cacheNames = "role")
-public class JwtPermissionService {
+public class JwtPermissionServiceImpl {
 
     private final RoleRepository roleRepository;
 
-    public JwtPermissionService(RoleRepository roleRepository) {
+    public JwtPermissionServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
     /**
@@ -29,7 +29,7 @@ public class JwtPermissionService {
      * @return Collection
      */
     @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
-    public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDTO user) {
+    public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
 
         System.out.println("--------------------loadPermissionByUser:" + user.getUsername() + "---------------------");
 

@@ -1,7 +1,7 @@
 package com.perye.dokit.mapper;
 
 import com.perye.dokit.base.BaseMapper;
-import com.perye.dokit.dto.DictSmallDTO;
+import com.perye.dokit.dto.DictSmallDto;
 import com.perye.dokit.entity.Dict;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -12,6 +12,6 @@ import org.mapstruct.ReportingPolicy;
  * @date 2019/12/11
  */
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface DictSmallMapper extends BaseMapper<DictSmallDTO, Dict> {
+public interface DictSmallMapper extends BaseMapper<DictSmallDto, Dict> {
 
 }

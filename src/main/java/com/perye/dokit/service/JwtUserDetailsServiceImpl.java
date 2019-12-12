@@ -1,8 +1,8 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.DeptSmallDTO;
-import com.perye.dokit.dto.JobSmallDTO;
-import com.perye.dokit.dto.UserDTO;
+import com.perye.dokit.dto.DeptSmallDto;
+import com.perye.dokit.dto.JobSmallDto;
+import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.security.JwtUser;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,20 +14,20 @@ import java.util.Optional;
 
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class JwtUserDetailsService implements UserDetailsService {
+public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
 
-    private final JwtPermissionService permissionService;
+    private final JwtPermissionServiceImpl permissionService;
 
-    public JwtUserDetailsService(UserService userService, JwtPermissionService permissionService) {
+    public JwtUserDetailsServiceImpl(UserService userService, JwtPermissionServiceImpl permissionService) {
         this.userService = userService;
         this.permissionService = permissionService;
     }
     @Override
     public UserDetails loadUserByUsername(String username){
 
-        UserDTO user = userService.findByName(username);
+        UserDto user = userService.findByName(username);
         if (user == null) {
             throw new BadRequestException("账号不存在");
         } else {
@@ -35,7 +35,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         }
     }
 
-    public UserDetails createJwtUser(UserDTO user) {
+    public UserDetails createJwtUser(UserDto user) {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),
@@ -43,8 +43,8 @@ public class JwtUserDetailsService implements UserDetailsService {
                 user.getAvatar(),
                 user.getEmail(),
                 user.getPhone(),
-                Optional.ofNullable(user.getDept()).map(DeptSmallDTO::getName).orElse(null),
-                Optional.ofNullable(user.getJob()).map(JobSmallDTO::getName).orElse(null),
+                Optional.ofNullable(user.getDept()).map(DeptSmallDto::getName).orElse(null),
+                Optional.ofNullable(user.getJob()).map(JobSmallDto::getName).orElse(null),
                 permissionService.mapToGrantedAuthorities(user),
                 user.getEnabled(),
                 user.getCreateTime(),

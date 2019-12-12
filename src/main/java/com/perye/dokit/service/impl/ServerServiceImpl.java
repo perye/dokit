@@ -2,7 +2,7 @@ package com.perye.dokit.service.impl;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.perye.dokit.dto.ServerDTO;
+import com.perye.dokit.dto.ServerDto;
 import com.perye.dokit.dto.ServerQueryCriteria;
 import com.perye.dokit.entity.Server;
 import com.perye.dokit.mapper.ServerMapper;
@@ -65,12 +65,12 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public List<ServerDTO> queryAll(ServerQueryCriteria criteria){
+    public List<ServerDto> queryAll(ServerQueryCriteria criteria){
         return serverMapper.toDto(serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
-    public ServerDTO findById(Integer id) {
+    public ServerDto findById(Integer id) {
         Server server = serverRepository.findById(id).orElseGet(Server::new);
         ValidationUtil.isNull(server.getId(),"Server","id",id);
         return serverMapper.toDto(server);
@@ -78,7 +78,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ServerDTO create(Server resources) {
+    public ServerDto create(Server resources) {
         return serverMapper.toDto(serverRepository.save(resources));
     }
 

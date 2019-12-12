@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
+import com.perye.dokit.dto.TestDto;
 import com.perye.dokit.entity.Test;
-import com.perye.dokit.dto.TestDTO;
 import com.perye.dokit.dto.TestQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
@@ -25,22 +25,22 @@ public interface TestService {
     * @param criteria 条件参数
     * @return List<TestDTO>
     */
-    List<TestDTO> queryAll(TestQueryCriteria criteria);
+    List<TestDto> queryAll(TestQueryCriteria criteria);
 
     /**
     * 根据ID查询
     * @param id ID
     * @return TestDTO
     */
-    TestDTO findById(Integer id);
+    TestDto findById(Integer id);
 
 
-    TestDTO create(Test resources);
+    TestDto create(Test resources);
 
 
     void update(Test resources);
 
     void delete(Integer id);
 
-    void download(List<TestDTO> all, HttpServletResponse response) throws IOException;
+    void download(List<TestDto> all, HttpServletResponse response) throws IOException;
 }

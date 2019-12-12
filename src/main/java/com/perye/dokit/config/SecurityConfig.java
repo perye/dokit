@@ -3,7 +3,7 @@ package com.perye.dokit.config;
 import com.perye.dokit.annotation.AnonymousAccess;
 import com.perye.dokit.security.JwtAuthenticationEntryPoint;
 import com.perye.dokit.security.JwtAuthorizationTokenFilter;
-import com.perye.dokit.service.JwtUserDetailsService;
+import com.perye.dokit.service.JwtUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -37,14 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    private final JwtUserDetailsService jwtUserDetailsService;
+    private final JwtUserDetailsServiceImpl jwtUserDetailsService;
 
     private final ApplicationContext applicationContext;
 
     // 自定义基于JWT的安全过滤器
     private final JwtAuthorizationTokenFilter authenticationTokenFilter;
 
-    public SecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtUserDetailsService jwtUserDetailsService, JwtAuthorizationTokenFilter authenticationTokenFilter, ApplicationContext applicationContext) {
+    public SecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtUserDetailsServiceImpl jwtUserDetailsService, JwtAuthorizationTokenFilter authenticationTokenFilter, ApplicationContext applicationContext) {
         this.unauthorizedHandler = unauthorizedHandler;
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.authenticationTokenFilter = authenticationTokenFilter;

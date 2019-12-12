@@ -2,7 +2,7 @@ package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.DataScope;
-import com.perye.dokit.dto.RoleSmallDTO;
+import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.dto.UserQueryCriteria;
 import com.perye.dokit.entity.User;
 import com.perye.dokit.entity.VerificationCode;
@@ -15,7 +15,6 @@ import com.perye.dokit.utils.SecurityUtils;
 import com.perye.dokit.vo.UserPassVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,7 +89,9 @@ public class UserController {
             criteria.setDeptIds(result);
             if(result.size() == 0){
                 return new ResponseEntity<>(PageUtil.toPage(null,0),HttpStatus.OK);
-            } else return new ResponseEntity<>(userService.queryAll(criteria,pageable),HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(userService.queryAll(criteria,pageable),HttpStatus.OK);
+            }
             // 否则取并集
         } else {
             result.addAll(deptSet);
@@ -124,9 +125,8 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('user:del')")
     public ResponseEntity delete(@PathVariable Long id){
-        Integer currentLevel =  Collections.min(roleService.findByUsers_Id(SecurityUtils.getUserId()).stream().map(RoleSmallDTO::getLevel).collect(Collectors.toList()));
-        Integer optLevel =  Collections.min(roleService.findByUsers_Id(id).stream().map(RoleSmallDTO::getLevel).collect(Collectors.toList()));
-
+        Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
+        Integer optLevel =  Collections.min(roleService.findByUsersId(id).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         if (currentLevel > optLevel) {
             throw new BadRequestException("角色权限不足");
         }
@@ -174,7 +174,7 @@ public class UserController {
      * @param resources /
      */
     private void checkLevel(User resources) {
-        Integer currentLevel =  Collections.min(roleService.findByUsers_Id(SecurityUtils.getUserId()).stream().map(RoleSmallDTO::getLevel).collect(Collectors.toList()));
+        Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         Integer optLevel = roleService.findByRoles(resources.getRoles());
         if (currentLevel > optLevel) {
             throw new BadRequestException("角色权限不足");

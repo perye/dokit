@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 
 @Data
-public class TestDTO implements Serializable {
+public class TestDto implements Serializable {
     // id
     private Integer id;
     //  用户名

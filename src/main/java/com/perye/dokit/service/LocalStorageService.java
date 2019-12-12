@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.LocalStorageDTO;
+import com.perye.dokit.dto.LocalStorageDto;
 import com.perye.dokit.dto.LocalStorageQueryCriteria;
 import com.perye.dokit.entity.LocalStorage;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +14,11 @@ public interface LocalStorageService {
 
     Object queryAll(LocalStorageQueryCriteria criteria, Pageable pageable);
 
-    List<LocalStorageDTO> queryAll(LocalStorageQueryCriteria criteria);
+    List<LocalStorageDto> queryAll(LocalStorageQueryCriteria criteria);
 
-    LocalStorageDTO findById(Long id);
+    LocalStorageDto findById(Long id);
 
-    LocalStorageDTO create(String name, MultipartFile file);
+    LocalStorageDto create(String name, MultipartFile file);
 
     void update(LocalStorage resources);
 
@@ -26,6 +26,6 @@ public interface LocalStorageService {
 
     void deleteAll(Long[] ids);
 
-    void download(List<LocalStorageDTO> queryAll, HttpServletResponse response) throws IOException;
+    void download(List<LocalStorageDto> queryAll, HttpServletResponse response) throws IOException;
 
 }

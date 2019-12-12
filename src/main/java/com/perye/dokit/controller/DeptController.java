@@ -2,7 +2,7 @@ package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.DataScope;
-import com.perye.dokit.dto.DeptDTO;
+import com.perye.dokit.dto.DeptDto;
 import com.perye.dokit.dto.DeptQueryCriteria;
 import com.perye.dokit.entity.Dept;
 import com.perye.dokit.exception.BadRequestException;
@@ -51,8 +51,8 @@ public class DeptController {
     public ResponseEntity getDepts(DeptQueryCriteria criteria){
         // 数据权限
         criteria.setIds(dataScope.getDeptIds());
-        List<DeptDTO> deptDTOS = deptService.queryAll(criteria);
-        return new ResponseEntity<>(deptService.buildTree(deptDTOS),HttpStatus.OK);
+        List<DeptDto> deptDtos = deptService.queryAll(criteria);
+        return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
     }
 
     @Log("新增部门")

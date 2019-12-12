@@ -1,6 +1,6 @@
 package com.perye.dokit.service.impl;
 
-import com.perye.dokit.dto.ServerDeployDTO;
+import com.perye.dokit.dto.ServerDeployDto;
 import com.perye.dokit.dto.ServerDeployQueryCriteria;
 import com.perye.dokit.entity.ServerDeploy;
 import com.perye.dokit.mapper.ServerDeployMapper;
@@ -14,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * @author perye
@@ -47,14 +45,14 @@ public class ServerDeployServiceImpl implements ServerDeployService {
     }
 
     @Override
-    public ServerDeployDTO findById(Long id) {
-        Optional<ServerDeploy> server = serverDeployRepository.findById(id);
-        ValidationUtil.isNull(server,"ServerDeploy","id",id);
-        return serverDeployMapper.toDto(server.get());
+    public ServerDeployDto findById(Long id) {
+        ServerDeploy server = serverDeployRepository.findById(id).orElseGet(ServerDeploy::new);
+        ValidationUtil.isNull(server.getId(),"ServerDeploy","id",id);
+        return serverDeployMapper.toDto(server);
     }
 
     @Override
-    public ServerDeployDTO findByIp(String ip) {
+    public ServerDeployDto findByIp(String ip) {
         ServerDeploy deploy = serverDeployRepository.findByIp(ip);
         return serverDeployMapper.toDto(deploy);
     }
@@ -62,16 +60,15 @@ public class ServerDeployServiceImpl implements ServerDeployService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ServerDeployDTO create(ServerDeploy resources) {
+    public ServerDeployDto create(ServerDeploy resources) {
         return serverDeployMapper.toDto(serverDeployRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(ServerDeploy resources) {
-        Optional<ServerDeploy> optionalServer = serverDeployRepository.findById(resources.getId());
-        ValidationUtil.isNull( optionalServer,"ServerDeploy","id",resources.getId());
-        ServerDeploy serverDeploy = optionalServer.get();
+        ServerDeploy serverDeploy = serverDeployRepository.findById(resources.getId()).orElseGet(ServerDeploy::new);
+        ValidationUtil.isNull( serverDeploy.getId(),"ServerDeploy","id",resources.getId());
         serverDeploy.copy(resources);
         serverDeployRepository.save(serverDeploy);
     }

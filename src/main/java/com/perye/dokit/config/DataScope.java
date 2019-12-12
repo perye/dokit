@@ -1,7 +1,7 @@
 package com.perye.dokit.config;
 
-import com.perye.dokit.dto.RoleSmallDTO;
-import com.perye.dokit.dto.UserDTO;
+import com.perye.dokit.dto.RoleSmallDto;
+import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.entity.Dept;
 import com.perye.dokit.service.DeptService;
 import com.perye.dokit.service.RoleService;
@@ -35,15 +35,15 @@ public class DataScope {
 
     public Set<Long> getDeptIds() {
 
-        UserDTO user = userService.findByName(SecurityUtils.getUsername());
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
 
         // 用于存储部门id
         Set<Long> deptIds = new HashSet<>();
 
         // 查询用户角色
-        List<RoleSmallDTO> roleSet = roleService.findByUsers_Id(user.getId());
+        List<RoleSmallDto> roleSet = roleService.findByUsersId(user.getId());
 
-        for (RoleSmallDTO role : roleSet) {
+        for (RoleSmallDto role : roleSet) {
 
             if (scopeType[0].equals(role.getDataScope())) {
                 return new HashSet<>() ;

@@ -18,32 +18,36 @@ import org.springframework.web.bind.annotation.*;
  * @email peryedev@gmail.com
  * @date 2019/12/10 11:33 下午
  */
-@Api(tags = "服务器部署管理")
+@Api(tags = "服务器管理")
 @RestController
 @RequestMapping("/api/serverDeploy")
 public class ServerDeployController {
 
-    @Autowired
-    private ServerDeployService serverDeployService;
+    private final ServerDeployService serverDeployService;
 
-    @Log("查询Server")
-    @ApiOperation(value = "查询Server")
+    public ServerDeployController(ServerDeployService serverDeployService) {
+        this.serverDeployService = serverDeployService;
+    }
+
+
+    @Log("查询服务器")
+    @ApiOperation(value = "查询服务器")
     @GetMapping
     @PreAuthorize("@dokit.check('serverDeploy:list')")
     public ResponseEntity getServers(ServerDeployQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(serverDeployService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(serverDeployService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增Server")
-    @ApiOperation(value = "新增Server")
+    @Log("新增服务器")
+    @ApiOperation(value = "新增服务器")
     @PostMapping
     @PreAuthorize("@dokit.check('serverDeploy:add')")
     public ResponseEntity create(@Validated @RequestBody ServerDeploy resources){
-        return new ResponseEntity(serverDeployService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(serverDeployService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改Server")
-    @ApiOperation(value = "修改Server")
+    @Log("修改服务器")
+    @ApiOperation(value = "修改服务器")
     @PutMapping
     @PreAuthorize("@dokit.check('serverDeploy:edit')")
     public ResponseEntity update(@Validated @RequestBody ServerDeploy resources){
@@ -51,8 +55,8 @@ public class ServerDeployController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除Server")
-    @ApiOperation(value = "删除Server")
+    @Log("删除服务器")
+    @ApiOperation(value = "删除服务器")
     @DeleteMapping(value = "/{id:.+}")
     @PreAuthorize("@dokit.check('serverDeploy:del')")
     public ResponseEntity delete(@PathVariable Long id){

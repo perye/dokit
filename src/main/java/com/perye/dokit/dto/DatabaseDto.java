@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @date 2019/12/10
  */
 @Data
-public class DatabaseDTO implements Serializable {
+public class DatabaseDto implements Serializable {
 
     /**
      * id

@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class LocalStorageDTO implements Serializable {
+public class LocalStorageDto implements Serializable {
 
     // ID
     private Long id;

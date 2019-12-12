@@ -1,6 +1,5 @@
 package com.perye.dokit.controller;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import com.perye.dokit.annotation.AnonymousAccess;
 import com.perye.dokit.aop.log.Log;
@@ -53,7 +52,7 @@ public class AuthenticationController {
 
     private final OnlineUserService onlineUserService;
 
-    public AuthenticationController(JwtTokenUtil jwtTokenUtil, RedisService redisService, @Qualifier("jwtUserDetailsService") UserDetailsService userDetailsService, OnlineUserService onlineUserService) {
+    public AuthenticationController(JwtTokenUtil jwtTokenUtil, RedisService redisService, @Qualifier("jwtUserDetailsServiceImpl") UserDetailsService userDetailsService, OnlineUserService onlineUserService) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.redisService = redisService;
         this.userDetailsService = userDetailsService;

@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.DatabaseDTO;
+import com.perye.dokit.dto.DatabaseDto;
 import com.perye.dokit.dto.DatabaseQueryCriteria;
 import com.perye.dokit.entity.Database;
 import org.springframework.data.domain.Pageable;
@@ -13,43 +13,43 @@ import org.springframework.data.domain.Pageable;
 public interface DatabaseService {
 
     /**
-     * queryAll 分页
-     * @param criteria
-     * @param pageable
-     * @return
+     * 分页查询
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
      */
     Object queryAll(DatabaseQueryCriteria criteria, Pageable pageable);
 
     /**
-     * queryAll 不分页
-     * @param criteria
-     * @return
+     * 查询全部
+     * @param criteria 条件
+     * @return /
      */
-    public Object queryAll(DatabaseQueryCriteria criteria);
+    Object queryAll(DatabaseQueryCriteria criteria);
 
     /**
-     * findById
-     * @param id
-     * @return
+     * 根据ID查询
+     * @param id /
+     * @return /
      */
-    DatabaseDTO findById(String id);
+    DatabaseDto findById(String id);
 
     /**
-     * create
-     * @param resources
-     * @return
+     * 创建
+     * @param resources /
+     * @return /
      */
-    DatabaseDTO create(Database resources);
+    DatabaseDto create(Database resources);
 
     /**
-     * update
-     * @param resources
+     * 编辑
+     * @param resources /
      */
     void update(Database resources);
 
     /**
-     * delete
-     * @param id
+     * 删除
+     * @param id /
      */
     void delete(String id);
 }

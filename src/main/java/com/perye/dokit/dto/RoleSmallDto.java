@@ -5,11 +5,14 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class DeptSmallDTO implements Serializable {
+public class RoleSmallDto implements Serializable {
 
-    // ID
     private Long id;
 
-    // 名称
     private String name;
+
+    private Integer level;
+
+    private String dataScope;
 }
+

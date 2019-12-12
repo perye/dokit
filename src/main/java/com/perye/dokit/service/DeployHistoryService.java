@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.DeployHistoryDTO;
+import com.perye.dokit.dto.DeployHistoryDto;
 import com.perye.dokit.dto.DeployHistoryQueryCriteria;
 import com.perye.dokit.entity.DeployHistory;
 import org.springframework.data.domain.Pageable;
@@ -13,37 +13,37 @@ import org.springframework.data.domain.Pageable;
 public interface DeployHistoryService {
 
     /**
-     * queryAll 分页
-     * @param criteria
-     * @param pageable
-     * @return
+     * 分页查询
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
      */
     Object queryAll(DeployHistoryQueryCriteria criteria, Pageable pageable);
 
     /**
-     * queryAll 不分页
-     * @param criteria
-     * @return
+     * 查询全部
+     * @param criteria 条件
+     * @return /
      */
-    public Object queryAll(DeployHistoryQueryCriteria criteria);
+    Object queryAll(DeployHistoryQueryCriteria criteria);
 
     /**
-     * findById
-     * @param id
-     * @return
+     * 根据ID查询
+     * @param id /
+     * @return /
      */
-    DeployHistoryDTO findById(String id);
+    DeployHistoryDto findById(String id);
 
     /**
-     * create
-     * @param resources
-     * @return
+     * 创建
+     * @param resources /
+     * @return /
      */
-    DeployHistoryDTO create(DeployHistory resources);
+    DeployHistoryDto create(DeployHistory resources);
 
     /**
-     * delete
-     * @param id
+     * 删除
+     * @param id /
      */
     void delete(String id);
 }

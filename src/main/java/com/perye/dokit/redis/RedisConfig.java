@@ -49,6 +49,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         return configuration;
     }
 
+    @SuppressWarnings("all")
     @Bean(name = "redisTemplate")
     @ConditionalOnMissingBean(name = "redisTemplate")
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -62,8 +63,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
         // 建议使用这种方式，小范围指定白名单
 //        ParserConfig.getGlobalInstance().addAccept("com.perye.dokit.entity");
-//        ParserConfig.getGlobalInstance().addAccept("com.perye.dokit.dto");
-//        ParserConfig.getGlobalInstance().addAccept("com.perye.dokit.security");
         // key的序列化采用StringRedisSerializer
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
@@ -78,7 +77,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Override
     public KeyGenerator keyGenerator() {
         return (target, method, params) -> {
-            Map<String,Object> container = new HashMap<>();
+            Map<String,Object> container = new HashMap<>(3);
             Class<?> targetClassClass = target.getClass();
             // 类地址
             container.put("class",targetClassClass.toGenericString());

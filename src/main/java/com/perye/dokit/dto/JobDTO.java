@@ -24,7 +24,7 @@ public class JobDTO implements Serializable {
     // 状态
     private Boolean enabled;
 
-    private DeptDTO dept;
+    private DeptDto dept;
 
     // 如果分公司存在相同部门，则显示上级部门名称
     private String deptSuperiorName;

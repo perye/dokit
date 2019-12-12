@@ -5,7 +5,7 @@ import com.perye.dokit.utils.ValidationUtil;
 import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.repository.TestRepository;
 import com.perye.dokit.service.TestService;
-import com.perye.dokit.dto.TestDTO;
+import com.perye.dokit.dto.TestDto;
 import com.perye.dokit.dto.TestQueryCriteria;
 import com.perye.dokit.mapper.TestMapper;
 import org.springframework.stereotype.Service;
@@ -48,13 +48,13 @@ public class TestServiceImpl implements TestService {
 
     @Override
     @Cacheable
-    public List<TestDTO> queryAll(TestQueryCriteria criteria){
+    public List<TestDto> queryAll(TestQueryCriteria criteria){
         return testMapper.toDto(testRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Cacheable(key = "#p0")
-    public TestDTO findById(Integer id) {
+    public TestDto findById(Integer id) {
         Test test = testRepository.findById(id).orElseGet(Test::new);
         ValidationUtil.isNull(test.getId(),"Test","id",id);
         return testMapper.toDto(test);
@@ -63,7 +63,7 @@ public class TestServiceImpl implements TestService {
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public TestDTO create(Test resources) {
+    public TestDto create(Test resources) {
         return testMapper.toDto(testRepository.save(resources));
     }
 
@@ -85,9 +85,9 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void download(List<TestDTO> all, HttpServletResponse response) throws IOException {
+    public void download(List<TestDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (TestDTO test : all) {
+        for (TestDto test : all) {
         Map<String,Object> map = new LinkedHashMap<>();
                     map.put(" 用户名", test.getUsername());
                     map.put("邮箱", test.getEmail());

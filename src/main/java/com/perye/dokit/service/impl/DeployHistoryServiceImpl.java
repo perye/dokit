@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import cn.hutool.core.util.IdUtil;
-import com.perye.dokit.dto.DeployHistoryDTO;
+import com.perye.dokit.dto.DeployHistoryDto;
 import com.perye.dokit.dto.DeployHistoryQueryCriteria;
 import com.perye.dokit.entity.DeployHistory;
 import com.perye.dokit.mapper.DeployHistoryMapper;
@@ -10,14 +10,11 @@ import com.perye.dokit.service.DeployHistoryService;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * @author perye
@@ -28,11 +25,14 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class DeployHistoryServiceImpl implements DeployHistoryService {
 
-    @Autowired
-    private DeployHistoryRepository deployhistoryRepository;
+    private final DeployHistoryRepository deployhistoryRepository;
 
-    @Autowired
-    private DeployHistoryMapper deployhistoryMapper;
+    private final DeployHistoryMapper deployhistoryMapper;
+
+    public DeployHistoryServiceImpl(DeployHistoryRepository deployhistoryRepository, DeployHistoryMapper deployhistoryMapper) {
+        this.deployhistoryRepository = deployhistoryRepository;
+        this.deployhistoryMapper = deployhistoryMapper;
+    }
 
     @Override
     public Object queryAll(DeployHistoryQueryCriteria criteria, Pageable pageable){
@@ -46,15 +46,15 @@ public class DeployHistoryServiceImpl implements DeployHistoryService {
     }
 
     @Override
-    public DeployHistoryDTO findById(String id) {
-        Optional<DeployHistory> deployhistory = deployhistoryRepository.findById(id);
-        ValidationUtil.isNull(deployhistory,"DeployHistory","id",id);
-        return deployhistoryMapper.toDto(deployhistory.get());
+    public DeployHistoryDto findById(String id) {
+        DeployHistory deployhistory = deployhistoryRepository.findById(id).orElseGet(DeployHistory::new);
+        ValidationUtil.isNull(deployhistory.getId(),"DeployHistory","id",id);
+        return deployhistoryMapper.toDto(deployhistory);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public DeployHistoryDTO create(DeployHistory resources) {
+    public DeployHistoryDto create(DeployHistory resources) {
         resources.setId(IdUtil.simpleUUID());
         return deployhistoryMapper.toDto(deployhistoryRepository.save(resources));
     }

@@ -14,6 +14,7 @@ public class QueryHelp {
     /**
      * 转换为Predicate
      */
+    @SuppressWarnings("all")
     public static <R, Q> Predicate getPredicate(Root<R> root, Q query, CriteriaBuilder cb) {
         List<Predicate> list = new ArrayList<>();
 

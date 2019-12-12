@@ -6,5 +6,12 @@ package com.perye.dokit.websocket;
  * @date 2019/12/10
  */
 public enum MsgType {
-    CONNECT,CLOSE,INFO,ERROR
+    /** 连接 */
+    CONNECT,
+    /** 关闭 */
+    CLOSE,
+    /** 信息 */
+    INFO,
+    /** 错误 */
+    ERROR
 }

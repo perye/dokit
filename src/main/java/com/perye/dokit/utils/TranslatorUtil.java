@@ -1,7 +1,6 @@
 package com.perye.dokit.utils;
 
 import cn.hutool.json.JSONArray;
-import lombok.var;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -9,6 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+/**
+ * 翻译工具类
+ */
 public class TranslatorUtil {
 
     public static String translate(String word){

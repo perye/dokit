@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author perye
@@ -35,27 +36,30 @@ public class DeployController {
 
     private String fileSavePath = System.getProperty("java.io.tmpdir");
 
-    @Autowired
-    private DeployService deployService;
+    private final DeployService deployService;
 
-    @Log("查询Deploy")
-    @ApiOperation(value = "查询Deploy")
+    public DeployController(DeployService deployService) {
+        this.deployService = deployService;
+    }
+
+    @Log("查询部署")
+    @ApiOperation(value = "查询部署")
     @GetMapping
     @PreAuthorize("@dokit.check('deploy:list')")
     public ResponseEntity getDeploys(DeployQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(deployService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(deployService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增Deploy")
-    @ApiOperation(value = "新增Deploy")
+    @Log("新增部署")
+    @ApiOperation(value = "新增部署")
     @PostMapping
     @PreAuthorize("@dokit.check('deploy:add')")
     public ResponseEntity create(@Validated @RequestBody Deploy resources){
-        return new ResponseEntity(deployService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(deployService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改Deploy")
-    @ApiOperation(value = "修改Deploy")
+    @Log("修改部署")
+    @ApiOperation(value = "修改部署")
     @PutMapping
     @PreAuthorize("@dokit.check('deploy:edit')")
     public ResponseEntity update(@Validated @RequestBody Deploy resources){
@@ -63,21 +67,21 @@ public class DeployController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除Deploy")
-    @ApiOperation(value = "删除Deploy")
+    @Log("删除部署")
+    @ApiOperation(value = "删除部署")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('deploy:del')")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity delete(@PathVariable Long id){
         deployService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("上传文件Deploy")
-    @ApiOperation(value = "上传文件Deploy")
+    @Log("上传文件部署")
+    @ApiOperation(value = "上传文件部署")
     @PostMapping(value = "/upload")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity upload(@RequestBody MultipartFile file, HttpServletRequest request, HttpServletResponse response)throws Exception{
-        String id = request.getParameter("id");
+    public ResponseEntity upload(@RequestBody MultipartFile file, HttpServletRequest request)throws Exception{
+        Long id = Long.valueOf(request.getParameter("id"));
         String fileName = "";
         if(file != null){
             fileName = file.getOriginalFilename();
@@ -89,42 +93,42 @@ public class DeployController {
         }else{
             System.out.println("没有找到相对应的文件");
         }
-        System.out.println("文件上传的原名称为:"+file.getOriginalFilename());
-        Map map = new HashMap(2);
+        System.out.println("文件上传的原名称为:"+ Objects.requireNonNull(file).getOriginalFilename());
+        Map<String,Object> map = new HashMap<>(2);
         map.put("errno",0);
         map.put("id",fileName);
-        return new ResponseEntity(map,HttpStatus.OK);
+        return new ResponseEntity<>(map,HttpStatus.OK);
     }
     @Log("系统还原")
     @ApiOperation(value = "系统还原")
     @PostMapping(value = "/serverReduction")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity serverReduction(@Validated @RequestBody DeployHistory resources, HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public ResponseEntity serverReduction(@Validated @RequestBody DeployHistory resources){
         String result = deployService.serverReduction(resources);
-        return new ResponseEntity(result,HttpStatus.OK);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
     @Log("服务运行状态")
     @ApiOperation(value = "服务运行状态")
     @PostMapping(value = "/serverStatus")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity serverStatus(@Validated @RequestBody Deploy resources, HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public ResponseEntity serverStatus(@Validated @RequestBody Deploy resources){
         String result = deployService.serverStatus(resources);
-        return new ResponseEntity(result,HttpStatus.OK);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
     @Log("启动服务")
     @ApiOperation(value = "启动服务")
     @PostMapping(value = "/startServer")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity startServer(@Validated @RequestBody Deploy resources,  HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public ResponseEntity startServer(@Validated @RequestBody Deploy resources){
         String result = deployService.startServer(resources);
-        return new ResponseEntity(result,HttpStatus.OK);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
     @Log("停止服务")
     @ApiOperation(value = "停止服务")
     @PostMapping(value = "/stopServer")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity stopServer(@Validated @RequestBody Deploy resources,  HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public ResponseEntity stopServer(@Validated @RequestBody Deploy resources){
         String result = deployService.stopServer(resources);
-        return new ResponseEntity(result,HttpStatus.OK);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 }

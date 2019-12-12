@@ -1,13 +1,11 @@
 package com.perye.dokit.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
-@NoArgsConstructor
-public class JobSmallDTO implements Serializable {
+public class DeptSmallDto implements Serializable {
 
     // ID
     private Long id;

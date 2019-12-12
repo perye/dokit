@@ -3,6 +3,7 @@ package com.perye.dokit.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @author perye
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * @date 2019/12/10
  */
 @Data
-public class DeployHistoryDTO implements Serializable {
+public class DeployHistoryDto implements Serializable {
 
     /**
      * 编号
@@ -30,7 +31,7 @@ public class DeployHistoryDTO implements Serializable {
     /**
      * 部署时间
      */
-    private String deployDate;
+    private Timestamp deployDate;
 
     /**
      * 部署人员
@@ -40,5 +41,5 @@ public class DeployHistoryDTO implements Serializable {
     /**
      * 部署编号
      */
-    private String deployId;
+    private Long deployId;
 }

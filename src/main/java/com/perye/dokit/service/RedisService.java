@@ -11,7 +11,7 @@ import java.util.List;
 public interface RedisService {
 
     /**
-     * findById
+     * 根据KEY查询
      * @param key 键
      * @return /
      */
@@ -51,7 +51,7 @@ public interface RedisService {
 
 
     /**
-     *
+     * 导出数据
      * @param redisVos /
      * @param response /
      */

@@ -2,11 +2,10 @@ package com.perye.dokit.service.impl;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.perye.dokit.dto.MenuDTO;
+import com.perye.dokit.dto.MenuDto;
 import com.perye.dokit.dto.MenuQueryCriteria;
-import com.perye.dokit.dto.RoleSmallDTO;
+import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.entity.Menu;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.exception.EntityExistException;
@@ -20,11 +19,9 @@ import com.perye.dokit.utils.StringUtils;
 import com.perye.dokit.utils.ValidationUtil;
 import com.perye.dokit.vo.MenuMetaVo;
 import com.perye.dokit.vo.MenuVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,23 +50,23 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Cacheable
-    public List<MenuDTO> queryAll(MenuQueryCriteria criteria){
+    public List<MenuDto> queryAll(MenuQueryCriteria criteria){
 //        Sort sort = new Sort(Sort.Direction.DESC,"id");
         return menuMapper.toDto(menuRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     @Cacheable(key = "#p0")
-    public MenuDTO findById(long id) {
+    public MenuDto findById(long id) {
         Menu menu = menuRepository.findById(id).orElseGet(Menu::new);
         ValidationUtil.isNull(menu.getId(),"Menu","id",id);
         return menuMapper.toDto(menu);
     }
 
     @Override
-    public List<MenuDTO> findByRoles(List<RoleSmallDTO> roles) {
+    public List<MenuDto> findByRoles(List<RoleSmallDto> roles) {
         Set<Menu> menus = new LinkedHashSet<>();
-        for (RoleSmallDTO role : roles) {
+        for (RoleSmallDto role : roles) {
             List<Menu> menus1 = new ArrayList<>(menuRepository.findByRoles_IdAndTypeIsNotInOrderBySortAsc(role.getId(), 2));
             menus.addAll(menus1);
         }
@@ -78,7 +75,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @CacheEvict(allEntries = true)
-    public MenuDTO create(Menu resources) {
+    public MenuDto create(Menu resources) {
         if(menuRepository.findByName(resources.getName()) != null){
             throw new EntityExistException(Menu.class,"name",resources.getName());
         }
@@ -187,14 +184,14 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Map<String,Object> buildTree(List<MenuDTO> menuDTOS) {
-        List<MenuDTO> trees = new ArrayList<>();
+    public Map<String,Object> buildTree(List<MenuDto> menuDtos) {
+        List<MenuDto> trees = new ArrayList<>();
         Set<Long> ids = new HashSet<>();
-        for (MenuDTO menuDTO : menuDTOS) {
+        for (MenuDto menuDTO : menuDtos) {
             if (menuDTO.getPid() == 0) {
                 trees.add(menuDTO);
             }
-            for (MenuDTO it : menuDTOS) {
+            for (MenuDto it : menuDtos) {
                 if (it.getPid().equals(menuDTO.getId())) {
                     if (menuDTO.getChildren() == null) {
                         menuDTO.setChildren(new ArrayList<>());
@@ -206,19 +203,19 @@ public class MenuServiceImpl implements MenuService {
         }
         Map<String,Object> map = new HashMap<>();
         if(trees.size() == 0){
-            trees = menuDTOS.stream().filter(s -> !ids.contains(s.getId())).collect(Collectors.toList());
+            trees = menuDtos.stream().filter(s -> !ids.contains(s.getId())).collect(Collectors.toList());
         }
         map.put("content",trees);
-        map.put("totalElements", menuDTOS.size());
+        map.put("totalElements", menuDtos.size());
         return map;
     }
 
     @Override
-    public List<MenuVo> buildMenus(List<MenuDTO> menuDTOS) {
+    public List<MenuVo> buildMenus(List<MenuDto> menuDtos) {
         List<MenuVo> list = new LinkedList<>();
-        menuDTOS.forEach(menuDTO -> {
+        menuDtos.forEach(menuDTO -> {
                     if (menuDTO!=null){
-                        List<MenuDTO> menuDTOList = menuDTO.getChildren();
+                        List<MenuDto> menuDtoList = menuDTO.getChildren();
                         MenuVo menuVo = new MenuVo();
                         menuVo.setName(ObjectUtil.isNotEmpty(menuDTO.getComponentName())  ? menuDTO.getComponentName() : menuDTO.getName());
                         // 一级目录需要加斜杠，不然会报警告
@@ -233,10 +230,10 @@ public class MenuServiceImpl implements MenuService {
                             }
                         }
                         menuVo.setMeta(new MenuMetaVo(menuDTO.getName(),menuDTO.getIcon(),!menuDTO.getCache()));
-                        if(menuDTOList!=null && menuDTOList.size()!=0){
+                        if(menuDtoList !=null && menuDtoList.size()!=0){
                             menuVo.setAlwaysShow(true);
                             menuVo.setRedirect("noredirect");
-                            menuVo.setChildren(buildMenus(menuDTOList));
+                            menuVo.setChildren(buildMenus(menuDtoList));
                             // 处理是一级菜单并且没有子菜单的情况
                         } else if(menuDTO.getPid() == 0){
                             MenuVo menuVo1 = new MenuVo();
@@ -271,9 +268,9 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void download(List<MenuDTO> menuDTOS, HttpServletResponse response) throws IOException {
+    public void download(List<MenuDto> menuDtos, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (MenuDTO menuDTO : menuDTOS) {
+        for (MenuDto menuDTO : menuDtos) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("菜单名称", menuDTO.getName());
             map.put("菜单类型", menuDTO.getType() == 0 ? "目录" : menuDTO.getType() == 1 ? "菜单" : "按钮");

@@ -1,7 +1,7 @@
 package com.perye.dokit.mapper;
 
 import com.perye.dokit.base.BaseMapper;
-import com.perye.dokit.dto.DeployHistoryDTO;
+import com.perye.dokit.dto.DeployHistoryDto;
 import com.perye.dokit.entity.DeployHistory;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -12,6 +12,6 @@ import org.mapstruct.ReportingPolicy;
  * @date 2019/12/10
  */
 @Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface DeployHistoryMapper extends BaseMapper<DeployHistoryDTO, DeployHistory> {
+public interface DeployHistoryMapper extends BaseMapper<DeployHistoryDto, DeployHistory> {
 
 }

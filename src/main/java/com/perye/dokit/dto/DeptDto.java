@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DeptDTO implements Serializable {
+public class DeptDto implements Serializable {
 
     // ID
     private Long id;
@@ -26,7 +26,7 @@ public class DeptDTO implements Serializable {
     private Long pid;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<DeptDTO> children;
+    private List<DeptDto> children;
 
     public String getLabel() {
         return name;

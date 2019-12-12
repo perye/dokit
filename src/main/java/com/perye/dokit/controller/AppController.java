@@ -20,31 +20,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/app")
 public class AppController {
 
-    @Autowired
-    private AppService appService;
+    private final AppService appService;
 
     public AppController(AppService appService){
-        this.appService = this.appService;
+        this.appService = appService;
     }
 
-    @Log("查询App")
-    @ApiOperation(value = "查询App")
+    @Log("查询应用")
+    @ApiOperation(value = "查询应用")
     @GetMapping
     @PreAuthorize("@dokit.check('app:list')")
     public ResponseEntity getApps(AppQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(appService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(appService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增App")
-    @ApiOperation(value = "新增App")
+    @Log("新增应用")
+    @ApiOperation(value = "新增应用")
     @PostMapping
     @PreAuthorize("@dokit.check('app:add')")
     public ResponseEntity create(@Validated @RequestBody App resources){
-        return new ResponseEntity(appService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(appService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改App")
-    @ApiOperation(value = "修改App")
+    @Log("修改应用")
+    @ApiOperation(value = "修改应用")
     @PutMapping
     @PreAuthorize("@dokit.check('app:edit')")
     public ResponseEntity update(@Validated @RequestBody App resources){
@@ -52,11 +51,11 @@ public class AppController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除App")
-    @ApiOperation(value = "删除App")
+    @Log("删除应用")
+    @ApiOperation(value = "删除应用")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('app:del')")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity delete(@PathVariable Long id){
         appService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }

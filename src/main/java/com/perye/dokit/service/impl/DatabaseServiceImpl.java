@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import cn.hutool.core.util.IdUtil;
-import com.perye.dokit.dto.DatabaseDTO;
+import com.perye.dokit.dto.DatabaseDto;
 import com.perye.dokit.dto.DatabaseQueryCriteria;
 import com.perye.dokit.entity.Database;
 import com.perye.dokit.mapper.DatabaseMapper;
@@ -15,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * @author perye
@@ -48,15 +46,15 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public DatabaseDTO findById(String id) {
-        Optional<Database> database = databaseRepository.findById(id);
-        ValidationUtil.isNull(database,"Database","id",id);
-        return databaseMapper.toDto(database.get());
+    public DatabaseDto findById(String id) {
+        Database database = databaseRepository.findById(id).orElseGet(Database::new);
+        ValidationUtil.isNull(database.getId(),"Database","id",id);
+        return databaseMapper.toDto(database);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public DatabaseDTO create(Database resources) {
+    public DatabaseDto create(Database resources) {
         resources.setId(IdUtil.simpleUUID());
         return databaseMapper.toDto(databaseRepository.save(resources));
     }
@@ -64,9 +62,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Database resources) {
-        Optional<Database> optionalDatabase = databaseRepository.findById(resources.getId());
-        ValidationUtil.isNull( optionalDatabase,"Database","id",resources.getId());
-        Database database = optionalDatabase.get();
+        Database database = databaseRepository.findById(resources.getId()).orElseGet(Database::new);
+        ValidationUtil.isNull(database.getId(),"Database","id",resources.getId());
         database.copy(resources);
         databaseRepository.save(database);
     }

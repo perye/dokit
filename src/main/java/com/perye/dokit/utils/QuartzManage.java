@@ -119,7 +119,7 @@ public class QuartzManage {
      * 立即执行job
      * @param quartzJob /
      */
-    public void runAJobNow(QuartzJob quartzJob){
+    public void runJobNow(QuartzJob quartzJob){
         try {
             TriggerKey triggerKey = TriggerKey.triggerKey(JOB_NAME + quartzJob.getId());
             CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);

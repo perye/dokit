@@ -3,7 +3,7 @@ package com.perye.dokit.controller;
 import cn.hutool.core.lang.Dict;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.dto.RoleQueryCriteria;
-import com.perye.dokit.dto.RoleSmallDTO;
+import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.entity.Role;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.RoleService;
@@ -73,7 +73,7 @@ public class RoleController {
     @ApiOperation("获取用户级别")
     @GetMapping(value = "/level")
     public ResponseEntity getLevel(){
-        List<Integer> levels = roleService.findByUsers_Id(SecurityUtils.getUserId()).stream().map(RoleSmallDTO::getLevel).collect(Collectors.toList());
+        List<Integer> levels = roleService.findByUsersId(SecurityUtils.getUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
         return new ResponseEntity<>(Dict.create().set("level", Collections.min(levels)),HttpStatus.OK);
     }
 

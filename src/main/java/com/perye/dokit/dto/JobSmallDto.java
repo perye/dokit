@@ -1,18 +1,17 @@
 package com.perye.dokit.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
-public class RoleSmallDTO implements Serializable {
+@NoArgsConstructor
+public class JobSmallDto implements Serializable {
 
+    // ID
     private Long id;
 
+    // 名称
     private String name;
-
-    private Integer level;
-
-    private String dataScope;
 }
-

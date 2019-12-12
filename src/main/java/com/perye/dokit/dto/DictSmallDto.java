@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class DictSmallDTO implements Serializable {
+public class DictSmallDto implements Serializable {
 
     private Long id;
 }

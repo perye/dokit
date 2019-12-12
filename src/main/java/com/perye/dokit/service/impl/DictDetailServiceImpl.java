@@ -1,6 +1,6 @@
 package com.perye.dokit.service.impl;
 
-import com.perye.dokit.dto.DictDetailDTO;
+import com.perye.dokit.dto.DictDetailDto;
 import com.perye.dokit.dto.DictDetailQueryCriteria;
 import com.perye.dokit.entity.DictDetail;
 import com.perye.dokit.mapper.DictDetailMapper;
@@ -9,7 +9,6 @@ import com.perye.dokit.service.DictDetailService;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @CacheConfig(cacheNames = "dictDetail")
@@ -45,7 +43,7 @@ public class DictDetailServiceImpl implements DictDetailService {
 
     @Override
     @Cacheable(key = "#p0")
-    public DictDetailDTO findById(Long id) {
+    public DictDetailDto findById(Long id) {
         DictDetail dictDetail = dictDetailRepository.findById(id).orElseGet(DictDetail::new);
         ValidationUtil.isNull(dictDetail.getId(),"DictDetail","id",id);
         return dictDetailMapper.toDto(dictDetail);
@@ -54,7 +52,7 @@ public class DictDetailServiceImpl implements DictDetailService {
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public DictDetailDTO create(DictDetail resources) {
+    public DictDetailDto create(DictDetail resources) {
         return dictDetailMapper.toDto(dictDetailRepository.save(resources));
     }
 

@@ -1,7 +1,7 @@
 package com.perye.dokit.mapper;
 
 import com.perye.dokit.base.BaseMapper;
-import com.perye.dokit.dto.DatabaseDTO;
+import com.perye.dokit.dto.DatabaseDto;
 import com.perye.dokit.entity.Database;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -12,6 +12,6 @@ import org.mapstruct.ReportingPolicy;
  * @date 2019/12/10
  */
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface DatabaseMapper extends BaseMapper<DatabaseDTO, Database> {
+public interface DatabaseMapper extends BaseMapper<DatabaseDto, Database> {
 
 }

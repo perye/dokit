@@ -5,21 +5,28 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
-
+import java.util.Set;
 
 @Getter
 @Setter
-public class DictDTO implements Serializable {
+public class RoleDto implements Serializable {
+
     private Long id;
 
-    // 字典名称
     private String name;
 
-    // 字典名称
+    private String dataScope;
+
+    private Integer level;
+
     private String remark;
 
-    private List<DictDetailDTO> dictDetails;
+    private String permission;
+
+    private Set<MenuDto> menus;
+
+    private Set<DeptDto> depts;
 
     private Timestamp createTime;
+
 }

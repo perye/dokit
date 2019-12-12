@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MenuDTO implements Serializable {
+public class MenuDto implements Serializable {
 
     private Long id;
 
@@ -37,7 +37,7 @@ public class MenuDTO implements Serializable {
 
     private String icon;
 
-    private List<MenuDTO> children;
+    private List<MenuDto> children;
 
     private Timestamp createTime;
 

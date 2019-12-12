@@ -1,7 +1,6 @@
 package com.perye.dokit.service.impl;
 
-import cn.hutool.core.util.IdUtil;
-import com.perye.dokit.dto.AppDTO;
+import com.perye.dokit.dto.AppDto;
 import com.perye.dokit.dto.AppQueryCriteria;
 import com.perye.dokit.entity.App;
 import com.perye.dokit.mapper.AppMapper;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * @author perye
@@ -48,32 +45,30 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public AppDTO findById(String id) {
-        Optional<App> app = appRepository.findById(id);
-        ValidationUtil.isNull(app,"App","id",id);
-        return appMapper.toDto(app.get());
+    public AppDto findById(Long id) {
+        App app = appRepository.findById(id).orElseGet(App::new);
+        ValidationUtil.isNull(app.getId(),"App","id",id);
+        return appMapper.toDto(app);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AppDTO create(App resources) {
-        resources.setId(IdUtil.fastUUID());
+    public AppDto create(App resources) {
         return appMapper.toDto(appRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(App resources) {
-        Optional<App> optionalApp = appRepository.findById(resources.getId());
-        ValidationUtil.isNull( optionalApp,"App","id",resources.getId());
-        App App = optionalApp.get();
-        App.copy(resources);
-        appRepository.save(App);
+        App app = appRepository.findById(resources.getId()).orElseGet(App::new);
+        ValidationUtil.isNull(app.getId(),"App","id",resources.getId());
+        app.copy(resources);
+        appRepository.save(app);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(String id) {
+    public void delete(Long id) {
         appRepository.deleteById(id);
     }
 }

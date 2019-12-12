@@ -1,9 +1,9 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.dto.MenuDTO;
+import com.perye.dokit.dto.MenuDto;
 import com.perye.dokit.dto.MenuQueryCriteria;
-import com.perye.dokit.dto.UserDTO;
+import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.entity.Menu;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.MenuService;
@@ -54,10 +54,10 @@ public class MenuController {
     @ApiOperation("获取前端所需菜单")
     @GetMapping(value = "/build")
     public ResponseEntity buildMenus(){
-        UserDTO user = userService.findByName(SecurityUtils.getUsername());
-        List<MenuDTO> menuDTOList = menuService.findByRoles(roleService.findByUsers_Id(user.getId()));
-        List<MenuDTO> menuDTOS = (List<MenuDTO>) menuService.buildTree(menuDTOList).get("content");
-        return new ResponseEntity<>(menuService.buildMenus(menuDTOS),HttpStatus.OK);
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        List<MenuDto> menuDtoList = menuService.findByRoles(roleService.findByUsersId(user.getId()));
+        List<MenuDto> menuDtos = (List<MenuDto>) menuService.buildTree(menuDtoList).get("content");
+        return new ResponseEntity<>(menuService.buildMenus(menuDtos),HttpStatus.OK);
     }
 
     @ApiOperation("返回全部的菜单")
@@ -72,8 +72,8 @@ public class MenuController {
     @GetMapping
     @PreAuthorize("@dokit.check('menu:list')")
     public ResponseEntity getMenus(MenuQueryCriteria criteria){
-        List<MenuDTO> menuDTOList = menuService.queryAll(criteria);
-        return new ResponseEntity<>(menuService.buildTree(menuDTOList),HttpStatus.OK);
+        List<MenuDto> menuDtoList = menuService.queryAll(criteria);
+        return new ResponseEntity<>(menuService.buildTree(menuDtoList),HttpStatus.OK);
     }
 
     @Log("新增菜单")

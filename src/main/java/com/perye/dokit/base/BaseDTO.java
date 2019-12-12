@@ -15,4 +15,13 @@ public class BaseDTO implements Serializable {
     private Timestamp createTime;
 
     private Timestamp updateTime;
+
+    @Override
+    public String toString() {
+        return "BaseDTO{" +
+                "isDelete=" + isDelete +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

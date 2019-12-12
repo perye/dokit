@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.ServerDTO;
+import com.perye.dokit.dto.ServerDto;
 import com.perye.dokit.dto.ServerQueryCriteria;
 import com.perye.dokit.entity.Server;
 import org.springframework.data.domain.Pageable;
@@ -28,19 +28,32 @@ public interface ServerService {
      * @param criteria 条件参数
      * @return List<ServerDTO>
      */
-    List<ServerDTO> queryAll(ServerQueryCriteria criteria);
+    List<ServerDto> queryAll(ServerQueryCriteria criteria);
 
     /**
      * 根据ID查询
      * @param id ID
      * @return ServerDTO
      */
-    ServerDTO findById(Integer id);
+    ServerDto findById(Integer id);
 
-    ServerDTO create(Server resources);
+    /**
+     * 创建服务监控
+     * @param resources /
+     * @return /
+     */
+    ServerDto create(Server resources);
 
+    /**
+     * 编辑服务监控
+     * @param resources /
+     */
     void update(Server resources);
 
+    /**
+     * 删除
+     * @param id /
+     */
     void delete(Integer id);
 
 }

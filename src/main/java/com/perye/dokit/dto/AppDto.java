@@ -3,6 +3,7 @@ package com.perye.dokit.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @author perye
@@ -10,12 +11,12 @@ import java.io.Serializable;
  * @date 2019/12/10
  */
 @Data
-public class AppDTO implements Serializable {
+public class AppDto implements Serializable {
 
     /**
      * 应用编号
      */
-    private String id;
+    private Long id;
 
     /**
      * 应用名称
@@ -25,7 +26,7 @@ public class AppDTO implements Serializable {
     /**
      * 端口
      */
-    private int port;
+    private Integer port;
 
     /**
      * 上传目录
@@ -51,5 +52,7 @@ public class AppDTO implements Serializable {
      * 部署脚本
      */
     private String deployScript;
+
+    private Timestamp createTime;
 
 }

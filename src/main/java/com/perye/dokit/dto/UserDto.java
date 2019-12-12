@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class UserDTO implements Serializable {
+public class UserDto implements Serializable {
 
     @ApiModelProperty(hidden = true)
     private Long id;
@@ -33,12 +33,12 @@ public class UserDTO implements Serializable {
     private Date lastPasswordResetTime;
 
     @ApiModelProperty(hidden = true)
-    private Set<RoleSmallDTO> roles;
+    private Set<RoleSmallDto> roles;
 
     @ApiModelProperty(hidden = true)
-    private JobSmallDTO job;
+    private JobSmallDto job;
 
-    private DeptSmallDTO dept;
+    private DeptSmallDto dept;
 
     private Long deptId;
 

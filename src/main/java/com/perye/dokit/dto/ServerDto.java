@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @date 2019/12/10 3:58 下午
  */
 @Data
-public class ServerDTO implements Serializable {
+public class ServerDto implements Serializable {
 
     // 编号
     private Integer id;

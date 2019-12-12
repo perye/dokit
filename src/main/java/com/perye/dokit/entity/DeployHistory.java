@@ -3,8 +3,11 @@ package com.perye.dokit.entity;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @author perye
@@ -38,8 +41,9 @@ public class DeployHistory implements Serializable {
     /**
      * 部署时间
      */
-    @Column(name = "deploy_date",nullable = false)
-    private String deployDate;
+    @Column(name = "deploy_date")
+    @CreationTimestamp
+    private Timestamp deployDate;
 
     /**
      * 部署人员
@@ -51,7 +55,7 @@ public class DeployHistory implements Serializable {
      * 部署编号
      */
     @Column(name = "deploy_id",nullable = false)
-    private String deployId;
+    private Long deployId;
 
     public void copy(DeployHistory source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

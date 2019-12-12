@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.ServerDeployDTO;
+import com.perye.dokit.dto.ServerDeployDto;
 import com.perye.dokit.dto.ServerDeployQueryCriteria;
 import com.perye.dokit.entity.ServerDeploy;
 import org.springframework.data.domain.Pageable;
@@ -13,46 +13,51 @@ import org.springframework.data.domain.Pageable;
 public interface ServerDeployService {
 
     /**
-     * queryAll 分页
-     * @param criteria
-     * @param pageable
-     * @return
+     * 分页查询
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
      */
     Object queryAll(ServerDeployQueryCriteria criteria, Pageable pageable);
 
     /**
-     * queryAll 不分页
-     * @param criteria
-     * @return
+     * 查询全部数据
+     * @param criteria 条件
+     * @return /
      */
-    public Object queryAll(ServerDeployQueryCriteria criteria);
+    Object queryAll(ServerDeployQueryCriteria criteria);
 
     /**
-     * findById
-     * @param id
-     * @return
+     * 根据ID查询
+     * @param id /
+     * @return /
      */
-    ServerDeployDTO findById(Long id);
+    ServerDeployDto findById(Long id);
 
     /**
-     * create
-     * @param resources
-     * @return
+     * 创建
+     * @param resources /
+     * @return /
      */
-    ServerDeployDTO create(ServerDeploy resources);
+    ServerDeployDto create(ServerDeploy resources);
 
     /**
-     * update
-     * @param resources
+     * 编辑
+     * @param resources /
      */
     void update(ServerDeploy resources);
 
     /**
-     * delete
-     * @param id
+     * 删除
+     * @param id /
      */
     void delete(Long id);
 
-    ServerDeployDTO findByIp(String ip);
+    /**
+     * 根据IP查询
+     * @param ip /
+     * @return /
+     */
+    ServerDeployDto findByIp(String ip);
 
 }

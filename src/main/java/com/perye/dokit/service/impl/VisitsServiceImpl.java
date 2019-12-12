@@ -56,7 +56,7 @@ public class VisitsServiceImpl implements VisitsService {
 
     @Override
     public Object get() {
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>(4);
         LocalDate localDate = LocalDate.now();
         Visits visits = visitsRepository.findByDate(localDate.toString());
         List<Visits> list = visitsRepository.findAllVisits(localDate.minusDays(6).toString(),localDate.plusDays(1).toString());
@@ -75,7 +75,7 @@ public class VisitsServiceImpl implements VisitsService {
 
     @Override
     public Object getChartData() {
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>(3);
         LocalDate localDate = LocalDate.now();
         List<Visits> list = visitsRepository.findAllVisits(localDate.minusDays(6).toString(),localDate.plusDays(1).toString());
         map.put("weekDays",list.stream().map(Visits::getWeekDay).collect(Collectors.toList()));

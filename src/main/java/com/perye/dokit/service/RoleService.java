@@ -1,8 +1,8 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.RoleDTO;
+import com.perye.dokit.dto.RoleDto;
 import com.perye.dokit.dto.RoleQueryCriteria;
-import com.perye.dokit.dto.RoleSmallDTO;
+import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.entity.Role;
 import org.springframework.data.domain.Pageable;
 
@@ -13,29 +13,88 @@ import java.util.Set;
 
 public interface RoleService {
 
-    RoleDTO findById(long id);
+    /**
+     * 根据ID查询
+     * @param id /
+     * @return /
+     */
+    RoleDto findById(long id);
 
-    RoleDTO create(Role resources);
+    /**
+     * 创建
+     * @param resources /
+     * @return /
+     */
+    RoleDto create(Role resources);
 
+    /**
+     * 编辑
+     * @param resources /
+     */
     void update(Role resources);
 
+    /**
+     * 删除
+     * @param id /
+     */
     void delete(Long id);
 
-    List<RoleSmallDTO> findByUsers_Id(Long id);
+    /**
+     * 根据用户ID查询
+     * @param id 用户ID
+     * @return /
+     */
+    List<RoleSmallDto> findByUsersId(Long id);
 
+    /**
+     * 根据角色查询角色级别
+     * @param roles /
+     * @return /
+     */
     Integer findByRoles(Set<Role> roles);
 
-    void updateMenu(Role resources, RoleDTO roleDTO);
+    /**
+     * 修改绑定的菜单
+     * @param resources /
+     * @param roleDTO /
+     */
+    void updateMenu(Role resources, RoleDto roleDTO);
 
+    /**
+     * 解绑菜单
+     * @param id /
+     */
     void untiedMenu(Long id);
 
+    /**
+     * 不带条件分页查询
+     * @param pageable 分页参数
+     * @return /
+     */
     Object queryAll(Pageable pageable);
 
+    /**
+     * 待条件分页查询
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
+     */
     Object queryAll(RoleQueryCriteria criteria, Pageable pageable);
 
-    List<RoleDTO> queryAll(RoleQueryCriteria criteria);
+    /**
+     * 查询全部
+     * @param criteria 条件
+     * @return /
+     */
+    List<RoleDto> queryAll(RoleQueryCriteria criteria);
 
-    void download(List<RoleDTO> queryAll, HttpServletResponse response) throws IOException;
+    /**
+     * 导出数据
+     * @param queryAll 待导出的数据
+     * @param response /
+     * @throws IOException /
+     */
+    void download(List<RoleDto> queryAll, HttpServletResponse response) throws IOException;
 
 
 }

@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.DeployDTO;
+import com.perye.dokit.dto.DeployDto;
 import com.perye.dokit.dto.DeployQueryCriteria;
 import com.perye.dokit.entity.Deploy;
 import com.perye.dokit.entity.DeployHistory;
@@ -14,80 +14,53 @@ import org.springframework.data.domain.Pageable;
 public interface DeployService {
 
     /**
-     * queryAll 分页
-     * @param criteria
-     * @param pageable
-     * @return
+     * 分页查询
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
      */
     Object queryAll(DeployQueryCriteria criteria, Pageable pageable);
 
     /**
-     * queryAll 不分页
-     * @param criteria
-     * @return
+     * 查询全部数据
+     * @param criteria 条件
+     * @return /
      */
-    public Object queryAll(DeployQueryCriteria criteria);
+    Object queryAll(DeployQueryCriteria criteria);
 
     /**
-     * findById
-     * @param id
-     * @return
+     * 根据ID查询
+     * @param id /
+     * @return /
      */
-    DeployDTO findById(String id);
+    DeployDto findById(Long id);
 
     /**
-     * create
-     * @CacheEvict(allEntries = true)
-     * @param resources
-     * @return
+     * 创建
+     * @param resources /
+     * @return /
      */
-    DeployDTO create(Deploy resources);
+    DeployDto create(Deploy resources);
 
     /**
-     * update
-     * @CacheEvict(allEntries = true)
-     * @param resources
+     * 编辑
+     * @param resources /
      */
     void update(Deploy resources);
 
     /**
-     * delete
-     * @CacheEvict(allEntries = true)
-     * @param id
+     * 删除
+     * @param id /
      */
-    void delete(String id);
+    void delete(Long id);
 
-    /**
-     * 部署文件到服务器
-     * @param fileSavePath
-     * @param appId
-     * @return
-     */
-    public String deploy(String fileSavePath, String appId);
+    void deploy(String fileSavePath, Long appId);
 
-    /**
-     * 查询部署状态
-     * @param resources
-     * @return
-     */
-    public String serverStatus(Deploy resources);
-    /**
-     * 启动服务
-     * @param resources
-     * @return
-     */
-    public String startServer(Deploy resources);
-    /**
-     * 停止服务
-     * @param resources
-     * @return
-     */
-    public String stopServer(Deploy resources);
+    String serverStatus(Deploy resources);
 
-    /**
-     * 停止服务
-     * @param resources
-     * @return
-     */
-    public String serverReduction(DeployHistory resources);
+    String startServer(Deploy resources);
+
+    String stopServer(Deploy resources);
+
+    String serverReduction(DeployHistory resources);
 }
