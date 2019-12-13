@@ -82,10 +82,17 @@ public interface UserService {
 
     /**
      * 导出数据
+     *
      * @param queryAll 待导出的数据
      * @param response /
      * @throws IOException /
      */
     void download(List<UserDto> queryAll, HttpServletResponse response) throws IOException;
+
+    /**
+     * 用户修改资料
+     * @param resources /
+     */
+    void updateCenter(User resources);
 }
 

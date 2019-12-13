@@ -18,7 +18,7 @@ public class UserQueryCriteria implements Serializable {
     private Set<Long> deptIds;
 
     // 多字段模糊
-    @Query(blurry = "email,username")
+    @Query(blurry = "email,username,nickName")
     private String blurry;
 
     @Query

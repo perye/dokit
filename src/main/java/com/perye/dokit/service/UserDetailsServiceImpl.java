@@ -42,6 +42,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),
+                user.getNickName(),
+                user.getSex(),
                 user.getPassword(),
                 user.getAvatar(),
                 user.getEmail(),
