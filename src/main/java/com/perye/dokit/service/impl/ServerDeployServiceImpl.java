@@ -6,6 +6,7 @@ import com.perye.dokit.entity.ServerDeploy;
 import com.perye.dokit.mapper.ServerDeployMapper;
 import com.perye.dokit.repository.ServerDeployRepository;
 import com.perye.dokit.service.ServerDeployService;
+import com.perye.dokit.utils.ExecuteShellUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
@@ -57,6 +58,21 @@ public class ServerDeployServiceImpl implements ServerDeployService {
         return serverDeployMapper.toDto(deploy);
     }
 
+
+    @Override
+    public Boolean testConnect(ServerDeploy resources) {
+        ExecuteShellUtil executeShellUtil = null;
+        try {
+            executeShellUtil = new ExecuteShellUtil(resources.getIp(), resources.getAccount(), resources.getPassword(),resources.getPort());
+            return executeShellUtil.execute("ls")==0;
+        } catch (Exception e) {
+            return false;
+        }finally {
+            if (executeShellUtil != null) {
+                executeShellUtil.close();
+            }
+        }
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

@@ -39,7 +39,7 @@ import java.util.Set;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class DeployServiceImpl implements DeployService {
 
-    private final String FILE_SEPARATOR = File.separatorChar + "";
+    private final String FILE_SEPARATOR = "/";
 
     private final DeployRepository deployRepository;
 
@@ -159,6 +159,7 @@ public class DeployServiceImpl implements DeployService {
             boolean result = checkIsRunningStatus(port, executeShellUtil);
             sb.append("服务器:").append(deployDTO.getName()).append("<br>应用:").append(app.getName());
             sendResultMsg(result, sb);
+            executeShellUtil.close();
         }
         return "部署结束";
     }
@@ -174,7 +175,7 @@ public class DeployServiceImpl implements DeployService {
     private void backupApp(ExecuteShellUtil executeShellUtil, String ip, String fileSavePath, String appName, String backupPath, Long id) {
         String deployDate = DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN);
         StringBuilder sb = new StringBuilder();
-        if (!backupPath.endsWith(FILE_SEPARATOR)) {
+        if (!backupPath.endsWith(FILE_SEPARATOR)&&!backupPath.endsWith("\\")) {
             backupPath += FILE_SEPARATOR;
         }
         backupPath += appName + FILE_SEPARATOR + deployDate + "\n";
@@ -216,8 +217,8 @@ public class DeployServiceImpl implements DeployService {
      * @return true 正在运行  false 已经停止
      */
     private boolean checkIsRunningStatus(int port, ExecuteShellUtil executeShellUtil) {
-        String statusResult = executeShellUtil.executeForResult(String.format("fuser -n tcp %d", port));
-        return !"".equals(statusResult.trim());
+        String result = executeShellUtil.executeForResult(String.format("fuser -n tcp %d", port));
+        return result.indexOf("/tcp:")>0;
     }
 
     private void sendMsg(String msg, MsgType msgType) {
@@ -246,17 +247,16 @@ public class DeployServiceImpl implements DeployService {
                 sendMsg(sb.toString(), MsgType.ERROR);
             }
             log.info(sb.toString());
+            executeShellUtil.close();
         }
         return "执行完毕";
     }
 
 
     private boolean checkFile(ExecuteShellUtil executeShellUtil, AppDto appDTO) {
-        String sb = "find " +
-                appDTO.getDeployPath() +
-                " -name " +
-                appDTO.getName();
-        return executeShellUtil.executeShell(sb);
+        StringBuilder sb = new StringBuilder("find ").append(appDTO.getDeployPath()).append(" -name ").append(appDTO.getName());
+        String result = executeShellUtil.executeForResult(sb.toString());
+        return result.indexOf("/tcp:")>0;
     }
 
     /**
@@ -282,6 +282,7 @@ public class DeployServiceImpl implements DeployService {
             boolean result = checkIsRunningStatus(app.getPort(), executeShellUtil);
             sendResultMsg(result, sb);
             log.info(sb.toString());
+            executeShellUtil.close();
         }
         return "执行完毕";
     }
@@ -315,6 +316,7 @@ public class DeployServiceImpl implements DeployService {
                 sendMsg(sb.toString(), MsgType.INFO);
             }
             log.info(sb.toString());
+            executeShellUtil.close();
         }
         return "执行完毕";
     }
@@ -325,7 +327,7 @@ public class DeployServiceImpl implements DeployService {
     public String serverReduction(DeployHistory resources) {
         Long deployId = resources.getDeployId();
         Deploy deployInfo = deployRepository.findById(deployId).orElseGet(Deploy::new);
-        Timestamp deployDate = resources.getDeployDate();
+        String deployDate = DateUtil.format(resources.getDeployDate(), DatePattern.PURE_DATETIME_PATTERN);
         App app = deployInfo.getApp();
         if (app == null) {
             sendMsg("应用信息不存在：" + resources.getAppName(), MsgType.ERROR);
@@ -368,6 +370,7 @@ public class DeployServiceImpl implements DeployService {
         StringBuilder sb = new StringBuilder();
         sb.append("服务器:").append(ip).append("<br>应用:").append(resources.getAppName());
         sendResultMsg(result, sb);
+        executeShellUtil.close();
         return "";
     }
 
@@ -377,7 +380,7 @@ public class DeployServiceImpl implements DeployService {
             sendMsg("IP对应服务器信息不存在：" + ip, MsgType.ERROR);
             throw new BadRequestException("IP对应服务器信息不存在：" + ip);
         }
-        return new ExecuteShellUtil(ip, serverDeployDTO.getAccount(), serverDeployDTO.getPassword());
+        return new ExecuteShellUtil(ip, serverDeployDTO.getAccount(), serverDeployDTO.getPassword(),serverDeployDTO.getPort());
     }
 
 

@@ -1,6 +1,7 @@
 package com.perye.dokit.config;
 
 import com.perye.dokit.annotation.AnonymousAccess;
+import com.perye.dokit.security.JwtAccessDeniedHandler;
 import com.perye.dokit.security.JwtAuthenticationEntryPoint;
 import com.perye.dokit.security.JwtAuthorizationTokenFilter;
 import com.perye.dokit.service.JwtUserDetailsServiceImpl;
@@ -37,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
+    private final JwtAccessDeniedHandler accessDeniedHandler;
+
     private final JwtUserDetailsServiceImpl jwtUserDetailsService;
 
     private final ApplicationContext applicationContext;
@@ -44,8 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 自定义基于JWT的安全过滤器
     private final JwtAuthorizationTokenFilter authenticationTokenFilter;
 
-    public SecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtUserDetailsServiceImpl jwtUserDetailsService, JwtAuthorizationTokenFilter authenticationTokenFilter, ApplicationContext applicationContext) {
+    public SecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler, JwtAccessDeniedHandler accessDeniedHandler, JwtUserDetailsServiceImpl jwtUserDetailsService, JwtAuthorizationTokenFilter authenticationTokenFilter, ApplicationContext applicationContext) {
         this.unauthorizedHandler = unauthorizedHandler;
+        this.accessDeniedHandler = accessDeniedHandler;
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.authenticationTokenFilter = authenticationTokenFilter;
         this.applicationContext = applicationContext;
@@ -96,6 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 // 授权异常
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
                 // 不创建会话
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 过滤请求

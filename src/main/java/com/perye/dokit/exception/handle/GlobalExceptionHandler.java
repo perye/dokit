@@ -42,17 +42,6 @@ public class GlobalExceptionHandler {
         return buildResponseEntity(ApiError.error(e.getMessage()));
     }
 
-    /**
-     * 处理 接口无权访问异常AccessDeniedException
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity handleAccessDeniedException(AccessDeniedException e){
-        // 打印堆栈信息
-        log.error(ThrowableUtil.getStackTrace(e));
-        return buildResponseEntity(ApiError.error(FORBIDDEN.value(),e.getMessage()));
-    }
 
     /**
      * 处理自定义异常
