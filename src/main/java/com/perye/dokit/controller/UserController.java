@@ -1,5 +1,7 @@
 package com.perye.dokit.controller;
 
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.DataScope;
 import com.perye.dokit.dto.RoleSmallDto;
@@ -15,6 +17,7 @@ import com.perye.dokit.utils.SecurityUtils;
 import com.perye.dokit.vo.UserPassVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+    @Value("${rsa.private_key}")
+    private String privateKey;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -110,6 +116,8 @@ public class UserController {
     @PreAuthorize("@dokit.check('user:add')")
     public ResponseEntity create(@Validated @RequestBody User resources){
         checkLevel(resources);
+        // 默认密码 123456
+        resources.setPassword(passwordEncoder.encode("123456"));
         return new ResponseEntity<>(userService.create(resources),HttpStatus.CREATED);
     }
 
@@ -153,14 +161,18 @@ public class UserController {
     @ApiOperation("修改密码")
     @PostMapping(value = "/updatePass")
     public ResponseEntity updatePass(@RequestBody UserPassVo passVo){
+        // 密码解密
+        RSA rsa = new RSA(privateKey, null);
+        String oldPass = new String(rsa.decrypt(passVo.getOldPass(), KeyType.PrivateKey));
+        String newPass = new String(rsa.decrypt(passVo.getNewPass(), KeyType.PrivateKey));
         UserDto user = userService.findByName(SecurityUtils.getUsername());
-        if(!passwordEncoder.matches(passVo.getOldPass(), user.getPassword())){
+        if(!passwordEncoder.matches(oldPass, user.getPassword())){
             throw new BadRequestException("修改失败，旧密码错误");
         }
-        if(passwordEncoder.matches(passVo.getNewPass(), user.getPassword())){
+        if(passwordEncoder.matches(newPass, user.getPassword())){
             throw new BadRequestException("新密码不能与旧密码相同");
         }
-        userService.updatePass(user.getUsername(),passwordEncoder.encode(passVo.getNewPass()));
+        userService.updatePass(user.getUsername(),passwordEncoder.encode(newPass));
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -175,8 +187,11 @@ public class UserController {
     @ApiOperation("修改邮箱")
     @PostMapping(value = "/updateEmail/{code}")
     public ResponseEntity updateEmail(@PathVariable String code,@RequestBody User user){
+        // 密码解密
+        RSA rsa = new RSA(privateKey, null);
+        String password = new String(rsa.decrypt(user.getPassword(), KeyType.PrivateKey));
         UserDto userDto = userService.findByName(SecurityUtils.getUsername());
-        if(!passwordEncoder.matches(user.getPassword(), userDto.getPassword())){
+        if(!passwordEncoder.matches(password, userDto.getPassword())){
             throw new BadRequestException("密码错误");
         }
         VerificationCode verificationCode = new VerificationCode(code, DoKitConstant.RESET_MAIL,"email",user.getEmail());

@@ -88,9 +88,6 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(resources.getEmail())!=null){
             throw new EntityExistException(User.class,"email",resources.getEmail());
         }
-
-        // 默认密码 123456，此密码是加密后的字符
-        resources.setPassword("e10adc3949ba59abbe56e057f20f883e");
         return userMapper.toDto(userRepository.save(resources));
     }
 

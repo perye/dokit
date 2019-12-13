@@ -58,4 +58,12 @@ public class DatabaseController {
         databaseService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Log("测试数据库链接")
+    @ApiOperation(value = "测试数据库链接")
+    @PostMapping("/testConnect")
+    @PreAuthorize("@el.check('database:testConnect')")
+    public ResponseEntity testConnect(@Validated @RequestBody Database resources){
+        return new ResponseEntity<>(databaseService.testConnection(resources),HttpStatus.CREATED);
+    }
 }

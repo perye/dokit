@@ -9,7 +9,9 @@ import com.perye.dokit.repository.DatabaseRepository;
 import com.perye.dokit.service.DatabaseService;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
+import com.perye.dokit.utils.SqlUtils;
 import com.perye.dokit.utils.ValidationUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2019/12/10
  */
 @Service
+@Slf4j
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class DatabaseServiceImpl implements DatabaseService {
 
@@ -72,5 +75,16 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(String id) {
         databaseRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean testConnection(Database resources) {
+        try {
+            return SqlUtils.testConnection(resources.getJdbcUrl(), resources.getUserName(), resources.getPwd());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+
     }
 }

@@ -1,5 +1,11 @@
-import { initData, download } from '@/api/data'
-import { parseTime, downloadFile } from '@/utils/index'
+import {
+  initData,
+  download
+} from '@/api/data'
+import {
+  parseTime,
+  downloadFile
+} from '@/utils/index'
 import checkPermission from '@/utils/permission'
 
 export default {
@@ -248,12 +254,17 @@ export default {
         this.init()
       }).catch(() => {
         this.loading = false
+        this.afterAddErrorMethod()
       })
     },
     /**
      * 新增后可以调用该方法
      */
     afterAddMethod() { },
+    /**
+     * 新增失败后调用该方法
+     */
+    afterAddErrorMethod() {},
     /**
      * 通用的编辑方法
      */

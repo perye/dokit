@@ -104,7 +104,7 @@
           </div>
         </el-dialog>
         <!--表格渲染-->
-        <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
+        <el-table v-loading="loading" :data="data" style="width: 100%;">
           <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" />
           <el-table-column :show-overflow-tooltip="true" prop="nickName" label="昵称" />
           <el-table-column prop="sex" label="性别" />
@@ -172,6 +172,7 @@ import { getAll, getLevel } from '@/api/role'
 import { getAllJob } from '@/api/job'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+let userRoles = []
 export default {
   name: 'User',
   components: { Treeselect },
@@ -234,6 +235,28 @@ export default {
     }
   },
   methods: {
+      changeRole(value) {
+          userRoles = []
+          value.forEach(function(data, index) {
+              const role = { id: data }
+              userRoles.push(role)
+          })
+      },
+      afterAddErrorMethod() {
+          // 恢复select
+          const initRoles = []
+          userRoles.forEach(function(role, index) {
+              initRoles.push(role.id)
+          })
+          this.form.roles = initRoles
+      },
+      deleteTag(value) {
+          userRoles.forEach(function(data, index) {
+              if (data.id === value) {
+                  userRoles.splice(index, value)
+              }
+          })
+      },
     beforeInit() {
       this.url = 'api/users'
       return true
@@ -246,6 +269,7 @@ export default {
     },
     // 打开编辑弹窗前做的操作
     beforeShowEditForm(data) {
+        userRoles = []
       this.getDepts()
       this.getRoles()
       this.getRoleLevel()
@@ -254,6 +278,9 @@ export default {
       const roles = []
       data.roles.forEach(function(role, index) {
         roles.push(role.id)
+          // 初始化编辑时候的角色
+          const rol = { id: role.id }
+          userRoles.push(rol)
       })
       this.form.roles = roles
     },
@@ -278,13 +305,8 @@ export default {
         })
         return false
       }
-      const roles = []
-      this.form.roles.forEach(function(data, index) {
-        const role = { id: data }
-        roles.push(role)
-      })
-      this.form.roles = roles
-      return true
+        this.form.roles = userRoles
+        return true
     },
     // 获取左侧部门数据
     getDeptDatas() {
@@ -347,6 +369,13 @@ export default {
       getLevel().then(res => {
         this.level = res.level
       }).catch(() => {})
+    },
+      addSuccessNotify() {
+          this.$notify({
+              title: '新增成功，默认密码：123456',
+              type: 'success',
+              duration: 2500
+          })
     }
   }
 }
