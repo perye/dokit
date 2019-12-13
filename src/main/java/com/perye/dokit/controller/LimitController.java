@@ -1,5 +1,6 @@
 package com.perye.dokit.controller;
 
+import com.perye.dokit.annotation.AnonymousAccess;
 import com.perye.dokit.annotation.Limit;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +26,7 @@ public class LimitController {
     @Limit(key = "test", period = 60, count = 10, name = "testLimit", prefix = "limit")
     @GetMapping
     @ApiOperation("测试")
-    @PreAuthorize("@dokit.check('anonymous')")
+    @AnonymousAccess
     public int testLimit() {
         return ATOMIC_INTEGER.incrementAndGet();
     }

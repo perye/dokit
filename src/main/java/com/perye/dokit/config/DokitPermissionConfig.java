@@ -11,11 +11,6 @@ import java.util.stream.Collectors;
 public class DokitPermissionConfig {
 
     public Boolean check(String ...permissions){
-        // 如果是匿名访问的，就放行
-        String anonymous = "anonymous";
-        if (Arrays.asList(permissions).contains(anonymous)) {
-            return true;
-        }
         List<String> dokitPermissions = SecurityUtils.getUserDetails().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         return dokitPermissions.contains("admin") || Arrays.stream(permissions).anyMatch(dokitPermissions::contains);
     }

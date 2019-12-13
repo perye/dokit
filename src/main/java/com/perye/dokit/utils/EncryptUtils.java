@@ -1,6 +1,5 @@
 package com.perye.dokit.utils;
 
-import org.springframework.util.DigestUtils;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;

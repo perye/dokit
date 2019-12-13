@@ -49,28 +49,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
-        // Remove the ROLE_ prefix
+        // 去除 ROLE_ 前缀
         return new GrantedAuthorityDefaults("");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // 密码加密方式
         return new BCryptPasswordEncoder();
     }
 
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // 搜寻 匿名标记 url： PreAuthorize("hasAnyRole('anonymous')") 和 PreAuthorize("@dokit.check('anonymous')") 和 AnonymousAccess
+        // 搜寻匿名标记 url： @AnonymousAccess
         Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = applicationContext.getBean(RequestMappingHandlerMapping.class).getHandlerMethods();
         Set<String> anonymousUrls = new HashSet<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
             HandlerMethod handlerMethod = infoEntry.getValue();
             AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
-            PreAuthorize preAuthorize = handlerMethod.getMethodAnnotation(PreAuthorize.class);
-            if (null != preAuthorize && preAuthorize.value().toLowerCase().contains("anonymous")) {
-                anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
-            } else if (null != anonymousAccess && null == preAuthorize) {
+            if (null != anonymousAccess) {
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
             }
         }
@@ -96,6 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
+                // 静态资源等等
                 .antMatchers(
                         HttpMethod.GET,
                         "/*.html",
@@ -105,27 +104,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webSocket/**"
                 ).permitAll()
 
-                // swagger start
+                // swagger
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/*/api-docs").permitAll()
-                // swagger end
 
                 // 文件
                 .antMatchers("/avatar/**").permitAll()
                 .antMatchers("/file/**").permitAll()
+                // druid
                 .antMatchers("/druid/**").permitAll()
 
 
                 // 放行OPTIONS请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // 自定义匿名访问所有url放行 ： 允许 匿名和带权限以及登录用户访问
+                // 自定义匿名访问所有url放行 ： 允许匿名和带权限以及登录用户访问
                 .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
                 // 所有请求都需要认证
                 .anyRequest().authenticated()
-                .and()
-                .apply(securityConfigurerAdapter());
+                .and().apply(securityConfigurerAdapter());
     }
 
     private TokenConfigurer securityConfigurerAdapter() {
