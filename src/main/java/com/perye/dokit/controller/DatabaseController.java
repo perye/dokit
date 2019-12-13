@@ -1,9 +1,13 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.dto.DatabaseDto;
 import com.perye.dokit.dto.DatabaseQueryCriteria;
 import com.perye.dokit.entity.Database;
+import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.DatabaseService;
+import com.perye.dokit.utils.FileUtil;
+import com.perye.dokit.utils.SqlUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +17,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 @Api(tags = "数据库管理")
 @RestController
 @RequestMapping("/api/database")
 public class DatabaseController {
+
+    private String fileSavePath = System.getProperty("java.io.tmpdir");
 
     private final DatabaseService databaseService;
 
@@ -62,8 +72,28 @@ public class DatabaseController {
     @Log("测试数据库链接")
     @ApiOperation(value = "测试数据库链接")
     @PostMapping("/testConnect")
-    @PreAuthorize("@el.check('database:testConnect')")
+    @PreAuthorize("@dokit.check('database:testConnect')")
     public ResponseEntity testConnect(@Validated @RequestBody Database resources){
         return new ResponseEntity<>(databaseService.testConnection(resources),HttpStatus.CREATED);
+    }
+
+    @Log("执行SQL脚本")
+    @ApiOperation(value = "执行SQL脚本")
+    @PostMapping(value = "/upload")
+    @PreAuthorize("@dokit.check('database:add')")
+    public ResponseEntity upload(@RequestBody MultipartFile file, HttpServletRequest request)throws Exception{
+        String id = request.getParameter("id");
+        DatabaseDto database = databaseService.findById(id);
+        String fileName = "";
+        if(database != null){
+            fileName = file.getOriginalFilename();
+            File executeFile = new File(fileSavePath+fileName);
+            FileUtil.del(executeFile);
+            file.transferTo(executeFile);
+            String result = SqlUtils.executeFile(database.getJdbcUrl(), database.getUserName(), database.getPwd(), executeFile);
+            return new ResponseEntity<>(result,HttpStatus.OK);
+        }else{
+            throw new BadRequestException("Database not exist");
+        }
     }
 }

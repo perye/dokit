@@ -3,15 +3,14 @@ package com.perye.dokit.utils;
 import cn.hutool.crypto.SecureUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.util.StringUtils;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.*;
+import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -153,11 +152,72 @@ public class SqlUtils {
         return false;
     }
 
-    public JdbcTemplate jdbcTemplate(String jdbcUrl, String userName, String password) {
-        DataSource dataSource = getDataSource(jdbcUrl,  userName,  password);
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.setFetchSize(1000);
-        return jdbcTemplate;
+    public static String executeFile(String jdbcUrl, String userName, String password, File sqlFile) {
+        Connection connection = getConnection(jdbcUrl, userName, password);
+        try {
+            batchExecute(connection, readSqlList( sqlFile));
+        } catch (Exception e) {
+            log.error("sql脚本执行发生异常:{}",e.getMessage());
+            return e.getMessage();
+        }finally {
+            releaseConnection(connection);
+        }
+        return "success";
+    }
+
+
+    /**
+     * 批量执行sql
+     * @param connection
+     * @param sqlList
+     * @return
+     */
+    public static void batchExecute(Connection connection, List<String> sqlList) throws SQLException {
+        Statement st = connection.createStatement();
+        for (String sql : sqlList) {
+            if (sql.endsWith(";")) {
+                sql = sql.substring(0, sql.length() - 1);
+            }
+            st.addBatch(sql);
+        }
+        st.executeBatch();
+    }
+
+    /**
+     * 将文件中的sql语句以；为单位读取到列表中
+     * @param sqlFile
+     * @return
+     * @throws Exception
+     */
+    private static List<String> readSqlList(File sqlFile) throws Exception {
+        List<String> sqlList = Lists.newArrayList();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(sqlFile), "UTF-8"));
+            String tmp = null;
+            while ((tmp = reader.readLine()) != null) {
+                log.info("line:{}", tmp);
+                if (tmp.endsWith(";")) {
+                    sb.append(tmp);
+                    sqlList.add(sb.toString());
+                    sb.delete(0, sb.length());
+                } else {
+                    sb.append(tmp);
+                }
+            }
+            if (!"".endsWith(sb.toString().trim())) {
+                sqlList.add(sb.toString());
+            }
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e1) {
+            }
+        }
+
+        return sqlList;
     }
 
 }
