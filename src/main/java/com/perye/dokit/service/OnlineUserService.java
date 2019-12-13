@@ -1,12 +1,9 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.config.SecurityProperties;
+import com.perye.dokit.utils.*;
 import com.perye.dokit.vo.JwtUser;
 import com.perye.dokit.vo.OnlineUser;
-import com.perye.dokit.utils.EncryptUtils;
-import com.perye.dokit.utils.FileUtil;
-import com.perye.dokit.utils.PageUtil;
-import com.perye.dokit.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,11 +25,11 @@ public class OnlineUserService {
 
     private final SecurityProperties properties;
 
-    private final RedisTemplate redisTemplate;
+    private RedisUtils redisUtils;
 
-    public OnlineUserService(SecurityProperties properties, RedisTemplate redisTemplate) {
+    public OnlineUserService(SecurityProperties properties,  RedisUtils redisUtils) {
         this.properties = properties;
-        this.redisTemplate = redisTemplate;
+        this.redisUtils = redisUtils;
     }
 
     /**
@@ -52,8 +49,8 @@ public class OnlineUserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        redisTemplate.opsForValue().set(properties.getOnlineKey() + token, onlineUser);
-        redisTemplate.expire(properties.getOnlineKey() + token,properties.getTokenValidityInSeconds(), TimeUnit.MILLISECONDS);
+        redisUtils.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds()/1000);
+
     }
 
     /**
@@ -62,11 +59,10 @@ public class OnlineUserService {
      * @param pageable
      * @return
      */
-    public Page<OnlineUser> getAll(String filter, Pageable pageable){
+    public Map<String,Object> getAll(String filter, Pageable pageable){
         List<OnlineUser> onlineUsers = getAll(filter);
-        return new PageImpl<OnlineUser>(
-                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(),onlineUsers),
-                pageable,
+        return PageUtil.toPage(
+                PageUtil.toPage(pageable.getPageNumber(), pageable.getPageSize(), onlineUsers),
                 onlineUsers.size());
     }
 
@@ -76,11 +72,11 @@ public class OnlineUserService {
      * @return
      */
     public List<OnlineUser> getAll(String filter){
-        List<String> keys = new ArrayList<>(redisTemplate.keys(properties.getOnlineKey() + "*"));
+        List<String> keys = redisUtils.scan(properties.getOnlineKey() + "*");
         Collections.reverse(keys);
         List<OnlineUser> onlineUsers = new ArrayList<>();
         for (String key : keys) {
-            OnlineUser onlineUser = (OnlineUser) redisTemplate.opsForValue().get(key);
+            OnlineUser onlineUser = (OnlineUser) redisUtils.get(key);
             if(StringUtils.isNotBlank(filter)){
                 if(onlineUser.toString().contains(filter)){
                     onlineUsers.add(onlineUser);
@@ -89,9 +85,7 @@ public class OnlineUserService {
                 onlineUsers.add(onlineUser);
             }
         }
-        Collections.sort(onlineUsers, (o1, o2) -> {
-            return o2.getLoginTime().compareTo(o1.getLoginTime());
-        });
+        onlineUsers.sort((o1, o2) -> o2.getLoginTime().compareTo(o1.getLoginTime()));
         return onlineUsers;
     }
 
@@ -100,9 +94,9 @@ public class OnlineUserService {
      * @param val
      * @throws Exception
      */
-    public void kickOut(String val) throws Exception {
-        String key = properties.getOnlineKey() + EncryptUtils.desDecrypt(val);
-        redisTemplate.delete(key);
+    public void kickOut(String key) throws Exception {
+        key = properties.getOnlineKey() + EncryptUtils.desDecrypt(key);
+        redisUtils.del(key);
     }
 
 
@@ -112,7 +106,7 @@ public class OnlineUserService {
      */
     public void logout(String token) {
         String key = properties.getOnlineKey() + token;
-        redisTemplate.delete(key);
+        redisUtils.del(key);
     }
 
     /**
@@ -168,6 +162,6 @@ public class OnlineUserService {
      * @return
      */
     public OnlineUser getOne(String key) {
-        return (OnlineUser)redisTemplate.opsForValue().get(key);
+        return (OnlineUser)redisUtils.get(key);
     }
 }

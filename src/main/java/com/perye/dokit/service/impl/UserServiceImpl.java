@@ -39,14 +39,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    private final RedisService redisService;
+    private final RedisUtils redisUtils;
 
     private final UserAvatarRepository userAvatarRepository;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, RedisService redisService, UserAvatarRepository userAvatarRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, RedisUtils redisUtils, UserAvatarRepository userAvatarRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.redisService = redisService;
+        this.redisUtils = redisUtils;
         this.userAvatarRepository = userAvatarRepository;
     }
 
@@ -114,9 +114,9 @@ public class UserServiceImpl implements UserService {
         // 如果用户的角色改变了，需要手动清理下缓存
         if (!resources.getRoles().equals(user.getRoles())) {
             String key = "role::loadPermissionByUser:" + user.getUsername();
-            redisService.delete(key);
+            redisUtils.del(key);
             key = "role::findByUsers_Id:" + user.getId();
-            redisService.delete(key);
+            redisUtils.del(key);
         }
 
         user.setUsername(resources.getUsername());

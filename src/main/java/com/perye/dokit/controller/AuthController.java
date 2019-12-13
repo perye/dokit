@@ -9,7 +9,6 @@ import com.perye.dokit.security.TokenProvider;
 import com.perye.dokit.vo.AuthUser;
 import com.perye.dokit.vo.JwtUser;
 import com.perye.dokit.service.OnlineUserService;
-import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.*;
 import com.wf.captcha.*;
 import com.wf.captcha.base.Captcha;
@@ -32,6 +31,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 授权、根据token获取用户详细信息
@@ -42,12 +42,15 @@ import java.util.Map;
 @Api(tags = "系统：系统授权接口")
 public class AuthController {
 
+    @Value("${loginCode.expiration}")
+    private Long expiration;
+
     @Value("${single.login:true}")
     private Boolean singleLogin;
 
     private final SecurityProperties properties;
 
-    private final RedisService redisService;
+    private final RedisUtils redisUtils;
 
     private final UserDetailsService userDetailsService;
 
@@ -57,9 +60,9 @@ public class AuthController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthController(SecurityProperties properties, RedisService redisService, UserDetailsService userDetailsService, OnlineUserService onlineUserService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthController(SecurityProperties properties, RedisUtils redisUtils, UserDetailsService userDetailsService, OnlineUserService onlineUserService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.properties = properties;
-        this.redisService = redisService;
+        this.redisUtils = redisUtils;
         this.userDetailsService = userDetailsService;
         this.onlineUserService = onlineUserService;
         this.tokenProvider = tokenProvider;
@@ -78,11 +81,11 @@ public class AuthController {
     public ResponseEntity login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request){
 
         // 查询验证码
-        String code = redisService.getCodeVal(authUser.getUuid());
+        String code = (String) redisUtils.get(authUser.getUuid());
         // 清除验证码
-        redisService.delete(authUser.getUuid());
+        redisUtils.del(authUser.getUuid());
         if (StringUtils.isBlank(code)) {
-            throw new BadRequestException("验证码已过期");
+            throw new BadRequestException("验证码不存在或已过期");
         }
         if (StringUtils.isBlank(authUser.getCode()) || !authUser.getCode().equalsIgnoreCase(code)) {
             throw new BadRequestException("验证码错误");
@@ -145,7 +148,8 @@ public class AuthController {
         captcha.setFont(Captcha.FONT_2);
         String result = captcha.text();
         String uuid = properties.getCodeKey() + IdUtil.simpleUUID();
-        redisService.saveCode(uuid,result);
+        // 保存
+        redisUtils.set(uuid, result, expiration, TimeUnit.MINUTES);
         // 验证码信息
         Map<String,Object> imgResult = new HashMap<String,Object>(2){{
             put("img", captcha.toBase64());
