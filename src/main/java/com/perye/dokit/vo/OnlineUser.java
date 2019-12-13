@@ -1,4 +1,4 @@
-package com.perye.dokit.security;
+package com.perye.dokit.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

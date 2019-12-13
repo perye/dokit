@@ -4,9 +4,11 @@ import cn.hutool.core.lang.Dict;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.dto.RoleQueryCriteria;
 import com.perye.dokit.dto.RoleSmallDto;
+import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.entity.Role;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.RoleService;
+import com.perye.dokit.service.UserService;
 import com.perye.dokit.utils.SecurityUtils;
 import com.perye.dokit.utils.ThrowableUtil;
 import io.swagger.annotations.Api;
@@ -33,8 +35,11 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    public RoleController(RoleService roleService) {
+    private final UserService userService;
+
+    public RoleController(RoleService roleService, UserService userService) {
         this.roleService = roleService;
+        this.userService = userService;
     }
 
     private static final String ENTITY_NAME = "role";
@@ -73,7 +78,8 @@ public class RoleController {
     @ApiOperation("获取用户级别")
     @GetMapping(value = "/level")
     public ResponseEntity getLevel(){
-        List<Integer> levels = roleService.findByUsersId(SecurityUtils.getUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        List<Integer> levels = roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
         return new ResponseEntity<>(Dict.create().set("level", Collections.min(levels)),HttpStatus.OK);
     }
 

@@ -1,4 +1,4 @@
-package com.perye.dokit.security;
+package com.perye.dokit.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +14,8 @@ public class AuthUser {
 
     @NotBlank
     private String password;
+
+    private Boolean rememberMe;
 
     private String code;
 

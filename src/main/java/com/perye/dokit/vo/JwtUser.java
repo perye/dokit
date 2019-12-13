@@ -1,4 +1,4 @@
-package com.perye.dokit.security;
+package com.perye.dokit.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

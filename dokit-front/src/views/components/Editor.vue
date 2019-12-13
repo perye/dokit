@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div ref="editor" class="text"/>
+    <div ref="editor" class="text" />
     <div style="margin: 12px 5px;font-size: 16px;font-weight: bold;color: #696969">HTML渲染如下：</div>
-    <div class="editor-content" v-html="editorContent"/>
+    <div class="editor-content" v-html="editorContent" />
   </div>
 </template>
 
@@ -15,9 +15,9 @@ export default {
   data() {
     return {
       headers: {
-        'Authorization': 'Bearer ' + getToken()
+        'Authorization': getToken()
       },
-        editorContent:
+      editorContent:
         `<h3 style="text-align: center;">欢迎使用 wangEditor 富文本编辑器!</h3>
         <ul>
           <li>富文本中图片上传使用的是sm.ms图床，支持上传到七牛云：<a style="color: #42b983" target="_blank" href="https://sm.ms/">sm.ms</a></li>
@@ -39,7 +39,7 @@ export default {
     editor.customConfig.uploadFileName = 'file'
     editor.customConfig.uploadImgServer = this.imagesUploadApi // 上传图片到服务器
     editor.customConfig.onchange = (html) => {
-       this.editorContent = html
+      this.editorContent = html
     }
     editor.create()
     // 初始化数据

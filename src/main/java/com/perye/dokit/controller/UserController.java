@@ -3,13 +3,13 @@ package com.perye.dokit.controller;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.DataScope;
 import com.perye.dokit.dto.RoleSmallDto;
+import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.dto.UserQueryCriteria;
 import com.perye.dokit.entity.User;
 import com.perye.dokit.entity.VerificationCode;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.*;
 import com.perye.dokit.utils.DoKitConstant;
-import com.perye.dokit.utils.EncryptUtils;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.SecurityUtils;
 import com.perye.dokit.vo.UserPassVo;
@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final PasswordEncoder passwordEncoder;
+
     private final UserService userService;
 
     private final DataScope dataScope;
@@ -45,7 +47,8 @@ public class UserController {
 
     private final VerificationCodeService verificationCodeService;
 
-    public UserController(UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService, VerificationCodeService verificationCodeService) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService, VerificationCodeService verificationCodeService) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.dataScope = dataScope;
         this.deptService = deptService;
@@ -125,7 +128,8 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('user:del')")
     public ResponseEntity delete(@PathVariable Long id){
-        Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        Integer currentLevel =  Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         Integer optLevel =  Collections.min(roleService.findByUsersId(id).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         if (currentLevel > optLevel) {
             throw new BadRequestException("角色权限不足");
@@ -136,15 +140,15 @@ public class UserController {
 
     @ApiOperation("修改密码")
     @PostMapping(value = "/updatePass")
-    public ResponseEntity updatePass(@RequestBody UserPassVo user){
-        UserDetails userDetails = SecurityUtils.getUserDetails();
-        if(!userDetails.getPassword().equals(EncryptUtils.encryptPassword(user.getOldPass()))){
+    public ResponseEntity updatePass(@RequestBody UserPassVo passVo){
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        if(!passwordEncoder.matches(passVo.getOldPass(), user.getPassword())){
             throw new BadRequestException("修改失败，旧密码错误");
         }
-        if(userDetails.getPassword().equals(EncryptUtils.encryptPassword(user.getNewPass()))){
+        if(passwordEncoder.matches(passVo.getNewPass(), user.getPassword())){
             throw new BadRequestException("新密码不能与旧密码相同");
         }
-        userService.updatePass(userDetails.getUsername(), EncryptUtils.encryptPassword(user.getNewPass()));
+        userService.updatePass(user.getUsername(),passwordEncoder.encode(passVo.getNewPass()));
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -159,13 +163,13 @@ public class UserController {
     @ApiOperation("修改邮箱")
     @PostMapping(value = "/updateEmail/{code}")
     public ResponseEntity updateEmail(@PathVariable String code,@RequestBody User user){
-        UserDetails userDetails = SecurityUtils.getUserDetails();
-        if(!userDetails.getPassword().equals(EncryptUtils.encryptPassword(user.getPassword()))){
+        UserDto userDto = userService.findByName(SecurityUtils.getUsername());
+        if(!passwordEncoder.matches(user.getPassword(), userDto.getPassword())){
             throw new BadRequestException("密码错误");
         }
         VerificationCode verificationCode = new VerificationCode(code, DoKitConstant.RESET_MAIL,"email",user.getEmail());
         verificationCodeService.validated(verificationCode);
-        userService.updateEmail(userDetails.getUsername(),user.getEmail());
+        userService.updateEmail(userDto.getUsername(),user.getEmail());
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -174,7 +178,8 @@ public class UserController {
      * @param resources /
      */
     private void checkLevel(User resources) {
-        Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        Integer currentLevel =  Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         Integer optLevel = roleService.findByRoles(resources.getRoles());
         if (currentLevel > optLevel) {
             throw new BadRequestException("角色权限不足");

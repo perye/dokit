@@ -3,21 +3,22 @@ package com.perye.dokit.service.impl;
 import com.perye.dokit.dto.RoleDto;
 import com.perye.dokit.dto.RoleQueryCriteria;
 import com.perye.dokit.dto.RoleSmallDto;
+import com.perye.dokit.dto.UserDto;
+import com.perye.dokit.entity.Menu;
 import com.perye.dokit.entity.Role;
 import com.perye.dokit.exception.EntityExistException;
 import com.perye.dokit.mapper.RoleMapper;
 import com.perye.dokit.mapper.RoleSmallMapper;
 import com.perye.dokit.repository.RoleRepository;
 import com.perye.dokit.service.RoleService;
-import com.perye.dokit.utils.FileUtil;
-import com.perye.dokit.utils.PageUtil;
-import com.perye.dokit.utils.QueryHelp;
-import com.perye.dokit.utils.ValidationUtil;
+import com.perye.dokit.utils.*;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,6 +140,20 @@ public class RoleServiceImpl implements RoleService {
             roleDtos.add(findById(role.getId()));
         }
         return Collections.min(roleDtos.stream().map(RoleDto::getLevel).collect(Collectors.toList()));
+    }
+
+    @Override
+    @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
+    public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
+        Set<Role> roles = roleRepository.findByUsers_Id(user.getId());
+        Set<String> permissions = roles.stream().filter(role -> StringUtils.isNotBlank(role.getPermission())).map(Role::getPermission).collect(Collectors.toSet());
+        permissions.addAll(
+                roles.stream().flatMap(role -> role.getMenus().stream())
+                        .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
+                        .map(Menu::getPermission).collect(Collectors.toSet())
+        );
+        return permissions.stream().map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

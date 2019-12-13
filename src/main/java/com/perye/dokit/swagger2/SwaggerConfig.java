@@ -38,6 +38,10 @@ public class SwaggerConfig {
     @Value("${jwt.header}")
     private String tokenHeader;
 
+    @Value("${jwt.token-start-with}")
+    private String tokenStartWith;
+
+
     @Value("${swagger.enabled}")
     private Boolean enabled;
 
@@ -49,7 +53,7 @@ public class SwaggerConfig {
         ticketPar.name(tokenHeader).description("token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
-                .defaultValue("Bearer ")
+                .defaultValue(tokenStartWith + " ")
                 .required(true)
                 .build();
         pars.add(ticketPar.build());

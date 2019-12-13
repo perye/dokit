@@ -37,7 +37,7 @@ export default {
       apps: [],
       servers: [],
       headers: {
-        Authorization: 'Bearer ' + getToken()
+        Authorization: getToken()
       },
       deployInfo: {},
       form: {

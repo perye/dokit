@@ -3,11 +3,14 @@ package com.perye.dokit.service;
 import com.perye.dokit.dto.RoleDto;
 import com.perye.dokit.dto.RoleQueryCriteria;
 import com.perye.dokit.dto.RoleSmallDto;
+import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.entity.Role;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -96,6 +99,13 @@ public interface RoleService {
      */
     void download(List<RoleDto> queryAll, HttpServletResponse response) throws IOException;
 
+
+    /**
+     * 获取用户权限信息
+     * @param user 用户信息
+     * @return 权限信息
+     */
+    Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
 
 }
 

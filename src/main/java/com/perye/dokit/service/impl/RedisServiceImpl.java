@@ -1,5 +1,6 @@
 package com.perye.dokit.service.impl;
 
+import com.perye.dokit.config.SecurityProperties;
 import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
@@ -21,20 +22,17 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"unchecked","all"})
 public class RedisServiceImpl implements RedisService {
 
+    private final SecurityProperties properties;
+
     private final RedisTemplate redisTemplate;
 
-    public RedisServiceImpl(RedisTemplate redisTemplate) {
+    public RedisServiceImpl(RedisTemplate redisTemplate, SecurityProperties properties) {
         this.redisTemplate = redisTemplate;
+        this.properties = properties;
     }
 
     @Value("${loginCode.expiration}")
     private Long expiration;
-
-    @Value("${jwt.online}")
-    private String onlineKey;
-
-    @Value("${jwt.codeKey}")
-    private String codeKey;
 
     @Override
     public Page<RedisVo> findByKey(String key, Pageable pageable){
@@ -54,7 +52,7 @@ public class RedisServiceImpl implements RedisService {
         Set<String> keys = redisTemplate.keys(key);
         for (String s : keys) {
             // 过滤掉权限的缓存
-            if (s.contains("role::loadPermissionByUser") || s.contains("user::loadUserByUsername") || s.contains(onlineKey) || s.contains(codeKey)) {
+            if (s.contains("role::loadPermissionByUser") || s.contains("user::loadUserByUsername") || s.contains(properties.getOnlineKey()) || s.contains(properties.getCodeKey())) {
                 continue;
             }
             RedisVo redisVo = new RedisVo(s, Objects.requireNonNull(redisTemplate.opsForValue().get(s)).toString());
@@ -71,7 +69,7 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void deleteAll() {
         Set<String> keys = redisTemplate.keys(  "*");
-        redisTemplate.delete(keys.stream().filter(s -> !s.contains(onlineKey)).filter(s -> !s.contains(codeKey)).collect(Collectors.toList()));
+        redisTemplate.delete(keys.stream().filter(s -> !s.contains(properties.getOnlineKey())).filter(s -> !s.contains(properties.getCodeKey())).collect(Collectors.toList()));
     }
 
     @Override

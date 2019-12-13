@@ -186,7 +186,7 @@ export default {
       title: '文件',
       crudMethod: { ...crudFile },
       delAllLoading: false,
-      headers: { 'Authorization': 'Bearer ' + getToken() },
+      headers: { 'Authorization': getToken() },
       form: { id: null, name: null }
     }
   },

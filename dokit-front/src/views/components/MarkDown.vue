@@ -4,7 +4,7 @@
       Markdown 基于
       <a href="https://github.com/hinesboy/mavonEditor" target="_blank">mavonEditor</a>
     </p>
-    <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" @imgDel="imgDel"/>
+    <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" @imgDel="imgDel" />
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
         url: this.imagesUploadApi,
         method: 'post',
         data: formdata,
-        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': 'Bearer ' + getToken() }
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': getToken() }
       }).then((data) => {
         this.data = data.data
         this.$refs.md.$img2Url(pos, this.data.data[0])
