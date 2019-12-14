@@ -46,7 +46,7 @@ public class DeployController {
     @ApiOperation(value = "查询部署")
     @GetMapping
     @PreAuthorize("@dokit.check('deploy:list')")
-    public ResponseEntity getDeploys(DeployQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getDeploys(DeployQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(deployService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -54,7 +54,7 @@ public class DeployController {
     @ApiOperation(value = "新增部署")
     @PostMapping
     @PreAuthorize("@dokit.check('deploy:add')")
-    public ResponseEntity create(@Validated @RequestBody Deploy resources){
+    public ResponseEntity<Object> create(@Validated @RequestBody Deploy resources){
         return new ResponseEntity<>(deployService.create(resources),HttpStatus.CREATED);
     }
 
@@ -62,25 +62,25 @@ public class DeployController {
     @ApiOperation(value = "修改部署")
     @PutMapping
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity update(@Validated @RequestBody Deploy resources){
+    public ResponseEntity<Object> update(@Validated @RequestBody Deploy resources){
         deployService.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除部署")
     @ApiOperation(value = "删除部署")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('deploy:del')")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Object> delete(@PathVariable Long id){
         deployService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Log("上传文件部署")
     @ApiOperation(value = "上传文件部署")
     @PostMapping(value = "/upload")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity upload(@RequestBody MultipartFile file, HttpServletRequest request)throws Exception{
+    public ResponseEntity<Object> upload(@RequestBody MultipartFile file, HttpServletRequest request)throws Exception{
         Long id = Long.valueOf(request.getParameter("id"));
         String fileName = "";
         if(file != null){
@@ -103,7 +103,7 @@ public class DeployController {
     @ApiOperation(value = "系统还原")
     @PostMapping(value = "/serverReduction")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity serverReduction(@Validated @RequestBody DeployHistory resources){
+    public ResponseEntity<Object> serverReduction(@Validated @RequestBody DeployHistory resources){
         String result = deployService.serverReduction(resources);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -111,7 +111,7 @@ public class DeployController {
     @ApiOperation(value = "服务运行状态")
     @PostMapping(value = "/serverStatus")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity serverStatus(@Validated @RequestBody Deploy resources){
+    public ResponseEntity<Object> serverStatus(@Validated @RequestBody Deploy resources){
         String result = deployService.serverStatus(resources);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -119,7 +119,7 @@ public class DeployController {
     @ApiOperation(value = "启动服务")
     @PostMapping(value = "/startServer")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity startServer(@Validated @RequestBody Deploy resources){
+    public ResponseEntity<Object> startServer(@Validated @RequestBody Deploy resources){
         String result = deployService.startServer(resources);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -127,7 +127,7 @@ public class DeployController {
     @ApiOperation(value = "停止服务")
     @PostMapping(value = "/stopServer")
     @PreAuthorize("@dokit.check('deploy:edit')")
-    public ResponseEntity stopServer(@Validated @RequestBody Deploy resources){
+    public ResponseEntity<Object> stopServer(@Validated @RequestBody Deploy resources){
         String result = deployService.stopServer(resources);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

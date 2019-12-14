@@ -35,14 +35,14 @@ public class GeneratorController {
 
     @ApiOperation("查询数据库数据")
     @GetMapping(value = "/tables/all")
-    public ResponseEntity getTables(){
+    public ResponseEntity<Object> getTables(){
         return new ResponseEntity<>(generatorService.getTables(), HttpStatus.OK);
     }
 
 
     @ApiOperation("查询数据库数据")
     @GetMapping(value = "/tables")
-    public ResponseEntity getTables(@RequestParam(defaultValue = "") String name,
+    public ResponseEntity<Object> getTables(@RequestParam(defaultValue = "") String name,
                                     @RequestParam(defaultValue = "0")Integer page,
                                     @RequestParam(defaultValue = "10")Integer size){
         int[] startEnd = PageUtil.transToStartEnd(page+1, size);
@@ -51,7 +51,7 @@ public class GeneratorController {
 
     @ApiOperation("查询字段数据")
     @GetMapping(value = "/columns")
-    public ResponseEntity getTables(@RequestParam String tableName){
+    public ResponseEntity<Object> getTables(@RequestParam String tableName){
         List<ColumnInfo> columnInfos = generatorService.getColumns(tableName);
         // 异步同步表信息
         generatorService.sync(columnInfos);
@@ -60,15 +60,15 @@ public class GeneratorController {
 
     @ApiOperation("保存字段数据")
     @PutMapping
-    public ResponseEntity save(@RequestBody List<ColumnInfo> columnInfos){
+    public ResponseEntity<HttpStatus>  save(@RequestBody List<ColumnInfo> columnInfos){
         // 异步同步表信息
         generatorService.save(columnInfos);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation("生成代码")
     @PostMapping(value = "/{tableName}/{type}")
-    public ResponseEntity generator(@PathVariable String tableName, @PathVariable Integer type, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<Object>  generator(@PathVariable String tableName, @PathVariable Integer type, HttpServletRequest request, HttpServletResponse response){
         if(!generatorEnabled && type == 0){
             throw new BadRequestException("此环境不允许生成代码，请选择预览或者下载查看！");
         }
@@ -82,7 +82,7 @@ public class GeneratorController {
             case 2: generatorService.download(genConfigService.find(tableName), generatorService.getColumns(tableName), request, response);
                 break;
             default: throw new BadRequestException("没有这个选项");
-        }        return new ResponseEntity(HttpStatus.OK);
+        }        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

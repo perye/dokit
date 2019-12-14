@@ -48,7 +48,7 @@ public class DeptController {
     @ApiOperation("查询部门")
     @GetMapping
     @PreAuthorize("@dokit.check('user:list','dept:list')")
-    public ResponseEntity getDepts(DeptQueryCriteria criteria){
+    public ResponseEntity<Object> getDepts(DeptQueryCriteria criteria){
         // 数据权限
         criteria.setIds(dataScope.getDeptIds());
         List<DeptDto> deptDtos = deptService.queryAll(criteria);
@@ -59,7 +59,7 @@ public class DeptController {
     @ApiOperation("新增部门")
     @PostMapping
     @PreAuthorize("@dokit.check('dept:add')")
-    public ResponseEntity create(@Validated @RequestBody Dept resources){
+    public ResponseEntity<Object> create(@Validated @RequestBody Dept resources){
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
@@ -70,21 +70,21 @@ public class DeptController {
     @ApiOperation("修改部门")
     @PutMapping
     @PreAuthorize("@dokit.check('dept:edit')")
-    public ResponseEntity update(@Validated(Dept.Update.class) @RequestBody Dept resources){
+    public ResponseEntity<Object> update(@Validated(Dept.Update.class) @RequestBody Dept resources){
         deptService.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除部门")
     @ApiOperation("删除部门")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('dept:del')")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Object> delete(@PathVariable Long id){
         try {
             deptService.delete(id);
         }catch (Throwable e){
             ThrowableUtil.throwForeignKeyException(e, "该部门存在岗位或者角色关联，请取消关联后再试");
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

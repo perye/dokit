@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 日志
@@ -26,7 +25,6 @@ public interface LogRepository extends JpaRepository<Log, Long>, JpaSpecificatio
      */
     @Query(nativeQuery = true,value = "delete from log where log_type = ?1")
     @Modifying
-    @Transactional
     void deleteByLogType(String logType);
 
 }

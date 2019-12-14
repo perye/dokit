@@ -1,5 +1,6 @@
 package com.perye.dokit.controller;
 
+import com.perye.dokit.annotation.AnonymousAccess;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.dto.DatabaseDto;
 import com.perye.dokit.dto.DatabaseQueryCriteria;
@@ -80,7 +81,8 @@ public class DatabaseController {
     @Log("执行SQL脚本")
     @ApiOperation(value = "执行SQL脚本")
     @PostMapping(value = "/upload")
-    @PreAuthorize("@dokit.check('database:add')")
+//    @PreAuthorize("@dokit.check('database:add')")
+    @AnonymousAccess
     public ResponseEntity upload(@RequestBody MultipartFile file, HttpServletRequest request)throws Exception{
         String id = request.getParameter("id");
         DatabaseDto database = databaseService.findById(id);

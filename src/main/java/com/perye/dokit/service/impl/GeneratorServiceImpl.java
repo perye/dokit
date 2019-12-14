@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@SuppressWarnings("all")
+@SuppressWarnings({"unchecked","all"})
 public class GeneratorServiceImpl implements GeneratorService {
 
     @PersistenceContext

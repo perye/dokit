@@ -56,14 +56,14 @@ public class RoleController {
     @ApiOperation("获取单个role")
     @GetMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('roles:list')")
-    public ResponseEntity getRoles(@PathVariable Long id){
+    public ResponseEntity<Object> getRoles(@PathVariable Long id){
         return new ResponseEntity<>(roleService.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation("返回全部的角色")
     @GetMapping(value = "/all")
     @PreAuthorize("@dokit.check('roles:list','user:add','user:edit')")
-    public ResponseEntity getAll(@PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable){
+    public ResponseEntity<Object> getAll(@PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity<>(roleService.queryAll(pageable),HttpStatus.OK);
     }
 
@@ -71,13 +71,13 @@ public class RoleController {
     @ApiOperation("查询角色")
     @GetMapping
     @PreAuthorize("@dokit.check('roles:list')")
-    public ResponseEntity getRoles(RoleQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getRoles(RoleQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(roleService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @ApiOperation("获取用户级别")
     @GetMapping(value = "/level")
-    public ResponseEntity getLevel(){
+    public ResponseEntity<Object> getLevel(){
         UserDto user = userService.findByName(SecurityUtils.getUsername());
         List<Integer> levels = roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
         return new ResponseEntity<>(Dict.create().set("level", Collections.min(levels)),HttpStatus.OK);
@@ -87,7 +87,7 @@ public class RoleController {
     @ApiOperation("新增角色")
     @PostMapping
     @PreAuthorize("@dokit.check('roles:add')")
-    public ResponseEntity create(@Validated @RequestBody Role resources){
+    public ResponseEntity<Object> create(@Validated @RequestBody Role resources){
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
@@ -98,31 +98,31 @@ public class RoleController {
     @ApiOperation("修改角色")
     @PutMapping
     @PreAuthorize("@dokit.check('roles:edit')")
-    public ResponseEntity update(@Validated(Role.Update.class) @RequestBody Role resources){
+    public ResponseEntity<Object> update(@Validated(Role.Update.class) @RequestBody Role resources){
         roleService.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("修改角色菜单")
     @ApiOperation("修改角色菜单")
     @PutMapping(value = "/menu")
     @PreAuthorize("@dokit.check('roles:edit')")
-    public ResponseEntity updateMenu(@RequestBody Role resources){
+    public ResponseEntity<Object> updateMenu(@RequestBody Role resources){
         roleService.updateMenu(resources,roleService.findById(resources.getId()));
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除角色")
     @ApiOperation("删除角色")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('roles:del')")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Object> delete(@PathVariable Long id){
         try {
             roleService.delete(id);
         }catch (Throwable e){
             ThrowableUtil.throwForeignKeyException(e, "该角色存在用户关联，请取消关联后再试");
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

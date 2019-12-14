@@ -73,11 +73,6 @@ public class LogServiceImpl implements LogService {
         Method method = signature.getMethod();
         com.perye.dokit.aop.log.Log aopLog = method.getAnnotation(com.perye.dokit.aop.log.Log.class);
 
-        // 描述
-        if (log != null) {
-            log.setDescription(aopLog.value());
-        }
-
         // 方法路径
         String methodName = joinPoint.getTarget().getClass().getName()+"."+signature.getName()+"()";
 

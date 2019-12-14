@@ -46,18 +46,18 @@ public class RedisController {
     @DeleteMapping
     @ApiOperation("删除Redis缓存")
     @PreAuthorize("@dokit.check('redis:del')")
-    public ResponseEntity delete(@RequestBody RedisVo resources){
+    public ResponseEntity<Object> delete(@RequestBody RedisVo resources){
         redisService.delete(resources.getKey());
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Log("清空Redis缓存")
     @DeleteMapping(value = "/all")
     @ApiOperation("清空Redis缓存")
     @PreAuthorize("@dokit.check('redis:del')")
-    public ResponseEntity deleteAll(){
+    public ResponseEntity<Object> deleteAll(){
         redisService.deleteAll();
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

@@ -28,7 +28,7 @@ public class OnlineController {
     @ApiOperation("查询在线用户")
     @GetMapping
     @PreAuthorize("@dokit.check()")
-    public ResponseEntity getAll(String filter, Pageable pageable){
+    public ResponseEntity<Object> getAll(String filter, Pageable pageable){
         return new ResponseEntity<>(onlineUserService.getAll(filter, pageable), HttpStatus.OK);
     }
 
@@ -44,8 +44,8 @@ public class OnlineController {
     @ApiOperation("踢出用户")
     @DeleteMapping(value = "/{key}")
     @PreAuthorize("@dokit.check()")
-    public ResponseEntity delete(@PathVariable String key) throws Exception {
+    public ResponseEntity<Object> delete(@PathVariable String key) throws Exception {
         onlineUserService.kickOut(key);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -30,7 +30,7 @@ public class AppController {
     @ApiOperation(value = "查询应用")
     @GetMapping
     @PreAuthorize("@dokit.check('app:list')")
-    public ResponseEntity getApps(AppQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getApps(AppQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(appService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -38,7 +38,7 @@ public class AppController {
     @ApiOperation(value = "新增应用")
     @PostMapping
     @PreAuthorize("@dokit.check('app:add')")
-    public ResponseEntity create(@Validated @RequestBody App resources){
+    public ResponseEntity<Object> create(@Validated @RequestBody App resources){
         return new ResponseEntity<>(appService.create(resources),HttpStatus.CREATED);
     }
 
@@ -46,17 +46,17 @@ public class AppController {
     @ApiOperation(value = "修改应用")
     @PutMapping
     @PreAuthorize("@dokit.check('app:edit')")
-    public ResponseEntity update(@Validated @RequestBody App resources){
+    public ResponseEntity<Object> update(@Validated @RequestBody App resources){
         appService.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除应用")
     @ApiOperation(value = "删除应用")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('app:del')")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity<Object> delete(@PathVariable Long id){
         appService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

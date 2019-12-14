@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
+@SuppressWarnings({"unchecked","all"})
 public enum DataTypeEnum {
 
     MYSQL("mysql", "mysql", "com.mysql.jdbc.Driver", "`", "`", "'", "'"),
@@ -63,7 +64,7 @@ public enum DataTypeEnum {
     private String aliasPrefix;
     private String aliasSuffix;
 
-    private static final String jdbcUrlPrefix = "jdbc:";
+    private static final String JDBC_URL_PREFIX = "jdbc:";
 
     DataTypeEnum(String feature, String desc, String driver, String keywordPrefix, String keywordSuffix, String aliasPrefix, String aliasSuffix) {
         this.feature = feature;
@@ -78,7 +79,7 @@ public enum DataTypeEnum {
     public static DataTypeEnum urlOf(String jdbcUrl) {
         String url = jdbcUrl.toLowerCase().trim();
         for (DataTypeEnum dataTypeEnum : values()) {
-            if (url.startsWith(jdbcUrlPrefix + dataTypeEnum.feature)) {
+            if (url.startsWith(JDBC_URL_PREFIX + dataTypeEnum.feature)) {
                 try {
                     Class<?> aClass = Class.forName(dataTypeEnum.getDriver());
                     if (null == aClass) {

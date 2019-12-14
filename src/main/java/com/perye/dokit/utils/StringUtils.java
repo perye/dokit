@@ -144,36 +144,40 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
      * 根据ip获取详细地址
      */
     public static String getCityInfo(String ip) {
-        DbSearcher searcher = null;
-        try {
-            String path = "ip2region/ip2region.db";
-            String name = "ip2region.db";
-            DbConfig config = new DbConfig();
-            File file = FileUtil.inputStreamToFile(new ClassPathResource(path).getStream(), name);
-            searcher = new DbSearcher(config, file.getPath());
-            Method method;
-            method = searcher.getClass().getMethod("btreeSearch", String.class);
-            DataBlock dataBlock;
-            dataBlock = (DataBlock) method.invoke(searcher, ip);
-            String address = dataBlock.getRegion().replace("0|","");
-            char symbol = '|';
-            if(address.charAt(address.length()-1) == symbol){
-                address = address.substring(0,address.length() - 1);
-            }
-            return address.equals(DoKitConstant.REGION)?"内网IP":address;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            if(searcher!=null){
-                try {
-                    searcher.close();
-                } catch (IOException ignored) {
-                }
-            }
-
-        }
-        return "";
+        return "内网IP";
     }
+    //TODO 以下方法造成 java heap space，内存溢出，待解决
+//    public static String getCityInfo(String ip) {
+//        DbSearcher searcher = null;
+//        try {
+//            String path = "ip2region/ip2region.db";
+//            String name = "ip2region.db";
+//            DbConfig config = new DbConfig();
+//            File file = FileUtil.inputStreamToFile(new ClassPathResource(path).getStream(), name);
+//            searcher = new DbSearcher(config, file.getPath());
+//            Method method;
+//            method = searcher.getClass().getMethod("btreeSearch", String.class);
+//            DataBlock dataBlock;
+//            dataBlock = (DataBlock) method.invoke(searcher, ip);
+//            String address = dataBlock.getRegion().replace("0|","");
+//            char symbol = '|';
+//            if(address.charAt(address.length()-1) == symbol){
+//                address = address.substring(0,address.length() - 1);
+//            }
+//            return address.equals(DoKitConstant.REGION)?"内网IP":address;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }finally {
+//            if(searcher!=null){
+//                try {
+//                    searcher.close();
+//                } catch (IOException ignored) {
+//                }
+//            }
+//
+//        }
+//        return "";
+//    }
 
     /**
      * 获得当天是周几

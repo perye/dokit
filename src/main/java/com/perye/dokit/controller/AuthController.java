@@ -83,7 +83,7 @@ public class AuthController {
     @ApiOperation("登录授权")
     @AnonymousAccess
     @PostMapping(value = "/login")
-    public ResponseEntity login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request){
+    public ResponseEntity<Object> login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request){
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
         String password = new String(rsa.decrypt(authUser.getPassword(), KeyType.PrivateKey));
@@ -123,7 +123,7 @@ public class AuthController {
 
     @ApiOperation("获取用户信息")
     @GetMapping(value = "/info")
-    public ResponseEntity getUserInfo(){
+    public ResponseEntity<Object> getUserInfo(){
         JwtUser jwtUser = (JwtUser)userDetailsService.loadUserByUsername(SecurityUtils.getUsername());
         return ResponseEntity.ok(jwtUser);
     }
@@ -131,7 +131,7 @@ public class AuthController {
     @ApiOperation("获取验证码")
     @AnonymousAccess
     @GetMapping(value = "/code")
-    public ResponseEntity getCode() throws IOException, FontFormatException {
+    public ResponseEntity<Object> getCode() throws IOException, FontFormatException {
         // 类型 https://gitee.com/whvse/EasyCaptcha
 
         // 算术类型
@@ -167,9 +167,9 @@ public class AuthController {
     @ApiOperation("退出登录")
     @AnonymousAccess
     @DeleteMapping(value = "/logout")
-    public ResponseEntity logout(HttpServletRequest request){
+    public ResponseEntity<Object> logout(HttpServletRequest request){
         onlineUserService.logout(tokenProvider.getToken(request));
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

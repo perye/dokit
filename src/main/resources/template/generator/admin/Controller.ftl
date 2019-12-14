@@ -39,7 +39,7 @@ public class ${className}Controller {
     @ApiOperation("查询${apiAlias}")
     @GetMapping()
     @PreAuthorize("@dokit.check('${changeClassName}:list')")
-    public ResponseEntity get${className}s(${className}QueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> get${className}s(${className}QueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -47,7 +47,7 @@ public class ${className}Controller {
     @ApiOperation("新增${apiAlias}")
     @PostMapping
     @PreAuthorize("@dokit.check('${changeClassName}:add')")
-    public ResponseEntity create(@Validated @RequestBody ${className} resources){
+    public ResponseEntity<Object> create(@Validated @RequestBody ${className} resources){
         return new ResponseEntity<>(${changeClassName}Service.create(resources),HttpStatus.CREATED);
     }
 
@@ -55,18 +55,18 @@ public class ${className}Controller {
     @ApiOperation("修改${apiAlias}")
     @PutMapping
     @PreAuthorize("@dokit.check('${changeClassName}:edit')")
-    public ResponseEntity update(@Validated @RequestBody ${className} resources){
+    public ResponseEntity<Object> update(@Validated @RequestBody ${className} resources){
     ${changeClassName}Service.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除${apiAlias}")
     @ApiOperation("删除${apiAlias}")
     @DeleteMapping(value = "/{${pkChangeColName}}")
     @PreAuthorize("@dokit.check('${changeClassName}:del')")
-    public ResponseEntity delete(@PathVariable ${pkColumnType} ${pkChangeColName}){
+    public ResponseEntity<Object> delete(@PathVariable ${pkColumnType} ${pkChangeColName}){
     ${changeClassName}Service.delete(${pkChangeColName});
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -74,9 +74,9 @@ public class ${className}Controller {
     @ApiOperation("多选删除${apiAlias}")
     @PreAuthorize("@dokit.check('${changeClassName}:del')")
     @DeleteMapping
-    public ResponseEntity deleteAll(@RequestBody ${pkColumnType}[] ids) {
+    public ResponseEntity<Object> deleteAll(@RequestBody ${pkColumnType}[] ids) {
     ${changeClassName}Service.deleteAll(ids);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

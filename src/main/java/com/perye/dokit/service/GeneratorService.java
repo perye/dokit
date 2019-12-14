@@ -60,7 +60,7 @@ public interface GeneratorService {
      * @param columns   字段信息
      * @return /
      */
-    ResponseEntity preview(GenConfig genConfig, List<ColumnInfo> columns);
+    ResponseEntity<Object> preview(GenConfig genConfig, List<ColumnInfo> columns);
 
     /**
      * 打包下载

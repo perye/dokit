@@ -34,7 +34,7 @@ public class DeployHistoryController {
     @ApiOperation(value = "查询部署历史管理")
     @GetMapping
     @PreAuthorize("@dokit.check('deployHistory:list')")
-    public ResponseEntity getDeployHistorys(DeployHistoryQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getDeployHistorys(DeployHistoryQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(deployhistoryService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -43,8 +43,8 @@ public class DeployHistoryController {
     @ApiOperation(value = "删除部署历史管理")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAnyRole('deployHistory:del')")
-    public ResponseEntity delete(@PathVariable String id){
+    public ResponseEntity<Object> delete(@PathVariable String id){
         deployhistoryService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

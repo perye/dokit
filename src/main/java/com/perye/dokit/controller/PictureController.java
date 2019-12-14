@@ -35,14 +35,14 @@ public class PictureController {
     @PreAuthorize("@dokit.check('pictures:list')")
     @GetMapping()
     @ApiOperation("查询图片")
-    public ResponseEntity getRoles(PictureQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getRoles(PictureQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(pictureService.queryAll(criteria,pageable), HttpStatus.OK);
     }
 
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('pictures:list')")
+    @PreAuthorize("@dokit.check('pictures:list')")
     public void download(HttpServletResponse response, PictureQueryCriteria criteria) throws IOException {
         pictureService.download(pictureService.queryAll(criteria), response);
     }
@@ -51,7 +51,7 @@ public class PictureController {
     @PreAuthorize("@dokit.check('pictures:add')")
     @PostMapping
     @ApiOperation("上传图片")
-    public ResponseEntity upload(@RequestParam MultipartFile file){
+    public ResponseEntity<Object> upload(@RequestParam MultipartFile file){
         String userName = SecurityUtils.getUsername();
         Picture picture = pictureService.upload(file,userName);
         Map<String,Object> map = new HashMap<>(3);
@@ -65,18 +65,18 @@ public class PictureController {
     @PreAuthorize("@dokit.check('pictures:del')")
     @DeleteMapping(value = "/{id}")
     @ApiOperation("删除图片")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         pictureService.delete(pictureService.findById(id));
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Log("多选删除图片")
     @ApiOperation("多选删除图片")
     @PreAuthorize("@dokit.check('pictures:del')")
     @DeleteMapping
-    public ResponseEntity deleteAll(@RequestBody Long[] ids) {
+    public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {
         pictureService.deleteAll(ids);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
