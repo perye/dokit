@@ -68,6 +68,12 @@ function CRUD(options) {
         return this.add > CRUD.STATUS.NORMAL ? `新增${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? `编辑${crud.title}` : crud.title
       }
     },
+    msg: {
+      submit: '提交成功',
+      add: '新增成功',
+      edit: '编辑成功',
+      del: '删除成功'
+    },
     page: {
       // 页码
       page: 0,
@@ -82,6 +88,21 @@ function CRUD(options) {
     downloadLoading: false
   }
   const methods = {
+    /**
+     * 通用的提示
+     */
+    submitSuccessNotify() {
+      crud.notify(crud.msg.submit, CRUD.NOTIFICATION_TYPE.SUCCESS)
+    },
+    addSuccessNotify() {
+      crud.notify(crud.msg.add, CRUD.NOTIFICATION_TYPE.SUCCESS)
+    },
+    editSuccessNotify() {
+      crud.notify(crud.msg.edit, CRUD.NOTIFICATION_TYPE.SUCCESS)
+    },
+    delSuccessNotify() {
+      crud.notify(crud.msg.del, CRUD.NOTIFICATION_TYPE.SUCCESS)
+    },
     // 搜索
     toQuery() {
       crud.page.page = 1
@@ -96,7 +117,7 @@ function CRUD(options) {
         crud.loading = true
         // 请求数据
         initData(crud.url, crud.getQueryParams()).then(data => {
-          crud.page.total = data.total
+          crud.page.total = data.totalElements
           crud.data = data.content
           crud.resetDataStatus()
           // time 毫秒后显示表格
@@ -120,6 +141,8 @@ function CRUD(options) {
       }
       crud.resetForm()
       crud.status.add = CRUD.STATUS.PREPARED
+      callVmHook(crud, CRUD.HOOK.afterToAdd, crud.form)
+      callVmHook(crud, CRUD.HOOK.afterToCU, crud.form)
     },
     /**
      * 启动编辑
@@ -132,6 +155,8 @@ function CRUD(options) {
       crud.resetForm(JSON.parse(JSON.stringify(data)))
       crud.status.edit = CRUD.STATUS.PREPARED
       crud.getDataStatus(data.id).edit = CRUD.STATUS.PREPARED
+      callVmHook(crud, CRUD.HOOK.afterToEdit, crud.form)
+      callVmHook(crud, CRUD.HOOK.afterToCU, crud.form)
     },
     /**
      * 启动删除
@@ -213,10 +238,12 @@ function CRUD(options) {
       crud.crudMethod.add(crud.form).then(() => {
         crud.status.add = CRUD.STATUS.NORMAL
         crud.resetForm()
-        crud.notify('新增成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        crud.addSuccessNotify()
         callVmHook(crud, CRUD.HOOK.afterSubmit)
         crud.toQuery()
-      }).catch(() => {})
+      }).catch(() => {
+        callVmHook(crud, CRUD.HOOK.afterAddError)
+      })
     },
     /**
      * 执行编辑
@@ -229,10 +256,12 @@ function CRUD(options) {
         crud.status.edit = CRUD.STATUS.NORMAL
         crud.getDataStatus(crud.form.id).edit = CRUD.STATUS.NORMAL
         crud.resetForm()
-        crud.notify('编辑成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        crud.editSuccessNotify()
         callVmHook(crud, CRUD.HOOK.afterSubmit)
         crud.refresh()
-      }).catch(() => {})
+      }).catch(() => {
+        callVmHook(crud, CRUD.HOOK.afterEditError)
+      })
     },
     /**
      * 执行删除
@@ -247,7 +276,7 @@ function CRUD(options) {
       return crud.crudMethod.del(data.id).then(() => {
         dataStatus.delete = CRUD.STATUS.NORMAL
         crud.dleChangePage(1)
-        crud.notify('删除成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        crud.delSuccessNotify()
         callVmHook(crud, CRUD.HOOK.afterDelete, data)
         crud.refresh()
       }).catch(() => {
@@ -333,12 +362,18 @@ function CRUD(options) {
      */
     resetDataStatus() {
       const dataStatus = {}
-      crud.data.forEach(e => {
-        dataStatus[e.id] = {
-          delete: 0,
-          edit: 0
-        }
-      })
+      function resetStatus(datas) {
+        datas.forEach(e => {
+          dataStatus[e.id] = {
+            delete: 0,
+            edit: 0
+          }
+          if (e.children) {
+            resetStatus(e.children)
+          }
+        })
+      }
+      resetStatus(crud.data)
       crud.dataStatus = dataStatus
     },
     /**
@@ -349,7 +384,7 @@ function CRUD(options) {
       return crud.dataStatus[id]
     },
     findVM(type) {
-      return crud.vms.find(vm => vm.type === type).vm
+      return crud.vms.find(vm => vm && vm.type === type).vm
     },
     notify(title, type = CRUD.NOTIFICATION_TYPE.INFO) {
       crud.vms[0].vm.$notify({
@@ -395,7 +430,7 @@ function CRUD(options) {
      * @param {*} vm 组件实例
      */
     unregisterVM(vm) {
-      this.vms.splice(this.vms.findIndex(e => e.vm === vm), 1)
+      this.vms.splice(this.vms.findIndex(e => e && e.vm === vm), 1)
     }
   })
   // 冻结处理，需要扩展数据的话，使用crud.updateProp(name, value)，以crud.props.name形式访问，这个是响应式的，可以做数据绑定
@@ -413,10 +448,11 @@ function callVmHook(crud, hook) {
   for (let i = 2; i < arguments.length; ++i) {
     nargs.push(arguments[i])
   }
-  crud.vms.forEach(({
-    vm
-  }) => {
-    if (vm && vm[hook]) {
+  // 有些组件扮演了多个角色，调用钩子时，需要去重
+  const vmSet = new Set()
+  crud.vms.forEach(vm => vm && vmSet.add(vm.vm))
+  vmSet.forEach(vm => {
+    if (vm[hook]) {
       ret = vm[hook].apply(vm, nargs) !== false && ret
     }
   })
@@ -601,10 +637,16 @@ CRUD.HOOK = {
   afterDeleteCancel: 'afterCrudDeleteCancel',
   /** 新建 - 之前 */
   beforeToAdd: 'beforeCrudToAdd',
+  /** 新建 - 之后 */
+  afterToAdd: 'afterCrudToAdd',
   /** 编辑 - 之前 */
   beforeToEdit: 'beforeCrudToEdit',
+  /** 编辑 - 之后 */
+  afterToEdit: 'afterCrudToEdit',
   /** 开始 "新建/编辑" - 之前 */
   beforeToCU: 'beforeCrudToCU',
+  /** 开始 "新建/编辑" - 之后 */
+  afterToCU: 'afterCrudToCU',
   /** "新建/编辑" 验证 - 之前 */
   beforeValidateCU: 'beforeCrudValidateCU',
   /** "新建/编辑" 验证 - 之后 */
@@ -620,7 +662,9 @@ CRUD.HOOK = {
   /** 提交 - 之前 */
   beforeSubmit: 'beforeCrudSubmitCU',
   /** 提交 - 之后 */
-  afterSubmit: 'afterCrudSubmitCU'
+  afterSubmit: 'afterCrudSubmitCU',
+  afterAddError: 'afterCrudAddError',
+  afterEditError: 'afterCrudEditError'
 }
 
 /**
