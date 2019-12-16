@@ -3,7 +3,68 @@
 Just do kit!
 
 #### 项目简介
-基于 Spring Boot 2.1.9 、 Jpa、 Spring Security、redis、Vue的前后端分离的后台管理系统， 权限控制的方式为RBAC，项目支持数据字典与数据权限管理，支持一键生成前后端代码，支持前端菜单动态路由
+基于 Spring Boot 2.1.9 、 Jpa、 Spring Security、redis、Vue的前后端分离的后台管理系统， 权限控制的方式为RBAC，项目支持数据字典与数据权限管理，支持一键生成前后端代码（支持在线预览及打包下载），支持前端菜单动态路由
+可一键部署服务器应用，数据库。系统中活跃用户状态监控，监视当前系统CPU、内存、磁盘、堆栈等相关信息。
+
+#### 技术栈
+
+##### 后端技术
+
+| 技术                 | 说明                | 
+| -------------------- | ------------------- |
+| SpringBoot           | 容器+MVC框架        | 
+| SpringSecurity       | 认证和授权框架      | 
+| Spring-data-jpa      | ORM框架             | 
+| Spring Cache         | Spring缓存
+| Swagger-UI           | 文档生产工具        | 
+| log4jdbc             | 监控sql日志            |
+| Redis                | 分布式缓存          | 
+| Druid                | 数据库连接池        | 
+| OSS                  | 对象存储            | 
+| JWT                  | JWT登录支持         | 
+| Lombok               | 简化对象封装工具    | 
+| quartz               | 作业调度框架          |
+| freemarker           | 模版引擎             |
+| sigar                | 系统信息              |
+| websocket            | TCP通信          |
+| ssh2                 | 服务器连接          |
+| jsch                 | SFTP文件传输       |
+| mapstruct            | 属性映射工具         |
+| ip2region            | 根据ip转换成具体地理位置 |
+| mysql| 关系型数据库|
+
+##### 前端技术
+
+| 技术       | 说明                  | 
+| ---------- | --------------------- 
+| Vue        | 前端框架              | 
+| Vue-router | 路由框架              | 
+| Vuex       | 全局状态管理框架      | 
+| Element    | 前端UI框架            | 
+| Axios      | 前端HTTP框架          | 
+| echarts   | 基于Echarts的图表框架 | 
+| Js-cookie  | cookie管理工具        | 
+| nprogress  | 进度条控件            | 
+| vue-count-to|数字滚动 |
+| vue-highlightjs|代码语法高亮|
+| qs            | 对象序列化        |
+| vue-cropper | 图片剪切|
+| vue-splitpane | 前端页面分割|
+| path-to-regexp| url正则表达 |
+| wangeditor|富文本编辑器 |
+| mavon-editor|markdown编辑器|
+| jszip|    压缩解压|
+| jsencrypt | 参数前端加密|
+| fusejs|基于 JavaScript 的轻量级模糊搜索引擎 |
+| file-saver|客户端保存文件|
+| codemirror|在线编辑代码|
+| clipboard| 点击复制|
+| vue-treeselect| 树形选择器|
+| vue-jsx|JSX语法|
+| screenfullJS| 全屏|
+| xlsx| 生成报表 |
+| sass| CSS扩展语言|
+| svgo| svg压缩|
 
 ####  系统功能
 - 用户管理：提供用户的相关配置，新增用户后，默认密码为123456
@@ -19,13 +80,15 @@ Just do kit!
 - 定时任务：整合Quartz做定时任务，加入任务日志，任务运行情况一目了然
 - 代码生成：高灵活度一键生成前后端代码，减少百分之80左右的工作任务，可以预览生成结果
 - 邮件工具：配合富文本，发送html格式的邮件
-- 免费图床：使用sm.ms图床，用作公共图片上传使用
+- 系统接口：根据业务代码自动生成相关的api接口文档。
+- 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
+- 图床管理：使用sm.ms图床，用作公共图片上传使用
 - 七牛云存储：可同步七牛云存储的数据到系统，无需登录七牛云直接操作云数据
 - 支付宝支付：整合了支付宝支付并且提供了测试账号，可自行测试
-- 在线用户：查看实时在线用户，可以管理在线用户，踢下线等操作
+- 在线用户：当前系统中活跃用户状态监控，查看实时在线用户，可以管理在线用户，踢下线等操作
 - 服务器： 可以连接云服务器进行管理
 - 数据库管理： 连接数据方便更新数据库脚本
-- 应用管理：上次jar包到服务器进行管理
+- 应用管理：上传jar包到服务器进行管理
 - 部署管理：可一键部署，根据配置的服务器和应用程序，线上直接配置，无需命令行
 
 #### 项目结构
@@ -152,6 +215,9 @@ Just do kit!
 ```
 
 #### 项目截图
+
+首页
+![首页](./asserts/dashboard.png)
 
 用户管理
 ![用户管理](./asserts/user.png)
