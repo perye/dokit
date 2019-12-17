@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 17/12/2019 15:19:43
+ Date: 17/12/2019 17:54:11
 */
 
 SET NAMES utf8mb4;
@@ -44,6 +44,29 @@ INSERT INTO `alipay_config` VALUES (1, '2016091700532697', 'utf-8', 'JSON', 'htt
 COMMIT;
 
 -- ----------------------------
+-- Table structure for captcha
+-- ----------------------------
+DROP TABLE IF EXISTS `captcha`;
+CREATE TABLE `captcha` (
+  `id` bigint(20) NOT NULL COMMENT 'id',
+  `type` int(10) NOT NULL COMMENT '验证码类型',
+  `font_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '字体名字',
+  `font_style` int(10) DEFAULT NULL COMMENT '字体风格',
+  `font_size` int(10) DEFAULT NULL COMMENT '字体大小',
+  `width` int(10) DEFAULT NULL COMMENT '宽度',
+  `height` int(10) DEFAULT NULL COMMENT '高度',
+  `len` int(10) DEFAULT NULL COMMENT '位数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of captcha
+-- ----------------------------
+BEGIN;
+INSERT INTO `captcha` VALUES (1, 1, '宋体', 1, 32, 130, 48, 4);
+COMMIT;
+
+-- ----------------------------
 -- Table structure for column_config
 -- ----------------------------
 DROP TABLE IF EXISTS `column_config`;
@@ -63,7 +86,7 @@ CREATE TABLE `column_config` (
   `remark` varchar(255) DEFAULT NULL,
   `date_annotation` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of column_config
@@ -88,6 +111,14 @@ INSERT INTO `column_config` VALUES (109, 'log', 'update_time', 'datetime', NULL,
 INSERT INTO `column_config` VALUES (110, 'test', 'id', 'int', NULL, 'auto_increment', b'1', 'Input', 'PRI', b'1', b'1', '=', 'id', '');
 INSERT INTO `column_config` VALUES (111, 'test', 'createTime', 'datetime', NULL, '', b'1', 'Date', '', b'1', b'1', 'BetWeen', 'createTime', 'CreationTimestamp');
 INSERT INTO `column_config` VALUES (112, 'test', 'username', 'varchar', NULL, '', b'1', 'Input', '', b'1', b'1', 'Like', 'username', NULL);
+INSERT INTO `column_config` VALUES (131, 'captcha', 'id', 'bigint', NULL, '', b'0', NULL, 'PRI', b'0', b'1', NULL, 'id', NULL);
+INSERT INTO `column_config` VALUES (132, 'captcha', 'type', 'int', 'captcha_type', '', b'1', 'Radio', '', b'1', b'1', NULL, '验证码类型', NULL);
+INSERT INTO `column_config` VALUES (133, 'captcha', 'font_name', 'varchar', 'font_name', '', b'1', 'Radio', '', b'1', b'0', NULL, '字体名字', NULL);
+INSERT INTO `column_config` VALUES (134, 'captcha', 'font_style', 'int', 'captcha_fontstyle', '', b'1', 'Radio', '', b'1', b'0', NULL, '字体风格', NULL);
+INSERT INTO `column_config` VALUES (135, 'captcha', 'font_size', 'int', NULL, '', b'1', '', '', b'1', b'0', NULL, '字体大小', NULL);
+INSERT INTO `column_config` VALUES (136, 'captcha', 'width', 'int', NULL, '', b'1', NULL, '', b'1', b'0', NULL, '宽度', NULL);
+INSERT INTO `column_config` VALUES (137, 'captcha', 'height', 'int', NULL, '', b'1', NULL, '', b'1', b'0', NULL, '高度', NULL);
+INSERT INTO `column_config` VALUES (138, 'captcha', 'len', 'int', NULL, '', b'1', NULL, '', b'1', b'0', NULL, '位数', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -127,7 +158,7 @@ CREATE TABLE `dict` (
   `remark` varchar(255) DEFAULT NULL COMMENT '描述',
   `create_time` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of dict
@@ -136,6 +167,9 @@ BEGIN;
 INSERT INTO `dict` VALUES (1, 'user_status', '用户状态', '2019-10-27 20:31:36');
 INSERT INTO `dict` VALUES (4, 'dept_status', '部门状态', '2019-10-27 20:31:36');
 INSERT INTO `dict` VALUES (5, 'job_status', '岗位状态', '2019-10-27 20:31:36');
+INSERT INTO `dict` VALUES (6, 'captcha_type', '验证码类型', '2019-12-17 15:41:58');
+INSERT INTO `dict` VALUES (7, 'captcha_fontstyle', '验证码字体风格', '2019-12-17 17:09:23');
+INSERT INTO `dict` VALUES (8, 'font_name', '字体名字', '2019-12-17 17:20:34');
 COMMIT;
 
 -- ----------------------------
@@ -152,7 +186,7 @@ CREATE TABLE `dict_detail` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `FK5tpkputc6d9nboxojdbgnpmyb` (`dict_id`) USING BTREE,
   CONSTRAINT `FK5tpkputc6d9nboxojdbgnpmyb` FOREIGN KEY (`dict_id`) REFERENCES `dict` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of dict_detail
@@ -164,6 +198,18 @@ INSERT INTO `dict_detail` VALUES (3, '启用', 'true', '1', 4, NULL);
 INSERT INTO `dict_detail` VALUES (4, '停用', 'false', '2', 4, '2019-10-27 20:31:36');
 INSERT INTO `dict_detail` VALUES (5, '启用', 'true', '1', 5, NULL);
 INSERT INTO `dict_detail` VALUES (6, '停用', 'false', '2', 5, '2019-10-27 20:31:36');
+INSERT INTO `dict_detail` VALUES (7, '纯小写字母', '5', '999', 6, '2019-12-17 15:43:00');
+INSERT INTO `dict_detail` VALUES (8, '纯大写字母', '4', '999', 6, '2019-12-17 15:43:11');
+INSERT INTO `dict_detail` VALUES (9, '纯字母', '3', '999', 6, '2019-12-17 15:43:19');
+INSERT INTO `dict_detail` VALUES (10, '纯数字', '2', '999', 6, '2019-12-17 15:43:31');
+INSERT INTO `dict_detail` VALUES (11, '数字和字母混合', '1', '999', 6, '2019-12-17 15:43:41');
+INSERT INTO `dict_detail` VALUES (12, '普通', '0', '999', 7, '2019-12-17 17:13:22');
+INSERT INTO `dict_detail` VALUES (13, '加粗', '1', '999', 7, '2019-12-17 17:13:46');
+INSERT INTO `dict_detail` VALUES (14, '斜体', '2', '999', 7, '2019-12-17 17:13:59');
+INSERT INTO `dict_detail` VALUES (15, '数字和大写字母', '6', '999', 6, '2019-12-17 17:17:27');
+INSERT INTO `dict_detail` VALUES (16, '宋体', '宋体', '999', 8, '2019-12-17 17:20:49');
+INSERT INTO `dict_detail` VALUES (17, '黑体', '黑体', '999', 8, '2019-12-17 17:20:58');
+INSERT INTO `dict_detail` VALUES (18, 'Times New Roman', 'Times New Roman', '999', 8, '2019-12-17 17:21:13');
 COMMIT;
 
 -- ----------------------------
@@ -195,13 +241,14 @@ CREATE TABLE `gen_config` (
   `prefix` varchar(255) DEFAULT NULL COMMENT '表前缀',
   `api_alias` varchar(255) DEFAULT NULL COMMENT '接口名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of gen_config
 -- ----------------------------
 BEGIN;
 INSERT INTO `gen_config` VALUES (4, 'test', 'perye', b'1', 'com.perye.dokit', '/Volumes/perye/dokit/dokit-front/src/views/gentest', '/Volumes/perye/dokit/dokit-front/src/api', NULL, 'genTest');
+INSERT INTO `gen_config` VALUES (6, 'captcha', 'perye', b'1', 'com.perye.dokit', '/Volumes/perye/dokit/dokit-front/src/views/system/captcha', '/Volumes/perye/dokit/dokit-front/src/api', NULL, 'captcha');
 COMMIT;
 
 -- ----------------------------
@@ -272,18 +319,15 @@ CREATE TABLE `log` (
   `is_delete` bit(1) DEFAULT b'0',
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5226 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=5556 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of log
 -- ----------------------------
 BEGIN;
-INSERT INTO `log` VALUES (5220, '2019-12-17 15:18:44', '删除所有INFO日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByInfo()', '{ }', '10.206.103.118', 46, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 15:18:44');
-INSERT INTO `log` VALUES (5221, '2019-12-17 15:18:50', '删除所有ERROR日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByError()', '{ }', '10.206.103.118', 36, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 15:18:50');
-INSERT INTO `log` VALUES (5222, '2019-12-17 15:18:54', '查询服务监控', NULL, 'INFO', 'com.perye.dokit.controller.ServerController.getServers()', '{ criteria: ServerQueryCriteria(blurry=null) pageable: Page request [number: 0, size 10, sort: sort: ASC] }', '10.206.103.118', 1150, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 15:18:54');
-INSERT INTO `log` VALUES (5223, '2019-12-17 15:18:55', '查询Redis缓存', NULL, 'INFO', 'com.perye.dokit.controller.RedisController.getRedis()', '{ key: * pageable: Page request [number: 0, size 10, sort: id: DESC] }', '10.206.103.118', 131, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 15:18:55');
-INSERT INTO `log` VALUES (5224, '2019-12-17 15:19:02', '查询在线用户', NULL, 'INFO', 'com.perye.dokit.controller.OnlineController.getAll()', '{ filter: null pageable: Page request [number: 0, size 10, sort: id: DESC] }', '10.206.103.118', 17, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 15:19:02');
-INSERT INTO `log` VALUES (5225, '2019-12-17 15:19:04', '踢出用户', NULL, 'INFO', 'com.perye.dokit.controller.OnlineController.delete()', '{ key: B04AE460789BA1F4BAD519DC88D7E5821A1233E7694303CD0541F75CE2EF7CE0BE0B6005CB8742753A4E4DDED90B8E7D00E128D2948B5EFF2C26DABABA105BAE6AD29D7BD1D5C55D7DACAC3B047AFE5CFA94C7818C84F97F6A945D8AA22BCDC96CE927B2E972773ECC1AF1E83DD1A57A1D468E1ADC77F971F0EE389ADEF8D4E052EBA739E6337BB698C111618ACCEA330921123F2183F65F44CC4AFDEAEE4086CB99149B6E0978B820EABB77E1163A8581466670C78DE6BFC194096E7ABC60BC432F9B9A1CAFE6A4845556232D540E9B1B926DB80CC8343C1E7C2723E7FB07718CAAAADEBA8F2B6DA365968F78200EA7DC372A901CAC88D493220E0C8E0DEF751936F5AEB1607F6E67F8E399221223BC32778F4459E350C3D945BC44F7D69B7F28491D7EB7607FA0A9F96FEAB7DB6D3EB0C6A92A96178AF9BFBEFF8806A7D509AAC5444E4655F6CAFCB949C9AAB5875B6D42CE231AFE1CE4F8C2D7C148B8F1A0416ABAF87AFF1650254513EEE0976E936402CD57311EAAC3E0F4A944B9A9908CCE8B6E1D86F6972C79699ABADEFDD5C99D935D0CC306795B93E725744DC4B3C88248D4AE1DE955920D78056DE29FA111EF17DF31081A881E9E0F3DD82FDF098CD087BE1674E27959BFF38C7612CC146E4FC269E722E5455CCA4A6C27D11DB7B3F7483116CBD94F926703FC858FC697E7AE5178A50B5850A111A0BD27CB95773F3CCD4175AE915900ACCE6990C12EB4B8D73CEEA71C2A55DDA47775C45DCF501C90BCCCB414CF93FFD31755B2550E27C5885832EDD977383AE163A3327F9A5947FB35BB7D42AFD632B2B7BB34CEB952EAD018F8EF964FC70D4BBB09C891621CAD27D456CDD999551B482F5E6CC43F6DBA9F5CD4C9173069ECF115FB25573EB4F8D3C99805D737458732A73B6481140F0BDDBB306FC224596F812EB588766226F5F29C20E136F3CEBEEC1F33E80460BAD5400FA061BE26A3481F64F864C45FA669E1BC926572533A0E63B9AFA0575425BF4E0DCC47775361D26622FDB102B3102E4A78D4D196F8DFDE2B1D8A651266CD6025E10B3E0DA09278071D9F70349754949F91803CD91515004F14F55EEEE366C070D653A6E8196A23B56BA6F4C603DA51A98CEFF95BD61DBACFB4F9962B131D89EA6AA097A6F1995592E56B5337713E1EBC11920B6F4293544EF80422BCF8B2CA3B07531F4642CC7F3F0CB4229D83D0DD3FB9F39776F8B47480353103DDF61861847663F74A903A5FA940CE4630ADB131AD4267A637C83333CC401302D4101DEB5774F07F370B1B4B9EEF370288C52C4C1C61FD08C555B2850FD0BD5776E58E5065FA8FA455820C302E030819798EECEBB44E3AD2D960DCE6C2106C7A4D4693B8142642BBE91E1820A2CE08F61576D590A9A2555702E891CB6C77B05A72F23ECA11B92B6252EFAC43CFFC258F8CC827FA4E0BD243CE035832A681D52A532E036E }', '10.206.103.118', 7, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 15:19:04');
+INSERT INTO `log` VALUES (5553, '2019-12-17 17:53:47', '删除所有INFO日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByInfo()', '{ }', '10.206.103.118', 23, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 17:53:47');
+INSERT INTO `log` VALUES (5554, '2019-12-17 17:53:54', '删除所有ERROR日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByError()', '{ }', '10.206.103.118', 14, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 17:53:54');
+INSERT INTO `log` VALUES (5555, '2019-12-17 17:53:56', '查询在线用户', NULL, 'INFO', 'com.perye.dokit.controller.OnlineController.getAll()', '{ filter: null pageable: Page request [number: 0, size 10, sort: id: DESC] }', '10.206.103.118', 22, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 17:53:56');
 COMMIT;
 
 -- ----------------------------
@@ -307,7 +351,7 @@ CREATE TABLE `menu` (
   `type` int(11) DEFAULT NULL COMMENT '类型',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `FKqcf9gem97gqa5qjm4d3elcqt5` (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of menu
@@ -390,6 +434,8 @@ INSERT INTO `menu` VALUES (113, b'0', '数据库编辑', '', 98, 999, '', '', b'
 INSERT INTO `menu` VALUES (114, b'0', '数据库删除', '', 98, 999, '', '', b'0', b'0', '', '2019-11-17 11:13:14', 'database:del', 2);
 INSERT INTO `menu` VALUES (115, b'0', '测试生成', 'gentest/index', 1, 999, 'Steve-Jobs', 'genTest', b'0', b'0', NULL, '2019-11-25 18:10:29', 'test:list', 1);
 INSERT INTO `menu` VALUES (116, b'0', '生成预览', 'generator/preview', 36, 999, 'java', 'generator/preview/:tableName', b'1', b'1', 'Preview', '2019-11-26 14:54:36', NULL, 1);
+INSERT INTO `menu` VALUES (117, b'0', '验证码设置', 'system/captcha/index', 118, 999, 'app', 'captcha', b'0', b'0', NULL, '2019-12-17 15:38:35', 'captcha:list', 1);
+INSERT INTO `menu` VALUES (118, b'0', '系统设置', NULL, 0, 999, 'bug', 'setting', b'0', b'0', NULL, '2019-12-17 17:52:05', NULL, 0);
 COMMIT;
 
 -- ----------------------------
@@ -807,6 +853,8 @@ INSERT INTO `roles_menus` VALUES (113, 1);
 INSERT INTO `roles_menus` VALUES (114, 1);
 INSERT INTO `roles_menus` VALUES (115, 1);
 INSERT INTO `roles_menus` VALUES (116, 1);
+INSERT INTO `roles_menus` VALUES (117, 1);
+INSERT INTO `roles_menus` VALUES (118, 1);
 INSERT INTO `roles_menus` VALUES (1, 2);
 INSERT INTO `roles_menus` VALUES (2, 2);
 INSERT INTO `roles_menus` VALUES (3, 2);
@@ -1001,7 +1049,7 @@ INSERT INTO `visits` VALUES (113, '2019-12-13 09:59:26', '2019-12-13', 1, 9, '�
 INSERT INTO `visits` VALUES (114, '2019-12-14 15:21:41', '2019-12-14', 2, 6, '星期六');
 INSERT INTO `visits` VALUES (115, '2019-12-15 00:00:00', '2019-12-15', 3, 7, '星期日');
 INSERT INTO `visits` VALUES (116, '2019-12-16 10:04:22', '2019-12-16', 2, 8, '星期一');
-INSERT INTO `visits` VALUES (117, '2019-12-17 08:58:45', '2019-12-17', 3, 13, '星期二');
+INSERT INTO `visits` VALUES (117, '2019-12-17 08:58:45', '2019-12-17', 1, 16, '星期二');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

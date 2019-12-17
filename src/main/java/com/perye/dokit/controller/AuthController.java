@@ -6,8 +6,10 @@ import cn.hutool.crypto.asymmetric.RSA;
 import com.perye.dokit.annotation.AnonymousAccess;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.SecurityProperties;
+import com.perye.dokit.dto.CaptchaDto;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.security.TokenProvider;
+import com.perye.dokit.service.CaptchaService;
 import com.perye.dokit.vo.AuthUser;
 import com.perye.dokit.vo.JwtUser;
 import com.perye.dokit.service.OnlineUserService;
@@ -53,6 +55,8 @@ public class AuthController {
     @Value("${single.login:true}")
     private Boolean singleLogin;
 
+    private final CaptchaService captchaService;
+
     private final SecurityProperties properties;
 
     private final RedisUtils redisUtils;
@@ -65,13 +69,14 @@ public class AuthController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthController(SecurityProperties properties, RedisUtils redisUtils, UserDetailsService userDetailsService, OnlineUserService onlineUserService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthController(SecurityProperties properties, RedisUtils redisUtils, UserDetailsService userDetailsService, OnlineUserService onlineUserService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, CaptchaService captchaService) {
         this.properties = properties;
         this.redisUtils = redisUtils;
         this.userDetailsService = userDetailsService;
         this.onlineUserService = onlineUserService;
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.captchaService = captchaService;
     }
 
     /**
@@ -133,32 +138,18 @@ public class AuthController {
     @GetMapping(value = "/code")
     public ResponseEntity<Object> getCode() throws IOException, FontFormatException {
         // 类型 https://gitee.com/whvse/EasyCaptcha
-
-        // 算术类型
-        ArithmeticCaptcha captcha = new ArithmeticCaptcha(111, 36);
-        captcha.setLen(2);
-
-        // png类型
-//        SpecCaptcha captcha = new SpecCaptcha(130, 48);
-
-        // gif类型
-//        GifCaptcha captcha = new GifCaptcha(130, 48);
-
-        // 中文类型
-//        ChineseCaptcha captcha = new ChineseCaptcha(130, 48);
-
-        // 中文gif类型
-//        ChineseGifCaptcha captcha = new ChineseGifCaptcha(130, 48);
-
-        // 设置内置字体
-        captcha.setFont(Captcha.FONT_2);
-        String result = captcha.text();
+//        根据数据库配置获取验证码类型
+        CaptchaDto captcha = captchaService.findById(1L);
+        SpecCaptcha specCaptcha = new SpecCaptcha(captcha.getWidth(), captcha.getHeight(), captcha.getLen());
+        specCaptcha.setFont(new Font(captcha.getFontName(), captcha.getFontStyle(), captcha.getFontSize()));
+        specCaptcha.setCharType(captcha.getType());
+        String result = specCaptcha.text();
         String uuid = properties.getCodeKey() + IdUtil.simpleUUID();
         // 保存
         redisUtils.set(uuid, result, expiration, TimeUnit.MINUTES);
         // 验证码信息
         Map<String,Object> imgResult = new HashMap<String,Object>(2){{
-            put("img", captcha.toBase64());
+            put("img", ((Captcha) specCaptcha).toBase64());
             put("uuid", uuid);
         }};
         return ResponseEntity.ok(imgResult);
