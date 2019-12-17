@@ -1,15 +1,9 @@
-<template>
-  <el-tabs v-if="!error" v-model="activeName" type="card">
-    <el-tab-pane v-for="item in data" :key="item.name" :lazy="true" :label="item.name" :name="item.name">
-      <Java :value="item.content" :height="height" />
-    </el-tab-pane>
-  </el-tabs>
-  <div v-else class="app-container">
-    <el-alert
-      :title="error"
-      type="error"
-    />
-  </div>
+<template lang="pug">
+  el-tabs(v-if="!error" v-model="activeName" type="card")
+    el-tab-pane(v-for="item in data" :key="item.name" :lazy="true" :label="item.name" :name="item.name")
+      Java(:value="item.content" :height="height")/
+  .app-container(v-else)
+    el-alert(:title="error" type="error")/
 </template>
 
 <script>

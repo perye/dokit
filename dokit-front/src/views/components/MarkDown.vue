@@ -1,11 +1,8 @@
-<template>
-  <div class="app-container">
-    <p class="warn-content">
-      Markdown 基于
-      <a href="https://github.com/hinesboy/mavonEditor" target="_blank">mavonEditor</a>
-    </p>
-    <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" @imgDel="imgDel" />
-  </div>
+<template lang="pug">
+  .app-container
+    p.warn-content Markdown 基于
+      a(href="https://github.com/hinesboy/mavonEditor" target="_blank") mavonEditor
+    mavon-editor(ref="md" :style="'height:' + height" @imgAdd="imgAdd" @imgDel="imgDel")/
 </template>
 
 <script>
