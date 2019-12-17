@@ -1,29 +1,19 @@
-<template>
-  <div class="dashboard-container">
-    <div class="dashboard-editor-container">
-      <panel-group />
-      <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-        <line-chart />
-      </el-row>
-      <el-row :gutter="32">
-        <el-col :xs="24" :sm="24" :lg="8">
-          <div class="chart-wrapper">
-            <radar-chart />
-          </div>
-        </el-col>
-        <el-col :xs="24" :sm="24" :lg="8">
-          <div class="chart-wrapper">
-            <pie-chart />
-          </div>
-        </el-col>
-        <el-col :xs="24" :sm="24" :lg="8">
-          <div class="chart-wrapper">
-            <bar-chart />
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-  </div>
+<template lang="pug">
+.dashboard-container
+  .dashboard-editor-container
+    panel-group
+    el-row(style="background:#fff;padding:16px 16px 0;margin-bottom:32px;")
+      line-chart
+    el-row(:gutter="32")
+      el-col(:xs="24" :sm="24" :lg="8")
+        .chart-wrapper
+          radar-chart
+      el-col(:xs="24" :sm="24" :lg="8")
+        .chart-wrapper
+          pie-chart
+      el-col(:xs="24" :sm="24" :lg="8")
+        .chart-wrapper
+          bar-chart
 </template>
 
 <script>

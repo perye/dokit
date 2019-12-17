@@ -297,5 +297,5 @@ sql监控
 MarkDown
 ![MarkDown](./asserts/markdown.png)
 
-Yaml编辑器
+Yaml编辑
 ![Yaml编辑器](./asserts/yaml.png)

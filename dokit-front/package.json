@@ -72,6 +72,8 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "chalk": "2.4.2",
     "chokidar": "2.1.5",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0",
     "connect": "3.6.6",
     "eslint": "5.15.3",
     "eslint-plugin-vue": "5.2.2",

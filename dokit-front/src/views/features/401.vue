@@ -1,29 +1,17 @@
-<template>
-  <div class="errPage-container">
-    <el-button icon="arrow-left" class="pan-back-btn" @click="back">
-      返回
-    </el-button>
-    <el-row>
-      <el-col :span="12">
-        <h1 class="text-jumbo text-ginormous">
-          Oops!
-        </h1>
-        <h2>你没有权限去该页面</h2>
-        <h6>如有不满请联系你领导</h6>
-        <ul class="list-unstyled">
-          <li>或者你可以去:</li>
-          <li class="link-type">
-            <router-link to="/dashboard">
-              回首页
-            </router-link>
-          </li>
-        </ul>
-      </el-col>
-      <el-col :span="12">
-        <img :src="errGif" width="313" height="428" alt="Girl has dropped her ice cream.">
-      </el-col>
-    </el-row>
-  </div>
+<template lang="pug">
+  .errPage-container
+    el-button.pan-back-btn(icon="arrow-left" @click="back") 返回
+    el-row
+      el-col(:span="12")
+        h1.text-jumbo.text-ginormous Oops!
+        h2 你没有权限去该页面
+        h6 如有不满请联系你领导
+        ul.list-unstyled
+          li 或者你可以去:
+          li.link-type
+            router-link(to="/dashboard") 回首页
+      el-col(:span="12")
+        img(:src="errGif" width="313" height="428" alt="Girl has dropped her ice cream.")
 </template>
 
 <script>
