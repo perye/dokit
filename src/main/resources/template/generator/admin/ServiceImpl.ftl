@@ -141,19 +141,19 @@ public class ${className}ServiceImpl implements ${className}Service {
     public void download(List<${className}Dto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (${className}Dto ${changeClassName} : all) {
-        Map<String,Object> map = new LinkedHashMap<>();
-        <#list columns as column>
-            <#if column.columnKey != 'PRI'>
-                <#if column.remark != ''>
-                    map.put("${column.remark}", ${changeClassName}.get${column.capitalColumnName}());
-                <#else>
-                    map.put(" ${column.changeColumnName}",  ${changeClassName}.get${column.capitalColumnName}());
+            Map<String,Object> map = new LinkedHashMap<>();
+            <#list columns as column>
+                <#if column.columnKey != 'PRI'>
+                    <#if column.remark != ''>
+            map.put("${column.remark}", ${changeClassName}.get${column.capitalColumnName}());
+                    <#else>
+            map.put(" ${column.changeColumnName}",  ${changeClassName}.get${column.capitalColumnName}());
+                    </#if>
                 </#if>
-            </#if>
-        </#list>
-        list.add(map);
+            </#list>
+            list.add(map);
         }
         FileUtil.downloadExcel(list, response);
-        }
+    }
 
  }

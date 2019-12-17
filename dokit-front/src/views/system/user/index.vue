@@ -94,7 +94,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item style="margin-bottom: 0;" label="角色" prop="roles">
-              <el-select v-model="form.roles" style="width: 437px;" multiple placeholder="请选择">
+              <el-select v-model="form.roles" style="width: 437px;" multiple placeholder="请选择" @remove-tag="deleteTag" @change="changeRole">
                 <el-option
                   v-for="item in roles"
                   :key="item.name"

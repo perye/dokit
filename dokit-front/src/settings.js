@@ -42,9 +42,9 @@ module.exports = {
   /**
    * 底部文字，支持html语法
    */
-  footerTxt: '© 2019 perye',
+  footerTxt: '',
   /**
    * 备案号
    */
-  caseNumber: '闽xxxxx'
+  caseNumber: ''
 }
