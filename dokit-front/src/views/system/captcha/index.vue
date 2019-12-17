@@ -51,7 +51,6 @@
       </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="loading" :data="data" size="small" style="width: 100%;">
-        <el-table-column type="selection" width="55" />
         <el-table-column prop="type" label="验证码类型">
           <template slot-scope="scope">
             {{ dict.label.captcha_type[scope.row.type] }}
@@ -72,7 +71,7 @@
         <el-table-column prop="height" label="高度" />
         <el-table-column prop="len" label="位数" />
         <el-table-column
-          v-if="checkPermission(['admin','captcha:edit','captcha:del'])"
+          v-if="checkPermission(['admin','captcha:edit'])"
           label="操作"
           width="150px"
           align="center"
@@ -85,20 +84,6 @@
               icon="el-icon-edit"
               @click="showEditFormDialog(scope.row)"
             />
-            <el-popover
-              :ref="scope.row.id"
-              v-permission="['admin','captcha:del']"
-              placement="top"
-              width="180"
-            >
-              <p>确定删除本条数据吗？</p>
-              <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
-                <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">确定
-                </el-button>
-              </div>
-              <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
-            </el-popover>
           </template>
         </el-table-column>
       </el-table>
