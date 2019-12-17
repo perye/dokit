@@ -1,14 +1,43 @@
 <template lang="pug">
-  el-dialog(:append-to-body="true" :close-on-click-modal="false" :before-close="crud.cancelCU" :visible!="crud.status.cu > 0" :title="crud.status.title" width="500px")
-    el-form(ref="form" :model="form" :rules="rules" size="small" label-width="80px")
+  el-dialog(
+    :append-to-body="true"
+    :close-on-click-modal="false"
+    :before-close="crud.cancelCU"
+    :visible!="crud.status.cu > 0"
+    :title="crud.status.title"
+    width="500px"
+  )
+    el-form(
+      ref="form"
+      :model="form"
+      :rules="rules"
+      size="small"
+      label-width="80px"
+    )
       el-form-item(label="名称" prop="name")
         el-input(v-model="form.name" style="width: 370px;")/
       el-form-item(label="排序" prop="sort")
-        el-input-number(v-model.number="form.sort" :min="0" :max="999" controls-position="right" style="width: 370px;")/
+        el-input-number(
+          v-model.number="form.sort"
+          :min="0"
+          :max="999"
+          controls-position="right"
+          style="width: 370px;"
+        )/
       el-form-item(v-if="form.pid !== 0" label="状态" prop="enabled")
-        el-radio(v-for="item in jobStatus" :key="item.id" v-model="form.enabled" :label="item.value === 'true'") {{ item.label }}
+        el-radio(
+          v-for="item in jobStatus"
+          :key="item.id"
+          v-model="form.enabled"
+          :label="item.value === 'true'"
+        ) {{ item.label }}
       el-form-item(label="所属部门" prop="dept.id" :rules="rules.dept")
-        treeselect(v-model="form.dept.id" :options="depts" style="width: 370px" placeholder="选择部门")/
+        treeselect(
+          v-model="form.dept.id"
+          :options="depts"
+          style="width: 370px"
+          placeholder="选择部门"
+        )/
     .dialog-footer(slot="footer")
       el-button(type="text" @click="crud.cancelCU") 取消
       el-button(:loading="crud.cu === 2" type="primary" @click="crud.submitCU") 确认
