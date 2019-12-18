@@ -124,8 +124,10 @@ public class DeptServiceImpl implements DeptService {
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        deptRepository.deleteById(id);
+    public void delete(Set<DeptDto> deptDtos) {
+        for (DeptDto deptDto : deptDtos) {
+            deptRepository.deleteById(deptDto.getId());
+        }
     }
 
     @Override
@@ -139,6 +141,19 @@ public class DeptServiceImpl implements DeptService {
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+
+    @Override
+    public Set<DeptDto> getDeleteDepts(List<Dept> menuList, Set<DeptDto> deptDtos) {
+        for (Dept dept : menuList) {
+            deptDtos.add(deptMapper.toDto(dept));
+            List<Dept> depts = deptRepository.findByPid(dept.getId());
+            if(depts!=null && depts.size()!=0){
+                getDeleteDepts(depts, deptDtos);
+            }
+        }
+        return deptDtos;
     }
 
 }

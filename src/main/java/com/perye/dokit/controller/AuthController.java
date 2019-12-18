@@ -52,7 +52,7 @@ public class AuthController {
     @Value("${rsa.private_key}")
     private String privateKey;
 
-    @Value("${single.login:true}")
+    @Value("${single.login:false}")
     private Boolean singleLogin;
 
     private final CaptchaService captchaService;

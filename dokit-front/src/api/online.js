@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function del(key) {
+export function del(keys) {
   return request({
-    url: 'auth/online/' + key,
-    method: 'delete'
+    url: 'auth/online',
+    method: 'delete',
+    data: keys
   })
 }
 

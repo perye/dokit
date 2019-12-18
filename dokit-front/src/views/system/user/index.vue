@@ -4,9 +4,24 @@
       <!--侧边部门数据-->
       <el-col :xs="9" :sm="6" :md="4" :lg="4" :xl="4">
         <div class="head-container">
-          <el-input v-model="deptName" clearable size="small" placeholder="输入部门名称搜索" prefix-icon="el-icon-search" style="width: 100%;" class="filter-item" @input="getDeptDatas" />
+          <el-input
+            v-model="deptName"
+            clearable
+            size="small"
+            placeholder="输入部门名称搜索"
+            prefix-icon="el-icon-search"
+            style="width: 100%;"
+            class="filter-item"
+            @input="getDeptDatas"
+          />
         </div>
-        <el-tree :data="deptDatas" :props="defaultProps" :expand-on-click-node="false" default-expand-all @node-click="handleNodeClick" />
+        <el-tree
+          :data="deptDatas"
+          :props="defaultProps"
+          :expand-on-click-node="false"
+          default-expand-all
+          @node-click="handleNodeClick"
+        />
       </el-col>
       <!--用户数据-->
       <el-col :xs="15" :sm="18" :md="20" :lg="20" :xl="20">
@@ -52,10 +67,17 @@
             </el-select>
             <rrOperation :crud="crud" />
           </div>
-          <crudOperation :permission="permission" />
+          <crudOperation show="" :permission="permission" />
         </div>
         <!--表单渲染-->
-        <el-dialog :append-to-body="true" :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
+        <el-dialog
+          append-to-body
+          :close-on-click-modal="false"
+          :before-close="crud.cancelCU"
+          :visible.sync="crud.status.cu > 0"
+          :title="crud.status.title"
+          width="570px"
+        >
           <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="66px">
             <el-form-item label="用户名" prop="username">
               <el-input v-model="form.username" />
@@ -90,11 +112,19 @@
             </el-form-item>
             <el-form-item label="状态">
               <el-radio-group v-model="form.enabled" :disabled="form.id === user.id">
-                <el-radio v-for="item in dict.user_status" :key="item.id" :label="item.value">{{ item.label }}</el-radio>
+                <el-radio v-for="item in dict.user_status" :key="item.id" :label="item.value">{{ item.label }}
+                </el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item style="margin-bottom: 0;" label="角色" prop="roles">
-              <el-select v-model="form.roles" style="width: 437px;" multiple placeholder="请选择" @remove-tag="deleteTag" @change="changeRole">
+              <el-select
+                v-model="form.roles"
+                style="width: 437px;"
+                multiple
+                placeholder="请选择"
+                @remove-tag="deleteTag"
+                @change="changeRole"
+              >
                 <el-option
                   v-for="item in roles"
                   :key="item.name"
@@ -111,13 +141,44 @@
           </div>
         </el-dialog>
         <!--表格渲染-->
-        <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
-          <el-table-column v-if="columns.visible('username')" :show-overflow-tooltip="true" prop="username" label="用户名" />
+        <el-table
+          ref="table"
+          v-loading="crud.loading"
+          :data="crud.data"
+          style="width: 100%;"
+          @selection-change="crud.selectionChangeHandler"
+        >
+          <el-table-column type="selection" width="55" />
+          <el-table-column
+            v-if="columns.visible('username')"
+            :show-overflow-tooltip="true"
+            prop="username"
+            label="用户名"
+          />
           <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" label="昵称" />
           <el-table-column v-if="columns.visible('sex')" prop="sex" label="性别" />
-          <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="120" label="电话" />
-          <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="135" prop="email" label="邮箱" />
-          <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="120" prop="dept" label="部门 / 岗位">
+          <el-table-column
+            v-if="columns.visible('phone')"
+            :show-overflow-tooltip="true"
+            prop="phone"
+            width="100"
+            label="电话"
+          />
+          <el-table-column
+            v-if="columns.visible('email')"
+            :show-overflow-tooltip="true"
+            width="125"
+            prop="email"
+            label="邮箱"
+          />
+          <el-table-column
+            v-if="columns.visible('dept')"
+            :show-overflow-tooltip="true"
+            width="110"
+            prop="dept"
+            label="部门 / 岗位"
+          >
+
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
             </template>
@@ -133,16 +194,29 @@
               />
             </template>
           </el-table-column>
-          <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" width="150" label="创建日期">
+          <el-table-column
+            v-if="columns.visible('createTime')"
+            :show-overflow-tooltip="true"
+            prop="createTime"
+            width="140"
+            label="创建日期"
+          >
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column v-permission="['admin','user:edit','user:del']" label="操作" width="125" align="center" fixed="right">
+          <el-table-column
+            v-permission="['admin','user:edit','user:del']"
+            label="操作"
+            width="125"
+            align="center"
+            fixed="right"
+          >
             <template slot-scope="scope">
               <udOperation
                 :data="scope.row"
                 :permission="permission"
+                :disabled-dle="scope.row.id === user.id"
               />
             </template>
           </el-table-column>
@@ -168,10 +242,21 @@ import pagination from '@crud/Pagination'
 import Treeselect from '@riophae/vue-treeselect'
 import { mapGetters } from 'vuex'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 let userRoles = []
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '用户', url: 'api/users', crudMethod: { ...crudUser }})
-const defaultForm = { username: null, nickName: null, sex: '男', email: null, enabled: 'false', roles: [], job: { id: null }, dept: { id: null }, phone: null }
+const defaultForm = {
+  username: null,
+  nickName: null,
+  sex: '男',
+  email: null,
+  enabled: 'false',
+  roles: [],
+  job: { id: null },
+  dept: { id: null },
+  phone: null
+}
 export default {
   name: 'User',
   components: { Treeselect, crudOperation, rrOperation, udOperation, pagination },
@@ -278,6 +363,10 @@ export default {
       this.getRoles()
       this.getRoleLevel()
       form.enabled = form.enabled.toString()
+    },
+    // 打开编辑弹窗前做的操作
+    [CRUD.HOOK.beforeToEdit](crud, form) {
+      this.getJobs(this.form.dept.id)
       userRoles = []
       const roles = []
       form.roles.forEach(function(role, index) {
@@ -287,10 +376,6 @@ export default {
         userRoles.push(rol)
       })
       form.roles = roles
-    },
-    // 打开编辑弹窗前做的操作
-    [CRUD.HOOK.beforeToEdit](crud, form) {
-      this.getJobs(this.form.dept.id)
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
@@ -320,7 +405,9 @@ export default {
     getDeptDatas() {
       const sort = 'id,desc'
       const params = { sort: sort }
-      if (this.deptName) { params['name'] = this.deptName }
+      if (this.deptName) {
+        params['name'] = this.deptName
+      }
       getDepts(params).then(res => {
         this.deptDatas = res.content
       })
@@ -360,13 +447,15 @@ export default {
     getRoles() {
       getAll().then(res => {
         this.roles = res
-      }).catch(() => {})
+      }).catch(() => {
+      })
     },
     // 获取弹窗内岗位数据
     getJobs(id) {
       getAllJob(id).then(res => {
         this.jobs = res.content
-      }).catch(() => {})
+      }).catch(() => {
+      })
     },
     // 点击部门搜索对应的岗位
     selectFun(node, instanceId) {
@@ -377,7 +466,8 @@ export default {
     getRoleLevel() {
       getLevel().then(res => {
         this.level = res.level
-      }).catch(() => {})
+      }).catch(() => {
+      })
     }
   }
 }

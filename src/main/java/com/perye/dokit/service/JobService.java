@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface JobService {
 
@@ -34,9 +35,9 @@ public interface JobService {
 
     /**
      * 删除
-     * @param id /
+     * @param ids /
      */
-    void delete(Long id);
+    void delete(Set<Long> ids);
 
     /**
      * 分页查询

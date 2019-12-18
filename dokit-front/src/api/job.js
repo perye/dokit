@@ -21,10 +21,11 @@ export function add(data) {
   })
 }
 
-export function del(id) {
+export function del(ids) {
   return request({
-    url: 'api/job/' + id,
-    method: 'delete'
+    url: 'api/job',
+    method: 'delete',
+    data: ids
   })
 }
 

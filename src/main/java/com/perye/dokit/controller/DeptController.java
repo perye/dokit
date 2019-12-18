@@ -1,5 +1,6 @@
 package com.perye.dokit.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.DataScope;
 import com.perye.dokit.dto.DeptDto;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Api(tags = "系统：部门管理")
@@ -77,13 +80,21 @@ public class DeptController {
 
     @Log("删除部门")
     @ApiOperation("删除部门")
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping
     @PreAuthorize("@dokit.check('dept:del')")
-    public ResponseEntity<Object> delete(@PathVariable Long id){
+    public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
+        Set<DeptDto> deptDtos = new HashSet<>();
+        for (Long id : ids) {
+            List<Dept> deptList = deptService.findByPid(id);
+            deptDtos.add(deptService.findById(id));
+            if(CollectionUtil.isNotEmpty(deptList)){
+                deptDtos = deptService.getDeleteDepts(deptList, deptDtos);
+            }
+        }
         try {
-            deptService.delete(id);
+            deptService.delete(deptDtos);
         }catch (Throwable e){
-            ThrowableUtil.throwForeignKeyException(e, "该部门存在岗位或者角色关联，请取消关联后再试");
+            ThrowableUtil.throwForeignKeyException(e, "所选部门中存在岗位或者角色关联，请取消关联后再试");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

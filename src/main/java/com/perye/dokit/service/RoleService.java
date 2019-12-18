@@ -38,9 +38,9 @@ public interface RoleService {
 
     /**
      * 删除
-     * @param id /
+     * @param ids /
      */
-    void delete(Long id);
+    void delete(Set<Long> ids);
 
     /**
      * 根据用户ID查询

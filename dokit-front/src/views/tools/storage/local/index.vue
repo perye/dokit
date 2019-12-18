@@ -55,10 +55,18 @@
         type="warning"
         icon="el-icon-download"
         @click="downloadMethod"
-      >导出</el-button>
+      >导出
+      </el-button>
     </div>
     <!--表单组件-->
-    <el-dialog :append-to-body="true" :close-on-click-modal="false" :before-close="cancel" :visible.sync="dialog" :title="getFormTitle()" width="500px">
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="cancel"
+      :visible.sync="dialog"
+      :title="getFormTitle()"
+      width="500px"
+    >
       <el-form ref="form" :model="form" size="small" label-width="80px">
         <el-form-item label="文件名">
           <el-input v-model="form.name" style="width: 370px;" />
@@ -144,7 +152,13 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-button v-permission="['admin','storage:edit']" size="mini" type="primary" icon="el-icon-edit" @click="showEditFormDialog(scope.row)" />
+          <el-button
+            v-permission="['admin','storage:edit']"
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="showEditFormDialog(scope.row)"
+          />
           <el-popover
             :ref="scope.row.id"
             v-permission="['admin','storage:del']"
@@ -179,6 +193,7 @@ import { mapGetters } from 'vuex'
 import { getToken } from '@/utils/auth'
 import crud from '@/mixins/crud'
 import crudFile from '@/api/localStorage'
+
 export default {
   mixins: [crud],
   data() {
@@ -241,10 +256,11 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ .el-image__error, .el-image__placeholder{
+  /deep/ .el-image__error, .el-image__placeholder {
     background: none;
   }
-  /deep/ .el-image-viewer__wrapper{
+
+  /deep/ .el-image-viewer__wrapper {
     top: 55px;
   }
 </style>

@@ -1,6 +1,7 @@
 <template lang="pug">
   div
     el-button(
+      :disabled="disabledEdit"
       v-permission="permission.edit"
       size="mini"
       type="primary"
@@ -16,7 +17,7 @@
       @show="onPopoverShow"
       @hide="onPopoverHide"
     )
-      p 确定删除本条数据吗？
+      p {{ msg }}
       div(style="text-align: right; margin: 0")
         el-button(size="mini" type="text" @click="doCancel") 取消
         el-button(
@@ -26,6 +27,7 @@
           @click="crud.doDelete(data)"
         ) 确定
       el-button(
+        :disabled="disabledDle"
         slot="reference"
         type="danger"
         icon="el-icon-delete"
@@ -45,6 +47,18 @@ export default {
     permission: {
       type: Object,
       required: true
+    },
+    disabledEdit: {
+      type: Boolean,
+      default: false
+    },
+    disabledDle: {
+      type: Boolean,
+      default: false
+    },
+    msg: {
+      type: String,
+      default: '确定删除本条数据吗？'
     }
   },
   data() {

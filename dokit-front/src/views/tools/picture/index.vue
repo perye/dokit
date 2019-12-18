@@ -3,7 +3,14 @@
     <!--工具栏-->
     <div class="head-container">
       <!--搜索-->
-      <el-input v-model="query.filename" clearable placeholder="输入文件名" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+      <el-input
+        v-model="query.filename"
+        clearable
+        placeholder="输入文件名"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="toQuery"
+      />
       <el-date-picker
         v-model="query.createTime"
         :default-time="['00:00:00','23:59:59']"
@@ -24,7 +31,8 @@
         type="primary"
         icon="el-icon-upload"
         @click="dialog = true"
-      >上传图片</el-button>
+      >上传图片
+      </el-button>
       <el-button
         v-permission="['admin','pictures:del']"
         :loading="delAllLoading"
@@ -34,7 +42,8 @@
         type="danger"
         icon="el-icon-delete"
         @click="beforeDelAllMethod"
-      >删除</el-button>
+      >删除
+      </el-button>
       <!-- 导出 -->
       <div style="display: inline-block;">
         <el-button
@@ -44,7 +53,8 @@
           type="warning"
           icon="el-icon-download"
           @click="downloadMethod"
-        >导出</el-button>
+        >导出
+        </el-button>
       </div>
     </div>
     <!--上传图片-->
@@ -61,7 +71,7 @@
       >
         <i class="el-icon-plus" />
       </el-upload>
-      <el-dialog :append-to-body="true" :visible.sync="dialogVisible">
+      <el-dialog append-to-body :visible.sync="dialogVisible">
         <img :src="dialogImageUrl" width="100%" alt="">
       </el-dialog>
       <div slot="footer" class="dialog-footer">
@@ -92,7 +102,13 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="checkPermission(['admin','pictures:del'])" label="操作" width="100px" align="center" fixed="right">
+      <el-table-column
+        v-if="checkPermission(['admin','pictures:del'])"
+        label="操作"
+        width="100px"
+        align="center"
+        fixed="right"
+      >
         <template slot-scope="scope">
           <el-popover
             :ref="scope.row.id"
@@ -102,7 +118,8 @@
             <p>确定删除本条数据吗？</p>
             <div style="text-align: right; margin: 0">
               <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
-              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">确定</el-button>
+              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">确定
+              </el-button>
             </div>
             <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
           </el-popover>
@@ -126,6 +143,7 @@ import crud from '@/mixins/crud'
 import { mapGetters } from 'vuex'
 import crudPic from '@/api/picture'
 import { getToken } from '@/utils/auth'
+
 export default {
   name: 'Pictures',
   mixins: [crud],
@@ -166,7 +184,8 @@ export default {
     handleBeforeRemove(file, fileList) {
       for (let i = 0; i < this.pictures.length; i++) {
         if (this.pictures[i].uid === file.uid) {
-          this.crudMethod.del(this.pictures[i].id).then(res => {})
+          this.crudMethod.del(this.pictures[i].id).then(res => {
+          })
           return true
         }
       }

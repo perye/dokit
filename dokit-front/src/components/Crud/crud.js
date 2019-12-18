@@ -37,6 +37,13 @@ function CRUD(options) {
       edit: (form) => {},
       get: (id) => {}
     },
+    // 主页操作栏显示哪些按钮
+    optShow: {
+      add: true,
+      edit: true,
+      del: true,
+      download: true
+    },
     // 自定义一些扩展属性
     props: {},
     // 在主页准备
@@ -85,7 +92,9 @@ function CRUD(options) {
     // 整体loading
     loading: true,
     // 导出的 Loading
-    downloadLoading: false
+    downloadLoading: false,
+    // 删除的 Loading
+    delAllLoading: false
   }
   const methods = {
     /**
@@ -139,7 +148,6 @@ function CRUD(options) {
       if (!(callVmHook(crud, CRUD.HOOK.beforeToAdd, crud.form) && callVmHook(crud, CRUD.HOOK.beforeToCU, crud.form))) {
         return
       }
-      crud.resetForm()
       crud.status.add = CRUD.STATUS.PREPARED
       callVmHook(crud, CRUD.HOOK.afterToAdd, crud.form)
       callVmHook(crud, CRUD.HOOK.afterToCU, crud.form)
@@ -149,10 +157,10 @@ function CRUD(options) {
      * @param {*} data 数据项
      */
     toEdit(data) {
+      crud.resetForm(JSON.parse(JSON.stringify(data)))
       if (!(callVmHook(crud, CRUD.HOOK.beforeToEdit, crud.form) && callVmHook(crud, CRUD.HOOK.beforeToCU, crud.form))) {
         return
       }
-      crud.resetForm(JSON.parse(JSON.stringify(data)))
       crud.status.edit = CRUD.STATUS.PREPARED
       crud.getDataStatus(data.id).edit = CRUD.STATUS.PREPARED
       callVmHook(crud, CRUD.HOOK.afterToEdit, crud.form)
@@ -255,8 +263,8 @@ function CRUD(options) {
       crud.crudMethod.edit(crud.form).then(() => {
         crud.status.edit = CRUD.STATUS.NORMAL
         crud.getDataStatus(crud.form.id).edit = CRUD.STATUS.NORMAL
-        crud.resetForm()
         crud.editSuccessNotify()
+        crud.resetForm()
         callVmHook(crud, CRUD.HOOK.afterSubmit)
         crud.refresh()
       }).catch(() => {
@@ -268,19 +276,36 @@ function CRUD(options) {
      * @param {*} data 数据项
      */
     doDelete(data) {
-      const dataStatus = crud.getDataStatus(data.id)
+      let delAll = false
+      let dataStatus
+      const ids = []
+      if (data instanceof Array) {
+        delAll = true
+        data.forEach(val => {
+          ids.push(val.id)
+        })
+      } else {
+        ids.push(data.id)
+        dataStatus = crud.getDataStatus(data.id)
+      }
       if (!callVmHook(crud, CRUD.HOOK.beforeDelete, data)) {
         return
       }
-      dataStatus.delete = CRUD.STATUS.PROCESSING
-      return crud.crudMethod.del(data.id).then(() => {
-        dataStatus.delete = CRUD.STATUS.NORMAL
+      if (!delAll) {
+        dataStatus.delete = CRUD.STATUS.PROCESSING
+      }
+      return crud.crudMethod.del(ids).then(() => {
+        if (delAll) {
+          crud.delAllLoading = false
+        } else dataStatus.delete = CRUD.STATUS.PREPARED
         crud.dleChangePage(1)
         crud.delSuccessNotify()
         callVmHook(crud, CRUD.HOOK.afterDelete, data)
         crud.refresh()
       }).catch(() => {
-        dataStatus.delete = CRUD.STATUS.PREPARED
+        if (delAll) {
+          crud.delAllLoading = false
+        } else dataStatus.delete = CRUD.STATUS.PREPARED
       })
     },
     /**
@@ -382,6 +407,56 @@ function CRUD(options) {
      */
     getDataStatus(id) {
       return crud.dataStatus[id]
+    },
+    /**
+     * 用于树形表格多选, 选中所有
+     * @param selection
+     */
+    selectAllChange(selection) {
+      // 如果选中的数目与请求到的数目相同就选中子节点，否则就清空选中
+      if (selection && selection.length === crud.data.length) {
+        selection.forEach(val => {
+          crud.selectChange(selection, val)
+        })
+      } else {
+        crud.findVM('presenter').$refs['table'].clearSelection()
+      }
+    },
+    /**
+     * 用于树形表格多选，单选的封装
+     * @param selection
+     * @param row
+     */
+    selectChange(selection, row) {
+      // 如果selection中存在row代表是选中，否则是取消选中
+      if (selection.find(val => { return val.id === row.id })) {
+        if (row.children) {
+          row.children.forEach(val => {
+            crud.findVM('presenter').$refs['table'].toggleRowSelection(val, true)
+            selection.push(val)
+            if (val.children) {
+              crud.selectChange(selection, val)
+            }
+          })
+        }
+      } else {
+        crud.toggleRowSelection(selection, row)
+      }
+    },
+    /**
+     * 切换选中状态
+     * @param selection
+     * @param data
+     */
+    toggleRowSelection(selection, data) {
+      if (data.children) {
+        data.children.forEach(val => {
+          crud.findVM('presenter').$refs['table'].toggleRowSelection(val, false)
+          if (val.children) {
+            crud.toggleRowSelection(selection, val)
+          }
+        })
+      }
     },
     findVM(type) {
       return crud.vms.find(vm => vm && vm.type === type).vm

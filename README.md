@@ -6,7 +6,13 @@ Just do kit!
 基于 Spring Boot 2.1.9 、 Jpa、 Spring Security、redis、Vue的前后端分离的后台管理系统， 权限控制的方式为RBAC，项目支持数据字典与数据权限管理，支持一键生成前后端代码（支持在线预览及打包下载），支持前端菜单动态路由
 可一键部署服务器应用，数据库。系统中活跃用户状态监控，监视当前系统CPU、内存、磁盘、堆栈等相关信息。
 
-#### 技术栈
+- 前后端统一异常拦截处理，统一输出异常，避免繁琐的判断
+- 高效率开发，使用代码生成器可以一键生成前后端代码
+- 支持数据字典，可方便的对一些状态进行管理
+- 支持接口限流，避免恶意请求导致服务层压力过大
+- 支持接口级别的功能权限与数据权限，可自定义操作
+- 自定义权限注解与匿名接口注解，可快速对某一接口拦截与放行
+- 对一些常用的前端组件封装：表格数据请求、数据字典等
 
 ##### 后端技术
 
@@ -101,15 +107,15 @@ Just do kit!
 │   │       └── perye
 │   │           └── dokit
 │   │               ├── DokitApplication.java       应用启动类
-│   │               ├── annotation                  自定义注解
+│   │               ├── annotation                  系统自定义注解
 │   │               ├── aop                     
-│   │               ├── aspect
-│   │               ├── base
-│   │               ├── config
+│   │               ├── aspect                      自定义注解的切面
+│   │               ├── base                        提供了Entity、DTO基类和mapstruct的通用mapper
+│   │               ├── config                      自定义权限实现、redis配置、swagger配置
 │   │               ├── controller
 │   │               ├── dto
 │   │               ├── entity
-│   │               ├── exception
+│   │               ├── exception                   统一异常的处理
 │   │               ├── mapper
 │   │               ├── redis
 │   │               ├── repository
@@ -117,7 +123,7 @@ Just do kit!
 │   │               ├── service
 │   │               ├── swagger2
 │   │               ├── task
-│   │               ├── utils
+│   │               ├── utils                       系统通用工具类
 │   │               ├── vo
 │   │               └── websocket
 │   └── resources

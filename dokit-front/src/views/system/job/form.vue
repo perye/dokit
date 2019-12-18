@@ -1,6 +1,6 @@
 <template lang="pug">
   el-dialog(
-    :append-to-body="true"
+    append-to-body
     :close-on-click-modal="false"
     :before-close="crud.cancelCU"
     :visible!="crud.status.cu > 0"
@@ -48,8 +48,9 @@ import CRUD, { form } from '@crud/crud'
 import { getDepts } from '@/api/dept'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 const defaultForm = {
-  id: null,
+  id: 1,
   name: '',
   sort: 999,
   enabled: true,

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :append-to-body="true" :close-on-click-modal="false" :visible.sync="dialog" title="系统还原" width="800px">
+  <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialog" title="系统还原" width="800px">
     <!--工具栏-->
     <div class="head-container">
       <el-date-picker
@@ -10,8 +10,8 @@
         size="small"
         class="date-item"
         value-format="yyyy-MM-dd HH:mm:ss"
-        start-placeholder="部署开始日期"
-        end-placeholder="部署结束日期"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
       />
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
     </div>

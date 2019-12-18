@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -34,9 +35,9 @@ public interface UserService {
 
     /**
      * 删除用户
-     * @param id /
+     * @param ids /
      */
-    void delete(Long id);
+    void delete(Set<Long> ids);
 
     /**
      * 根据用户名查询

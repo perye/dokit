@@ -1,7 +1,10 @@
 <template lang="pug">
   .crud-opts
     span.crud-opts-left
+      //左侧插槽
+      slot(name="left")/
       el-button.filter-item(
+        v-if="crud.optShow.add"
         v-permission="permission.add"
         size="mini"
         type="primary"
@@ -9,6 +12,8 @@
         @click="crud.toAdd"
       ) 新增
       el-button.filter-item(
+        v-if="crud.optShow.edit"
+        v-permission="permission.edit"
         size="mini"
         type="success"
         icon="el-icon-edit"
@@ -16,21 +21,26 @@
         @click="crud.toEdit(crud.selections[0])"
       ) 修改
       el-button.filter-item(
+        v-if="crud.optShow.del"
         slot="reference"
         v-permission="permission.del"
         type="danger"
         icon="el-icon-delete"
         size="mini"
+        :loading="crud.delAllLoading"
         :disabled="crud.selections.length === 0"
         @click="toDelete(crud.selections)"
       ) 删除
       el-button.filter-item(
+        v-if="crud.optShow.download"
         :loading="crud.downloadLoading"
         size="mini"
         type="warning"
         icon="el-icon-download"
         @click="crud.doExport"
       ) 导出
+      //右侧
+      slot(name="right")/
     el-button-group.crud-opts-right
       el-button(
         size="mini"
@@ -74,7 +84,7 @@ export default {
   props: {
     permission: {
       type: Object,
-      required: true
+      default: null
     }
   },
   data() {
@@ -93,11 +103,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (datas.length === 1) {
-          this.crud.doDelete(datas[0])
-        } else {
-          this.crud.doDeletes(datas)
-        }
+        this.crud.delAllLoading = true
+        this.crud.doDelete(datas)
       }).catch(() => {
       })
     },
