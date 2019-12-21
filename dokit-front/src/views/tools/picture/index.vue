@@ -2,60 +2,45 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <!--搜索-->
-      <el-input
-        v-model="query.filename"
-        clearable
-        placeholder="输入文件名"
-        style="width: 200px;"
-        class="filter-item"
-        @keyup.enter.native="toQuery"
-      />
-      <el-date-picker
-        v-model="query.createTime"
-        :default-time="['00:00:00','23:59:59']"
-        type="daterange"
-        range-separator=":"
-        size="small"
-        class="date-item"
-        value-format="yyyy-MM-dd HH:mm:ss"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-      />
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
-      <!-- 上传 -->
-      <el-button
-        v-permission="['admin','pictures:add']"
-        class="filter-item"
-        size="mini"
-        type="primary"
-        icon="el-icon-upload"
-        @click="dialog = true"
-      >上传图片
-      </el-button>
-      <el-button
-        v-permission="['admin','pictures:del']"
-        :loading="delAllLoading"
-        :disabled="data.length === 0 || $refs.table.selection.length === 0"
-        class="filter-item"
-        size="mini"
-        type="danger"
-        icon="el-icon-delete"
-        @click="beforeDelAllMethod"
-      >删除
-      </el-button>
-      <!-- 导出 -->
-      <div style="display: inline-block;">
-        <el-button
-          :loading="downloadLoading"
-          size="mini"
-          class="filter-item"
-          type="warning"
-          icon="el-icon-download"
-          @click="downloadMethod"
-        >导出
-        </el-button>
+      <div v-if="crud.props.searchToggle">
+        <!--搜索-->
+        <el-input v-model="query.filename" clearable size="small" placeholder="输入文件名" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-date-picker
+          v-model="query.createTime"
+          :default-time="['00:00:00','23:59:59']"
+          type="daterange"
+          range-separator=":"
+          size="small"
+          class="date-item"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
+        <rrOperation :crud="crud" />
       </div>
+      <crudOperation :permission="permission">
+        <!-- 上传 -->
+        <el-button
+          slot="left"
+          v-permission="['admin','pictures:add']"
+          class="filter-item"
+          size="mini"
+          type="primary"
+          icon="el-icon-upload"
+          @click="dialog = true"
+        >上传</el-button>
+        <el-tooltip slot="right" class="item" effect="dark" content="使用同步功能需要在 https://sm.ms/login 中注册账号，并且在 application.yml 文件中修改 Secret Token" placement="top-start">
+          <el-button
+            v-permission="['admin','pictures:add']"
+            class="filter-item"
+            size="mini"
+            type="success"
+            icon="el-icon-refresh"
+            :loading="syncLoading"
+            @click="sync"
+          >同步</el-button>
+        </el-tooltip>
+      </crudOperation>
     </div>
     <!--上传图片-->
     <el-dialog :visible.sync="dialog" :close-on-click-modal="false" append-to-body width="600px" @close="doSubmit">
@@ -79,11 +64,11 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;">
+    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="filename" label="文件名" />
-      <el-table-column prop="username" label="上传者" />
-      <el-table-column ref="table" :show-overflow-tooltip="true" prop="url" label="缩略图">
+      <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" label="文件名" />
+      <el-table-column v-if="columns.visible('username')" prop="username" label="上传者" />
+      <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" label="缩略图">
         <template slot-scope="{row}">
           <el-image
             :src="row.url"
@@ -94,65 +79,43 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="size" label="文件大小" />
-      <el-table-column prop="height" label="高度" />
-      <el-table-column prop="width" label="宽度" />
-      <el-table-column width="180px" prop="createTime" label="创建日期">
+      <el-table-column v-if="columns.visible('size')" prop="size" label="文件大小" />
+      <el-table-column v-if="columns.visible('height')" prop="height" label="高度" />
+      <el-table-column v-if="columns.visible('width')" prop="width" label="宽度" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        v-if="checkPermission(['admin','pictures:del'])"
-        label="操作"
-        width="100px"
-        align="center"
-        fixed="right"
-      >
-        <template slot-scope="scope">
-          <el-popover
-            :ref="scope.row.id"
-            placement="top"
-            width="180"
-          >
-            <p>确定删除本条数据吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
-              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">确定
-              </el-button>
-            </div>
-            <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
-          </el-popover>
-        </template>
-      </el-table-column>
     </el-table>
     <!--分页组件-->
-    <el-pagination
-      :total="total"
-      :current-page="page + 1"
-      style="margin-top: 8px;"
-      layout="total, prev, pager, next, sizes"
-      @size-change="sizeChange"
-      @current-change="pageChange"
-    />
+    <pagination />
   </div>
 </template>
 
 <script>
-import crud from '@/mixins/crud'
 import { mapGetters } from 'vuex'
 import crudPic from '@/api/picture'
+import CRUD, { presenter, header, crud } from '@crud/crud'
 import { getToken } from '@/utils/auth'
-
+import rrOperation from '@crud/RR.operation'
+import crudOperation from '@crud/CRUD.operation'
+import pagination from '@crud/Pagination'
+// crud交由presenter持有
+const defaultCrud = CRUD({ title: '图片', url: 'api/pictures', crudMethod: { ...crudPic }})
 export default {
   name: 'Pictures',
-  mixins: [crud],
+  components: { pagination, crudOperation, rrOperation },
+  mixins: [presenter(defaultCrud), header(), crud()],
   data() {
     return {
-      title: '图片',
-      crudMethod: { ...crudPic },
+      dialog: false,
+      syncLoading: false,
       headers: {
         'Authorization': getToken()
+      },
+      permission: {
+        del: ['admin', 'pictures:del']
       },
       dialogImageUrl: '',
       dialogVisible: false,
@@ -166,16 +129,10 @@ export default {
     ])
   },
   created() {
-    this.$nextTick(() => {
-      this.init()
-    })
+    this.crud.optShow.add = false
+    this.crud.optShow.edit = false
   },
   methods: {
-    beforeInit() {
-      this.url = 'api/pictures'
-      return true
-    },
-
     handleSuccess(response, file, fileList) {
       const uid = file.uid
       const id = response.id
@@ -184,8 +141,7 @@ export default {
     handleBeforeRemove(file, fileList) {
       for (let i = 0; i < this.pictures.length; i++) {
         if (this.pictures[i].uid === file.uid) {
-          this.crudMethod.del(this.pictures[i].id).then(res => {
-          })
+          crudPic.del(this.pictures[i].id).then(res => {})
           return true
         }
       }
@@ -200,7 +156,7 @@ export default {
       this.dialogVisible = false
       this.dialogImageUrl = ''
       this.dialog = false
-      this.init()
+      this.crud.toQuery()
     },
     // 监听上传失败
     handleError(e, file, fileList) {
@@ -210,11 +166,18 @@ export default {
         type: 'error',
         duration: 2500
       })
+    },
+    sync() {
+      this.syncLoading = true
+      crudPic.sync().then(res => {
+        this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        this.crud.toQuery()
+        this.syncLoading = false
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>

@@ -14,6 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Set;
+
 /**
  * @author perye
  * @email peryedev@gmail.com
@@ -30,6 +34,14 @@ public class DeployHistoryController {
         this.deployhistoryService = deployHistoryService;
     }
 
+    @Log("导出部署历史数据")
+    @ApiOperation("导出部署历史数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check('deployHistory:list')")
+    public void download(HttpServletResponse response, DeployHistoryQueryCriteria criteria) throws IOException {
+        deployhistoryService.download(deployhistoryService.queryAll(criteria), response);
+    }
+
     @Log("查询部署历史管理")
     @ApiOperation(value = "查询部署历史管理")
     @GetMapping
@@ -41,10 +53,10 @@ public class DeployHistoryController {
 
     @Log("删除部署历史管理")
     @ApiOperation(value = "删除部署历史管理")
-    @DeleteMapping(value = "/{id}")
-    @PreAuthorize("hasAnyRole('deployHistory:del')")
-    public ResponseEntity<Object> delete(@PathVariable String id){
-        deployhistoryService.delete(id);
+    @DeleteMapping
+    @PreAuthorize("@dokit.check('deployHistory:del')")
+    public ResponseEntity<Object> delete(@RequestBody Set<String> ids){
+        deployhistoryService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -6,15 +6,16 @@ import com.perye.dokit.entity.ServerDeploy;
 import com.perye.dokit.mapper.ServerDeployMapper;
 import com.perye.dokit.repository.ServerDeployRepository;
 import com.perye.dokit.service.ServerDeployService;
-import com.perye.dokit.utils.ExecuteShellUtil;
-import com.perye.dokit.utils.PageUtil;
-import com.perye.dokit.utils.QueryHelp;
-import com.perye.dokit.utils.ValidationUtil;
+import com.perye.dokit.utils.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author perye
@@ -41,7 +42,7 @@ public class ServerDeployServiceImpl implements ServerDeployService {
     }
 
     @Override
-    public Object queryAll(ServerDeployQueryCriteria criteria){
+    public List<ServerDeployDto> queryAll(ServerDeployQueryCriteria criteria){
         return serverDeployMapper.toDto(serverDeployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
@@ -91,7 +92,24 @@ public class ServerDeployServiceImpl implements ServerDeployService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        serverDeployRepository.deleteById(id);
+    public void delete(Set<Long> ids) {
+        for (Long id : ids) {
+            serverDeployRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public void download(List<ServerDeployDto> queryAll, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (ServerDeployDto deployDto : queryAll) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("服务器名称", deployDto.getName());
+            map.put("服务器IP", deployDto.getIp());
+            map.put("端口", deployDto.getPort());
+            map.put("账号", deployDto.getAccount());
+            map.put("创建日期", deployDto.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
     }
 }

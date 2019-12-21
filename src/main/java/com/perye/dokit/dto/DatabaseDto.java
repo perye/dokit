@@ -3,6 +3,7 @@ package com.perye.dokit.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @author perye
@@ -36,5 +37,8 @@ public class DatabaseDto implements Serializable {
      * 用户名
      */
     private String userName;
+
+    private Timestamp createTime;
+
 
 }

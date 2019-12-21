@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -104,10 +105,10 @@ public class QuartzJobController {
 
     @Log("删除定时任务")
     @ApiOperation("删除定时任务")
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping
     @PreAuthorize("@dokit.check('timing:del')")
-    public ResponseEntity<Object> delete(@PathVariable Long id){
-        quartzJobService.delete(quartzJobService.findById(id));
+    public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
+        quartzJobService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

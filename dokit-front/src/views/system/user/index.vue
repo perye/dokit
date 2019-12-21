@@ -148,7 +148,7 @@
           style="width: 100%;"
           @selection-change="crud.selectionChangeHandler"
         >
-          <el-table-column type="selection" width="55" />
+          <el-table-column :selectable="checkboxT" type="selection" width="55" />
           <el-table-column
             v-if="columns.visible('username')"
             :show-overflow-tooltip="true"
@@ -468,6 +468,9 @@ export default {
         this.level = res.level
       }).catch(() => {
       })
+    },
+    checkboxT(row, rowIndex) {
+      return row.id !== this.user.id
     }
   }
 }

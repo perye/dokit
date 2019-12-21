@@ -13,6 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Set;
+
 /**
  * @author perye
  * @email peryedev@gmail.com
@@ -29,6 +34,13 @@ public class ServerDeployController {
         this.serverDeployService = serverDeployService;
     }
 
+    @Log("导出服务器数据")
+    @ApiOperation("导出服务器数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check('serverDeploy:list')")
+    public void download(HttpServletResponse response, ServerDeployQueryCriteria criteria) throws IOException {
+        serverDeployService.download(serverDeployService.queryAll(criteria), response);
+    }
 
     @Log("查询服务器")
     @ApiOperation(value = "查询服务器")
@@ -57,10 +69,10 @@ public class ServerDeployController {
 
     @Log("删除服务器")
     @ApiOperation(value = "删除服务器")
-    @DeleteMapping(value = "/{id:.+}")
+    @DeleteMapping
     @PreAuthorize("@dokit.check('serverDeploy:del')")
-    public ResponseEntity<Object> delete(@PathVariable Long id){
-        serverDeployService.delete(id);
+    public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
+        serverDeployService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

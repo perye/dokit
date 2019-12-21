@@ -12,7 +12,7 @@
         el-input(v-model="loginForm.code" auto-complete="off" placeholder="验证码" style="width: 63%" @keyup.enter.native="handleLogin")
           svg-icon.el-input__icon.input-icon(slot="prefix" icon-class="validCode")
         .login-code
-          img(:src="codeUrl" alt="加载失败" @click="getCode")
+          img(:src="codeUrl" @click="getCode")
       el-checkbox(v-model="loginForm.rememberMe" style="margin:0 0 25px 0;") 记住我
       el-form-item(style="width:100%;")
         el-button(:loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin")

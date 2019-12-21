@@ -7,7 +7,6 @@ import com.perye.dokit.service.PictureService;
 import com.perye.dokit.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pictures")
@@ -54,19 +51,14 @@ public class PictureController {
     public ResponseEntity<Object> upload(@RequestParam MultipartFile file){
         String userName = SecurityUtils.getUsername();
         Picture picture = pictureService.upload(file,userName);
-        Map<String,Object> map = new HashMap<>(3);
-        map.put("errno",0);
-        map.put("id",picture.getId());
-        map.put("data",new String[]{picture.getUrl()});
-        return new ResponseEntity<>(map,HttpStatus.OK);
+        return new ResponseEntity<>(picture,HttpStatus.OK);
     }
 
-    @Log("删除图片")
-    @PreAuthorize("@dokit.check('pictures:del')")
-    @DeleteMapping(value = "/{id}")
-    @ApiOperation("删除图片")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        pictureService.delete(pictureService.findById(id));
+    @Log("同步图床数据")
+    @ApiOperation("同步图床数据")
+    @PostMapping(value = "/synchronize")
+    public ResponseEntity<Object> synchronize(){
+        pictureService.synchronize();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

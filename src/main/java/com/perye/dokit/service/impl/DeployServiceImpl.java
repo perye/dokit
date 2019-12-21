@@ -22,12 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author perye
@@ -91,8 +88,10 @@ public class DeployServiceImpl implements DeployService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        deployRepository.deleteById(id);
+    public void delete(Set<Long> ids) {
+        for (Long id : ids) {
+            deployRepository.deleteById(id);
+        }
     }
 
     @Override
@@ -105,7 +104,7 @@ public class DeployServiceImpl implements DeployService {
      * @param id
      * @return
      */
-    private String deployApp(String fileSavePath, Long id) {
+    private void deployApp(String fileSavePath, Long id) {
 
         DeployDto deploy = findById(id);
         if (deploy == null) {
@@ -129,13 +128,15 @@ public class DeployServiceImpl implements DeployService {
             //判断是否第一次部署
             boolean flag = checkFile(executeShellUtil, app);
             //第一步要确认服务器上有这个目录
-            executeShellUtil.execute("mkdir -p " + uploadPath);
+            executeShellUtil.execute("mkdir -p " + app.getUploadPath());
+            executeShellUtil.execute("mkdir -p " + app.getBackupPath());
+            executeShellUtil.execute("mkdir -p " + app.getDeployPath());
             //上传文件
             msg = String.format("登陆到服务器:%s", ip);
             ScpClientUtil scpClientUtil = getScpClientUtil(ip);
             log.info(msg);
             sendMsg(msg, MsgType.INFO);
-            msg = String.format("上传文件到服务器:%s<br>目录:%s下", ip, uploadPath);
+            msg = String.format("上传文件到服务器:%s<br>目录:%s下，请稍等...", ip, uploadPath);
             sendMsg(msg, MsgType.INFO);
             scpClientUtil.putFile(fileSavePath, uploadPath);
             if (flag) {
@@ -151,17 +152,23 @@ public class DeployServiceImpl implements DeployService {
             String deployScript = app.getDeployScript();
             executeShellUtil.execute(deployScript);
 
-            sendMsg("启动应用", MsgType.INFO);
-            String startScript = app.getStartScript();
-            executeShellUtil.execute(startScript);
-            //只有过5秒才能知道到底是不是启动成功了。
-            sleep(5);
-            boolean result = checkIsRunningStatus(port, executeShellUtil);
+            sleep(3);
+            sendMsg("应用部署中，请耐心等待部署结果，或者稍后手动查看部署状态", MsgType.INFO);
+            int i  = 0;
+            boolean result = false;
+            // 由于启动应用需要时间，所以需要循环获取状态，如果超过30次，则认为是启动失败
+            while (i++ < 30){
+                result = checkIsRunningStatus(port, executeShellUtil);
+                if(result){
+                    break;
+                }
+                // 休眠6秒
+                sleep(6);
+            }
             sb.append("服务器:").append(deployDTO.getName()).append("<br>应用:").append(app.getName());
             sendResultMsg(result, sb);
             executeShellUtil.close();
         }
-        return "部署结束";
     }
 
     private void sleep(int second) {
@@ -256,7 +263,7 @@ public class DeployServiceImpl implements DeployService {
 
     private boolean checkFile(ExecuteShellUtil executeShellUtil, AppDto appDTO) {
         String result = executeShellUtil.executeForResult("find " + appDTO.getDeployPath() + " -name " + appDTO.getName());
-        return result.indexOf("/tcp:")>0;
+        return result.indexOf(appDTO.getName())>0;
     }
 
     /**
@@ -277,9 +284,19 @@ public class DeployServiceImpl implements DeployService {
             sb.append("服务器:").append(deploy.getName()).append("<br>应用:").append(app.getName());
             sendMsg("下发启动命令", MsgType.INFO);
             executeShellUtil.execute(app.getStartScript());
-            //停止3秒，防止应用没有启动完成
             sleep(3);
-            boolean result = checkIsRunningStatus(app.getPort(), executeShellUtil);
+            sendMsg("应用启动中，请耐心等待启动结果，或者稍后手动查看运行状态", MsgType.INFO);
+            int i  = 0;
+            boolean result = false;
+            // 由于启动应用需要时间，所以需要循环获取状态，如果超过30次，则认为是启动失败
+            while (i++ < 30){
+                result = checkIsRunningStatus(app.getPort(), executeShellUtil);
+                if(result){
+                    break;
+                }
+                // 休眠6秒
+                sleep(6);
+            }
             sendResultMsg(result, sb);
             log.info(sb.toString());
             executeShellUtil.close();
@@ -353,20 +370,24 @@ public class DeployServiceImpl implements DeployService {
         //删除原来应用
         sendMsg("删除应用", MsgType.INFO);
         //考虑到系统安全性，必须限制下操作目录
-        String path = "/opt";
-        if (!deployPath.startsWith(path)) {
-            throw new BadRequestException("部署路径必须在opt目录下：" + deployPath);
-        }
         executeShellUtil.execute("rm -rf " + deployPath + FILE_SEPARATOR + resources.getAppName());
-
         //还原应用
         sendMsg("还原应用", MsgType.INFO);
         executeShellUtil.execute("cp -r " + backupPath + "/. " + deployPath);
         sendMsg("启动应用", MsgType.INFO);
         executeShellUtil.execute(app.getStartScript());
-        //只有过5秒才能知道到底是不是启动成功了。
-        sleep(5);
-        boolean result = checkIsRunningStatus(app.getPort(), executeShellUtil);
+        sendMsg("应用启动中，请耐心等待启动结果，或者稍后手动查看启动状态", MsgType.INFO);
+        int i  = 0;
+        boolean result = false;
+        // 由于启动应用需要时间，所以需要循环获取状态，如果超过30次，则认为是启动失败
+        while (i++ < 30){
+            result = checkIsRunningStatus(app.getPort(), executeShellUtil);
+            if(result){
+                break;
+            }
+            // 休眠6秒
+            sleep(6);
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("服务器:").append(ip).append("<br>应用:").append(resources.getAppName());
         sendResultMsg(result, sb);
@@ -401,5 +422,19 @@ public class DeployServiceImpl implements DeployService {
             sb.append("<br>启动失败!");
             sendMsg(sb.toString(), MsgType.ERROR);
         }
+    }
+
+
+    @Override
+    public void download(List<DeployDto> queryAll, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (DeployDto deployDto : queryAll) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("应用名称", deployDto.getApp().getName());
+            map.put("服务器", deployDto.getServers());
+            map.put("部署日期", deployDto.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
     }
 }

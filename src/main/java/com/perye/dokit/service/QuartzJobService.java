@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface QuartzJobService {
 
@@ -58,9 +59,9 @@ public interface QuartzJobService {
 
     /**
      * 删除任务
-     * @param quartzJob /
+     * @param ids /
      */
-    void delete(QuartzJob quartzJob);
+    void delete(Set<Long> ids);
 
     /**
      * 根据ID查询

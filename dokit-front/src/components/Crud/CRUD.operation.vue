@@ -34,6 +34,7 @@
       el-button.filter-item(
         v-if="crud.optShow.download"
         :loading="crud.downloadLoading"
+        :disabled="!crud.data.length"
         size="mini"
         type="warning"
         icon="el-icon-download"

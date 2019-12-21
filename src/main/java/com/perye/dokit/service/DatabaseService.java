@@ -5,6 +5,11 @@ import com.perye.dokit.dto.DatabaseQueryCriteria;
 import com.perye.dokit.entity.Database;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author perye
  * @email peryedev@gmail.com
@@ -25,7 +30,7 @@ public interface DatabaseService {
      * @param criteria 条件
      * @return /
      */
-    Object queryAll(DatabaseQueryCriteria criteria);
+    List<DatabaseDto> queryAll(DatabaseQueryCriteria criteria);
 
     /**
      * 根据ID查询
@@ -49,9 +54,9 @@ public interface DatabaseService {
 
     /**
      * 删除
-     * @param id /
+     * @param ids /
      */
-    void delete(String id);
+    void delete(Set<String> ids);
 
 
     /**
@@ -60,4 +65,11 @@ public interface DatabaseService {
      * @return
      */
     boolean testConnection(Database resources);
+
+    /**
+     * 导出数据
+     * @param queryAll /
+     * @param response /
+     */
+    void download(List<DatabaseDto> queryAll, HttpServletResponse response) throws IOException;
 }

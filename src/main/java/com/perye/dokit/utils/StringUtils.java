@@ -6,6 +6,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import org.lionsoul.ip2region.DataBlock;
 import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbSearcher;
+import org.lionsoul.ip2region.Util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;

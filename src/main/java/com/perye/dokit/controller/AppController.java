@@ -14,6 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Set;
+
 
 @Api(tags = "应用管理")
 @RestController
@@ -24,6 +28,14 @@ public class AppController {
 
     public AppController(AppService appService){
         this.appService = appService;
+    }
+
+    @Log("导出应用数据")
+    @ApiOperation("导出应用数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check('app:list')")
+    public void download(HttpServletResponse response, AppQueryCriteria criteria) throws IOException {
+        appService.download(appService.queryAll(criteria), response);
     }
 
     @Log("查询应用")
@@ -53,10 +65,10 @@ public class AppController {
 
     @Log("删除应用")
     @ApiOperation(value = "删除应用")
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping
     @PreAuthorize("@dokit.check('app:del')")
-    public ResponseEntity<Object> delete(@PathVariable Long id){
-        appService.delete(id);
+    public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
+        appService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

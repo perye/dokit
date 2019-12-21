@@ -3,6 +3,9 @@ package com.perye.dokit.dto;
 import com.perye.dokit.annotation.Query;
 import lombok.Data;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 /**
  * @author perye
  * @email peryedev@gmail.com
@@ -22,4 +25,7 @@ public class DatabaseQueryCriteria{
      */
     @Query
     private String jdbcUrl;
+
+    @Query(type = Query.Type.BETWEEN)
+    private List<Timestamp> createTime;
 }

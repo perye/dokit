@@ -3,9 +3,11 @@ package com.perye.dokit.service.impl;
 import com.perye.dokit.dto.AppDto;
 import com.perye.dokit.dto.AppQueryCriteria;
 import com.perye.dokit.entity.App;
+import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.mapper.AppMapper;
 import com.perye.dokit.repository.AppRepository;
 import com.perye.dokit.service.AppService;
+import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
@@ -14,6 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author perye
@@ -40,7 +46,7 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public Object queryAll(AppQueryCriteria criteria){
+    public List<AppDto> queryAll(AppQueryCriteria criteria){
         return appMapper.toDto(appRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
@@ -54,21 +60,57 @@ public class AppServiceImpl implements AppService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AppDto create(App resources) {
+        verification(resources);
         return appMapper.toDto(appRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(App resources) {
+        verification(resources);
         App app = appRepository.findById(resources.getId()).orElseGet(App::new);
         ValidationUtil.isNull(app.getId(),"App","id",resources.getId());
         app.copy(resources);
         appRepository.save(app);
     }
 
+    private void verification(App resources){
+        String opt = "/opt";
+        String home = "/home";
+        if (!(resources.getUploadPath().startsWith(opt) || resources.getUploadPath().startsWith(home))) {
+            throw new BadRequestException("文件只能上传在opt目录或者home目录 ");
+        }
+        if (!(resources.getDeployPath().startsWith(opt) || resources.getDeployPath().startsWith(home))) {
+            throw new BadRequestException("文件只能部署在opt目录或者home目录 ");
+        }
+        if (!(resources.getBackupPath().startsWith(opt) || resources.getBackupPath().startsWith(home))) {
+            throw new BadRequestException("文件只能备份在opt目录或者home目录 ");
+        }
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        appRepository.deleteById(id);
+    public void delete(Set<Long> ids) {
+        for (Long id : ids) {
+            appRepository.deleteById(id);
+        }
+    }
+
+    @Override
+    public void download(List<AppDto> queryAll, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (AppDto appDto : queryAll) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("应用名称", appDto.getName());
+            map.put("端口", appDto.getPort());
+            map.put("上传目录", appDto.getUploadPath());
+            map.put("部署目录", appDto.getDeployPath());
+            map.put("备份目录", appDto.getBackupPath());
+            map.put("启动脚本", appDto.getStartScript());
+            map.put("部署脚本", appDto.getDeployScript());
+            map.put("创建日期", appDto.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
     }
 }

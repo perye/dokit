@@ -27,7 +27,7 @@ public class ServerMonitorController {
 
     @GetMapping()
     @AnonymousAccess
-    public ResponseEntity getServeInfo() {
+    public ResponseEntity<Object> getServeInfo() {
         Map<String, Object> resultMap = new HashMap<>(8);
         try {
             CpuInfo[] infoList = sigar.getCpuInfoList();

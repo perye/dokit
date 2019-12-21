@@ -72,7 +72,7 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.init()
+      this.$parent.crud.toQuery()
     })
   },
   methods: {

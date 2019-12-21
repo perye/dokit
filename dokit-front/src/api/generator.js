@@ -22,3 +22,11 @@ export function save(data) {
     method: 'put'
   })
 }
+
+export function sync(tables) {
+  return request({
+    url: 'api/generator/sync',
+    method: 'post',
+    data: tables
+  })
+}

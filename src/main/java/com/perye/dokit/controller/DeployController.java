@@ -20,9 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author perye
@@ -40,6 +42,14 @@ public class DeployController {
 
     public DeployController(DeployService deployService) {
         this.deployService = deployService;
+    }
+
+    @Log("导出部署数据")
+    @ApiOperation("导出部署数据")
+    @GetMapping(value = "/download")
+    @PreAuthorize("@dokit.check('database:list')")
+    public void download(HttpServletResponse response, DeployQueryCriteria criteria) throws IOException {
+        deployService.download(deployService.queryAll(criteria), response);
     }
 
     @Log("查询部署")
@@ -69,10 +79,10 @@ public class DeployController {
 
     @Log("删除部署")
     @ApiOperation(value = "删除部署")
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping
     @PreAuthorize("@dokit.check('deploy:del')")
-    public ResponseEntity<Object> delete(@PathVariable Long id){
-        deployService.delete(id);
+    public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
+        deployService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

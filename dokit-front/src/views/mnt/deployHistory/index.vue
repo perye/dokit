@@ -12,6 +12,18 @@
           class="filter-item"
           @keyup.enter.native="crud.toQuery"
         />
+        <el-date-picker
+          v-model="query.deployDate"
+          :default-time="['00:00:00','23:59:59']"
+          type="daterange"
+          range-separator=":"
+          size="small"
+          class="date-item"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          style="width: 240px"
+          start-placeholder="部署开始日期"
+          end-placeholder="部署结束日期"
+        />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission" />
@@ -27,8 +39,12 @@
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('appName')" prop="appName" label="应用名称" />
       <el-table-column v-if="columns.visible('ip')" prop="ip" label="部署IP" />
-      <el-table-column v-if="columns.visible('deployDate')" prop="deployDate" label="部署时间" />
       <el-table-column v-if="columns.visible('deployUser')" prop="deployUser" label="部署人员" />
+      <el-table-column v-if="columns.visible('deployDate')" prop="deployDate" label="部署时间">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.deployDate) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column v-permission="['admin','deployHistory:del']" label="操作" width="100px" align="center">
         <template slot-scope="scope">
           <el-popover
@@ -84,7 +100,7 @@ export default {
   methods: {
     delMethod(id) {
       this.delLoading = true
-      del(id).then(() => {
+      del([id]).then(() => {
         this.delLoading = false
         this.$refs[id].doClose()
         this.crud.dleChangePage(1)

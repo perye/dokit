@@ -18,6 +18,6 @@ public class DoKitConstant {
      * 常用接口
      */
     public static class Url{
-        public static final String SM_MS_URL = "https://sm.ms/api/upload";
+        public static final String SM_MS_URL = "https://sm.ms/api";
     }
 }

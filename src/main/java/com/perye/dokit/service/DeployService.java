@@ -6,6 +6,11 @@ import com.perye.dokit.entity.Deploy;
 import com.perye.dokit.entity.DeployHistory;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author perye
  * @email peryedev@gmail.com
@@ -26,7 +31,7 @@ public interface DeployService {
      * @param criteria 条件
      * @return /
      */
-    Object queryAll(DeployQueryCriteria criteria);
+    List<DeployDto> queryAll(DeployQueryCriteria criteria);
 
     /**
      * 根据ID查询
@@ -50,9 +55,9 @@ public interface DeployService {
 
     /**
      * 删除
-     * @param id /
+     * @param ids /
      */
-    void delete(Long id);
+    void delete(Set<Long> ids);
 
     void deploy(String fileSavePath, Long appId);
 
@@ -63,4 +68,11 @@ public interface DeployService {
     String stopServer(Deploy resources);
 
     String serverReduction(DeployHistory resources);
+
+    /**
+     * 导出数据
+     * @param queryAll /
+     * @param response /
+     */
+    void download(List<DeployDto> queryAll, HttpServletResponse response) throws IOException;
 }

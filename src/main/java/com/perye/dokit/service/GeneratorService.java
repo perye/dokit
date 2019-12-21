@@ -29,9 +29,10 @@ public interface GeneratorService {
     /**
      * 同步表数据
      * @param columnInfos /
+     * @param columnInfoList
      */
     @Async
-    void sync(List<ColumnInfo> columnInfos);
+    void sync(List<ColumnInfo> columnInfos, List<ColumnInfo> columnInfoList);
 
     /**
      * 保持数据
@@ -72,6 +73,11 @@ public interface GeneratorService {
      */
     void download(GenConfig genConfig, List<ColumnInfo> columns, HttpServletRequest request, HttpServletResponse response);
 
-
+    /**
+     * 查询数据库的表字段数据数据
+     * @param table /
+     * @return /
+     */
+    List<ColumnInfo> query(String table);
 }
 

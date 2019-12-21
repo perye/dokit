@@ -22,8 +22,6 @@ public interface LocalStorageService {
 
     void update(LocalStorage resources);
 
-    void delete(Long id);
-
     void deleteAll(Long[] ids);
 
     void download(List<LocalStorageDto> queryAll, HttpServletResponse response) throws IOException;
