@@ -2,10 +2,8 @@ package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.service.RedisService;
-import com.perye.dokit.vo.RedisVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/redis")
@@ -46,18 +45,10 @@ public class RedisController {
     @DeleteMapping
     @ApiOperation("删除Redis缓存")
     @PreAuthorize("@dokit.check('redis:del')")
-    public ResponseEntity<Object> delete(@RequestBody RedisVo resources){
-        redisService.delete(resources.getKey());
+    public ResponseEntity<Object> delete(@RequestBody Set<String> ids){
+        redisService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Log("清空Redis缓存")
-    @DeleteMapping(value = "/all")
-    @ApiOperation("清空Redis缓存")
-    @PreAuthorize("@dokit.check('redis:del')")
-    public ResponseEntity<Object> deleteAll(){
-        redisService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
 

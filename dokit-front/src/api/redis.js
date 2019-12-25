@@ -8,21 +8,11 @@ export function add(data) {
   })
 }
 
-export function del(key) {
-  const data = {
-    key
-  }
+export function del(keys) {
   return request({
-    url: 'api/redis/',
+    url: 'api/redis',
     method: 'delete',
-    data
-  })
-}
-
-export function delAll() {
-  return request({
-    url: 'api/redis/all',
-    method: 'delete'
+    data: keys
   })
 }
 
@@ -34,4 +24,4 @@ export function edit(data) {
   })
 }
 
-export default { del, delAll }
+export default { del }

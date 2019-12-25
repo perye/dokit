@@ -4,6 +4,7 @@ import com.perye.dokit.config.SecurityProperties;
 import com.perye.dokit.service.RedisService;
 import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
+import com.perye.dokit.utils.StringUtils;
 import com.perye.dokit.vo.RedisVo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -35,10 +36,14 @@ public class RedisServiceImpl implements RedisService {
     private Long expiration;
 
     @Override
-    public Page<RedisVo> findByKey(String key, Pageable pageable){
+    public Page<RedisVo> findByKey(String key, Pageable pageable) {
+        // 不传值默认查询全部:*
+        if (StringUtils.isEmpty(key)) {
+            key = "*";
+        }
         List<RedisVo> redisVos = findByKey(key);
         return new PageImpl<RedisVo>(
-                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(),redisVos),
+                PageUtil.toPage(pageable.getPageNumber(), pageable.getPageSize(), redisVos),
                 pageable,
                 redisVos.size());
     }
@@ -62,15 +67,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void delete(String key) {
-        redisTemplate.delete(key);
+    public void delete(Set<String> keys) {
+        for (String key : keys) {
+            redisTemplate.delete(key);
+        }
     }
 
-    @Override
-    public void deleteAll() {
-        Set<String> keys = redisTemplate.keys(  "*");
-        redisTemplate.delete(keys.stream().filter(s -> !s.contains(properties.getOnlineKey())).filter(s -> !s.contains(properties.getCodeKey())).collect(Collectors.toList()));
-    }
 
     @Override
     public String getCodeVal(String key) {

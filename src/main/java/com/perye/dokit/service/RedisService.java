@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface RedisService {
 
@@ -40,15 +41,9 @@ public interface RedisService {
 
     /**
      * delete
-     * @param key 键
+     * @param ids 键数组
      */
-    void delete(String key);
-
-    /**
-     * 清空缓存
-     */
-    void deleteAll();
-
+    void delete(Set<String> ids);
 
     /**
      * 导出数据
