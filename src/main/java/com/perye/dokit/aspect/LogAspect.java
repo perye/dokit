@@ -32,7 +32,7 @@ public class LogAspect {
         this.logService = logService;
     }
 
-    private long currentTime = 0L;
+    ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
     /**
      * 配置切入点
@@ -50,9 +50,10 @@ public class LogAspect {
     @Around("logPointcut()")
     public Object logAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object result;
-        currentTime = System.currentTimeMillis();
+        currentTime.set(System.currentTimeMillis());
         result = proceedingJoinPoint.proceed();
-        Log log = new Log("INFO", System.currentTimeMillis() - currentTime);
+        Log log = new Log("INFO", System.currentTimeMillis() - currentTime.get());
+        currentTime.remove();
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
         logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request),proceedingJoinPoint, log);
         return result;
@@ -65,7 +66,7 @@ public class LogAspect {
      */
     @AfterThrowing(pointcut = "logPointcut()",throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        Log log = new Log("ERROR", System.currentTimeMillis() - currentTime);
+        Log log = new Log("ERROR", System.currentTimeMillis() - currentTime.get());
         log.setExceptionDetail(ThrowableUtil.getStackTrace(e).getBytes());
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
         logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request), (ProceedingJoinPoint)joinPoint, log);
