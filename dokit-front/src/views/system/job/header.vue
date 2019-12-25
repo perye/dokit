@@ -31,7 +31,7 @@
         :label="item.label"
         :value="item.value"
       )/
-    rrOperation(:crud="crud")
+    rrOperation/
 </template>
 
 <script>

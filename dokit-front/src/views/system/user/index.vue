@@ -65,7 +65,7 @@
                 :value="item.key"
               />
             </el-select>
-            <rrOperation :crud="crud" />
+            <rrOperation />
           </div>
           <crudOperation show="" :permission="permission" />
         </div>
@@ -149,41 +149,17 @@
           @selection-change="crud.selectionChangeHandler"
         >
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
-          <el-table-column
-            v-if="columns.visible('username')"
-            :show-overflow-tooltip="true"
-            prop="username"
-            label="用户名"
-          />
-          <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" label="昵称" />
-          <el-table-column v-if="columns.visible('sex')" prop="sex" label="性别" />
-          <el-table-column
-            v-if="columns.visible('phone')"
-            :show-overflow-tooltip="true"
-            prop="phone"
-            width="100"
-            label="电话"
-          />
-          <el-table-column
-            v-if="columns.visible('email')"
-            :show-overflow-tooltip="true"
-            width="125"
-            prop="email"
-            label="邮箱"
-          />
-          <el-table-column
-            v-if="columns.visible('dept')"
-            :show-overflow-tooltip="true"
-            width="110"
-            prop="dept"
-            label="部门 / 岗位"
-          >
-
+          <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" />
+          <el-table-column :show-overflow-tooltip="true" prop="nickName" label="昵称" />
+          <el-table-column prop="sex" label="性别" />
+          <el-table-column :show-overflow-tooltip="true" prop="phone" width="100" label="电话" />
+          <el-table-column :show-overflow-tooltip="true" width="125" prop="email" label="邮箱" />
+          <el-table-column :show-overflow-tooltip="true" width="110" prop="dept" label="部门 / 岗位" >
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
             </template>
           </el-table-column>
-          <el-table-column v-if="columns.visible('enabled')" label="状态" align="center" prop="enabled">
+          <el-table-column label="状态" align="center" prop="enabled">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.enabled"
@@ -195,7 +171,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            v-if="columns.visible('createTime')"
             :show-overflow-tooltip="true"
             prop="createTime"
             width="140"

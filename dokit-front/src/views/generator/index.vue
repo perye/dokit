@@ -3,7 +3,7 @@
     .head-container
       div(v-if="crud.props.searchToggle")
         el-input.filter-item(v-model="query.name" clearable size="small" placeholder="请输入表名" style="width: 200px;" @keyup.enter.native="crud.toQuery")/
-        rrOperation(:crud="crud")/
+        rrOperation/
       crudOperation
         el-tooltip.item(slot="right" effect="dark" content="数据库中表字段变动时使用该功能" placement="top-start")
           el-button.filter-item(
@@ -17,11 +17,11 @@
     // 表格渲染
     el-table(ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler")
       el-table-column(type="selection" width="55")/
-      el-table-column(v-if="columns.visible('tableName')" :show-overflow-tooltip="true" prop="tableName" label="表名")/
-      el-table-column(v-if="columns.visible('engine')" :show-overflow-tooltip="true" prop="engine" label="数据库引擎")/
-      el-table-column(v-if="columns.visible('coding')" :show-overflow-tooltip="true" prop="coding" label="字符编码集")/
-      el-table-column(v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" label="备注")/
-      el-table-column(v-if="columns.visible('createTime')" prop="createTime" label="创建日期")
+      el-table-column(:show-overflow-tooltip="true" prop="tableName" label="表名")/
+      el-table-column(:show-overflow-tooltip="true" prop="engine" label="数据库引擎")/
+      el-table-column(:show-overflow-tooltip="true" prop="coding" label="字符编码集")/
+      el-table-column(:show-overflow-tooltip="true" prop="remark" label="备注")/
+      el-table-column(prop="createTime" label="创建日期")
         template(slot-scope="scope")
           span {{ parseTime(scope.row.createTime) }}
       el-table-column(label="操作" width="160px" align="center" fixed="right")

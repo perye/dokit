@@ -24,7 +24,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         />
-        <rrOperation :crud="crud" />
+        <rrOperation />
       </div>
       <crudOperation :permission="permission" />
     </div>
@@ -86,18 +86,12 @@
             @current-change="handleCurrentChange"
           >
             <el-table-column :selectable="checkboxT" type="selection" width="55" />
-            <el-table-column v-if="columns.visible('name')" prop="name" label="名称" />
-            <el-table-column v-if="columns.visible('dataScope')" prop="dataScope" label="数据权限" />
-            <el-table-column v-if="columns.visible('permission')" prop="permission" label="角色权限" />
-            <el-table-column v-if="columns.visible('level')" prop="level" label="角色级别" />
-            <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" label="描述" />
-            <el-table-column
-              v-if="columns.visible('createTime')"
-              :show-overflow-tooltip="true"
-              width="135px"
-              prop="createTime"
-              label="创建日期"
-            >
+            <el-table-column prop="name" label="名称" />
+            <el-table-column prop="dataScope" label="数据权限" />
+            <el-table-column prop="permission" label="角色权限" />
+            <el-table-column prop="level" label="角色级别" />
+            <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
+            <el-table-column :show-overflow-tooltip="true" width="135px" prop="createTime" label="创建日期" >
               <template slot-scope="scope">
                 <span>{{ parseTime(scope.row.createTime) }}</span>
               </template>

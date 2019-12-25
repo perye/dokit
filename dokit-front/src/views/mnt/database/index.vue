@@ -23,7 +23,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         />
-        <rrOperation :crud="crud" />
+        <rrOperation />
       </div>
       <crudOperation :permission="permission">
         <el-button
@@ -81,10 +81,10 @@
       @current-change="handleCurrentChange"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" width="130px" label="数据库名称" />
-      <el-table-column v-if="columns.visible('jdbcUrl')" prop="jdbcUrl" label="连接地址" />
-      <el-table-column v-if="columns.visible('userName')" prop="userName" width="200px" label="用户名" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" width="200px" label="创建日期">
+      <el-table-column prop="name" width="130px" label="数据库名称" />
+      <el-table-column prop="jdbcUrl" label="连接地址" />
+      <el-table-column prop="userName" width="200px" label="用户名" />
+      <el-table-column prop="createTime" width="200px" label="创建日期">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
