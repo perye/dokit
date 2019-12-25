@@ -5,15 +5,15 @@
         el-input.filter-item(v-model="query.name" clearable size="small" placeholder="请输入表名" style="width: 200px;" @keyup.enter.native="crud.toQuery")/
         rrOperation(:crud="crud")/
       crudOperation
-        el-button.filter-item(
-          slot="left"
-          size="mini"
-          type="success"
-          icon="el-icon-refresh"
-          :loading="syncLoading"
-          :disabled="crud.selections.length === 0"
-          @click="sync"
-        ) 同步
+        el-tooltip.item(slot="right" effect="dark" content="数据库中表字段变动时使用该功能" placement="top-start")
+          el-button.filter-item(
+            size="mini"
+            type="success"
+            icon="el-icon-refresh"
+            :loading="syncLoading"
+            :disabled="crud.selections.length === 0"
+            @click="sync"
+          ) 同步
     // 表格渲染
     el-table(ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler")
       el-table-column(type="selection" width="55")/
@@ -38,6 +38,7 @@
 
 <script>
 import { generator, sync } from '@/api/generator'
+import { downloadFile } from '@/utils/index'
 import CRUD, { presenter, header } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
@@ -71,7 +72,7 @@ export default {
     toDownload(tableName) {
       // 打包下载
       generator(tableName, 2).then(data => {
-        this.downloadFile(data, tableName, 'zip')
+        downloadFile(data, tableName, 'zip')
       })
     },
     sync() {

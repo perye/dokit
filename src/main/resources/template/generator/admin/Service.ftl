@@ -48,12 +48,6 @@ public interface ${className}Service {
     void update(${className} resources);
 
     /**
-    * 删除
-    * @param ${pkChangeColName} /
-    */
-    void delete(${pkColumnType} ${pkChangeColName});
-
-    /**
     * 导出数据
     * @param all 待导出的数据
     * @param response /

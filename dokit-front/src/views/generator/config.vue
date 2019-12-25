@@ -6,21 +6,30 @@
           .clearfix(slot="header")
             span.role-span 字段配置：{{ tableName }}
             el-button(
+              :loading="genLoading"
+              icon="el-icon-s-promotion"
+              size="mini"
+              style="float: right; padding: 6px 9px;"
+              type="success"
+              @click="toGen"
+            ) 保存&生成
+            el-button(
               :loading="columnLoading"
               icon="el-icon-check"
               size="mini"
-              style="float: right; padding: 6px 9px;"
+              style="float: right; padding: 6px 9px;margin-right: 9px"
               type="primary"
               @click="saveColumnConfig"
             ) 保存
-            el-button(
-              :loading="syncLoading"
-              icon="el-icon-refresh"
-              size="mini"
-              style="float: right; padding: 6px 9px;margin-right: 10px"
-              type="success"
-              @click="sync"
-            ) 同步
+            el-tooltip.item(effect="dark" content="数据库中表字段变动时使用该功能" placement="top-start")
+              el-button(
+                :loading="syncLoading"
+                icon="el-icon-refresh"
+                size="mini"
+                style="float: right; padding: 6px 9px;"
+                type="info"
+                @click="sync"
+              ) 同步
           el-form(size="small" label-width="90px")
             el-table(v-loading="loading" :data="data" :max-height="tableHeight" size="small" style="width: 100%;margin-bottom: 15px")
               el-table-column(prop="columnName" label="字段名称")/
@@ -53,6 +62,7 @@
                     el-option(label!=">=" value!=">=")/
                     el-option(label!="<=" value!="<=")/
                     el-option(label!="Like" value!="Like")/
+                    el-option(label!="NotNull" value!="NotNull")
                     el-option(label!="BetWeen" value!="BetWeen")/
               el-table-column(label="日期注解")
                 template(slot-scope="scope")
@@ -101,7 +111,7 @@
 <script>
 import crud from '@/mixins/crud'
 import { update, get } from '@/api/genConfig'
-import { save, sync } from '@/api/generator'
+import { save, sync, generator } from '@/api/generator'
 import { getDicts } from '@/api/dict'
 export default {
   name: 'GeneratorConfig',
@@ -109,7 +119,7 @@ export default {
   mixins: [crud],
   data() {
     return {
-      activeName: 'first', tableName: '', tableHeight: 550, columnLoading: false, configLoading: false, dicts: [], syncLoading: false,
+      activeName: 'first', tableName: '', tableHeight: 550, columnLoading: false, configLoading: false, dicts: [], syncLoading: false, genLoading: false,
       form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null },
       rules: {
         author: [
@@ -185,6 +195,23 @@ export default {
         this.syncLoading = false
       }).then(() => {
         this.syncLoading = false
+      })
+    },
+    toGen() {
+      this.genLoading = true
+      save(this.data).then(res => {
+        this.notify('保存成功', 'success')
+        // 生成代码
+        generator(this.tableName, 0).then(data => {
+          this.genLoading = false
+          this.notify('生成成功', 'success')
+        }).catch(err => {
+          this.genLoading = false
+          console.log(err.response.data.message)
+        })
+      }).catch(err => {
+        this.genLoading = false
+        console.log(err.response.data.message)
       })
     }
   }

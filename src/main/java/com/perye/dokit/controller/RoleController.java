@@ -2,6 +2,7 @@ package com.perye.dokit.controller;
 
 import cn.hutool.core.lang.Dict;
 import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.dto.RoleDto;
 import com.perye.dokit.dto.RoleQueryCriteria;
 import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.dto.UserDto;
@@ -79,9 +80,7 @@ public class RoleController {
     @ApiOperation("获取用户级别")
     @GetMapping(value = "/level")
     public ResponseEntity<Object> getLevel(){
-        UserDto user = userService.findByName(SecurityUtils.getUsername());
-        List<Integer> levels = roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
-        return new ResponseEntity<>(Dict.create().set("level", Collections.min(levels)),HttpStatus.OK);
+        return new ResponseEntity<>(Dict.create().set("level", getLevels(null)),HttpStatus.OK);
     }
 
     @Log("新增角色")
@@ -92,6 +91,7 @@ public class RoleController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
+        getLevels(resources.getLevel());
         return new ResponseEntity<>(roleService.create(resources),HttpStatus.CREATED);
     }
 
@@ -99,7 +99,8 @@ public class RoleController {
     @ApiOperation("修改角色")
     @PutMapping
     @PreAuthorize("@dokit.check('roles:edit')")
-    public ResponseEntity<Object> update(@Validated(Role.Update.class) @RequestBody Role resources){
+    public ResponseEntity<Object> update(@Validated(Role.Update.class) @RequestBody Role resources) {
+        getLevels(resources.getLevel());
         roleService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -109,7 +110,9 @@ public class RoleController {
     @PutMapping(value = "/menu")
     @PreAuthorize("@dokit.check('roles:edit')")
     public ResponseEntity<Object> updateMenu(@RequestBody Role resources){
-        roleService.updateMenu(resources,roleService.findById(resources.getId()));
+        RoleDto role = roleService.findById(resources.getId());
+        getLevels(role.getLevel());
+        roleService.updateMenu(resources,role);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -118,8 +121,32 @@ public class RoleController {
     @DeleteMapping
     @PreAuthorize("@dokit.check('roles:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
-        roleService.delete(ids);
+        for (Long id : ids) {
+            RoleDto role = roleService.findById(id);
+            getLevels(role.getLevel());
+        }
+        try {
+            roleService.delete(ids);
+        } catch (Throwable e){
+            ThrowableUtil.throwForeignKeyException(e, "所选角色存在用户关联，请取消关联后再试");
+        }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 获取用户的角色级别
+     * @return /
+     */
+    private int getLevels(Integer level){
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        List<Integer> levels = roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
+        int min = Collections.min(levels);
+        if(level != null){
+            if(level < min){
+                throw new BadRequestException("权限不足，你的角色级别：" + min + "，低于操作的角色级别：" + level);
+            }
+        }
+        return min;
     }
 }
 

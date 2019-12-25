@@ -19,31 +19,36 @@ public class ${className}QueryCriteria{
 <#if queryColumns??>
     <#list queryColumns as column>
 
-        <#if column.queryType = '='>
+<#if column.queryType = '='>
     // 精确
     @Query
     private ${column.columnType} ${column.changeColumnName};
-        </#if>
-        <#if column.queryType = 'Like'>
+</#if>
+<#if column.queryType = 'Like'>
     // 模糊
     @Query(type = Query.Type.INNER_LIKE)
     private ${column.columnType} ${column.changeColumnName};
-        </#if>
-        <#if column.queryType = '!='>
+</#if>
+<#if column.queryType = '!='>
     // 不等于
     @Query(type = Query.Type.NOT_EQUAL)
     private ${column.columnType} ${column.changeColumnName};
-        </#if>
-        <#if column.queryType = '>='>
+</#if>
+<#if column.queryType = 'NotNull'>
+    /** 不为空 */
+    @Query(type = Query.Type.NOT_NULL)
+    private ${column.columnType} ${column.changeColumnName};
+</#if>
+<#if column.queryType = '>='>
     // 大于等于
     @Query(type = Query.Type.GREATER_THAN)
     private ${column.columnType} ${column.changeColumnName};
-        </#if>
-        <#if column.queryType = '<='>
+</#if>
+<#if column.queryType = '<='>
     // 小于等于
     @Query(type = Query.Type.LESS_THAN)
     private ${column.columnType} ${column.changeColumnName};
-        </#if>
+</#if>
     </#list>
 </#if>
 <#if betweens??>
