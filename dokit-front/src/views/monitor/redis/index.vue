@@ -103,11 +103,6 @@ export default {
     }
   },
   methods: {
-    // 获取数据前设置好接口地址
-    beforeInit() {
-      this.url = 'api/redis'
-      return true
-    },
     doDelete(datas) {
       this.$confirm(`确认清除选中的${datas.length}个缓存?`, '提示', {
         confirmButtonText: '确定',

@@ -203,6 +203,7 @@ import udOperation from '@crud/UD.operation'
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '菜单', url: 'api/menus', crudMethod: { ...crudMenu }})
 const defaultForm = {
+  id: null,
   name: null,
   sort: 999,
   path: null,

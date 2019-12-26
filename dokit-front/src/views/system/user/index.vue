@@ -154,7 +154,7 @@
           <el-table-column prop="sex" label="性别" />
           <el-table-column :show-overflow-tooltip="true" prop="phone" width="100" label="电话" />
           <el-table-column :show-overflow-tooltip="true" width="125" prop="email" label="邮箱" />
-          <el-table-column :show-overflow-tooltip="true" width="110" prop="dept" label="部门 / 岗位" >
+          <el-table-column :show-overflow-tooltip="true" width="110" prop="dept" label="部门 / 岗位">
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
             </template>
@@ -222,6 +222,7 @@ let userRoles = []
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '用户', url: 'api/users', crudMethod: { ...crudUser }})
 const defaultForm = {
+  id: null,
   username: null,
   nickName: null,
   sex: '男',
@@ -327,10 +328,6 @@ export default {
           userRoles.splice(index, value)
         }
       })
-    },
-    beforeInit() {
-      this.url = 'api/users'
-      return true
     },
     // 新增与编辑前做的操作
     [CRUD.HOOK.afterToCU](crud, form) {

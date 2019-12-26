@@ -91,7 +91,7 @@
             <el-table-column prop="permission" label="角色权限" />
             <el-table-column prop="level" label="角色级别" />
             <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
-            <el-table-column :show-overflow-tooltip="true" width="135px" prop="createTime" label="创建日期" >
+            <el-table-column :show-overflow-tooltip="true" width="135px" prop="createTime" label="创建日期">
               <template slot-scope="scope">
                 <span>{{ parseTime(scope.row.createTime) }}</span>
               </template>
@@ -165,7 +165,7 @@ import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '角色', url: 'api/roles', sort: 'level,asc', crudMethod: { ...crudRoles }})
-const defaultForm = { name: null, depts: [], remark: null, dataScope: '全部', level: 3, permission: null }
+const defaultForm = { id: null, name: null, depts: [], remark: null, dataScope: '全部', level: 3, permission: null }
 
 export default {
   name: 'Role',
@@ -174,7 +174,7 @@ export default {
   data() {
     return {
       defaultProps: { children: 'children', label: 'label' },
-      dateScopes: ['全部', '本级', '自定义'],level: 3,
+      dateScopes: ['全部', '本级', '自定义'], level: 3,
       currentId: 0, menuLoading: false, showButton: false,
       menus: [], menuIds: [], depts: [],
       permission: {
