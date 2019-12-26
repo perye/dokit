@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.LocalStorageDto;
-import com.perye.dokit.dto.LocalStorageQueryCriteria;
+import com.perye.dokit.query.LocalStorageQueryCriteria;
 import com.perye.dokit.entity.LocalStorage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

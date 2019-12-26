@@ -3,7 +3,7 @@ package com.perye.dokit.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.perye.dokit.dto.DictDto;
 import com.perye.dokit.dto.DictDetailDto;
-import com.perye.dokit.dto.DictQueryCriteria;
+import com.perye.dokit.query.DictQueryCriteria;
 import com.perye.dokit.entity.Dict;
 import com.perye.dokit.mapper.DictMapper;
 import com.perye.dokit.repository.DictRepository;

@@ -3,7 +3,7 @@ package com.perye.dokit.controller;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.entity.Captcha;
 import com.perye.dokit.service.CaptchaService;
-import com.perye.dokit.dto.CaptchaQueryCriteria;
+import com.perye.dokit.query.CaptchaQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

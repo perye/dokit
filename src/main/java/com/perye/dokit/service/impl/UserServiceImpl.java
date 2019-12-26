@@ -2,7 +2,7 @@ package com.perye.dokit.service.impl;
 
 import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.dto.UserDto;
-import com.perye.dokit.dto.UserQueryCriteria;
+import com.perye.dokit.query.UserQueryCriteria;
 import com.perye.dokit.entity.User;
 import com.perye.dokit.entity.UserAvatar;
 import com.perye.dokit.exception.EntityExistException;
@@ -10,7 +10,6 @@ import com.perye.dokit.exception.EntityNotFoundException;
 import com.perye.dokit.mapper.UserMapper;
 import com.perye.dokit.repository.UserAvatarRepository;
 import com.perye.dokit.repository.UserRepository;
-import com.perye.dokit.service.RedisService;
 import com.perye.dokit.service.UserService;
 import com.perye.dokit.utils.*;
 import org.springframework.beans.factory.annotation.Value;

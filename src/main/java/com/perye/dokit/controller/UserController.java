@@ -6,7 +6,7 @@ import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.DataScope;
 import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.dto.UserDto;
-import com.perye.dokit.dto.UserQueryCriteria;
+import com.perye.dokit.query.UserQueryCriteria;
 import com.perye.dokit.entity.User;
 import com.perye.dokit.entity.VerificationCode;
 import com.perye.dokit.exception.BadRequestException;

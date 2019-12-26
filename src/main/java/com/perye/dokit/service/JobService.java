@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.JobDTO;
-import com.perye.dokit.dto.JobQueryCriteria;
+import com.perye.dokit.query.JobQueryCriteria;
 import com.perye.dokit.entity.Job;
 import org.springframework.data.domain.Pageable;
 

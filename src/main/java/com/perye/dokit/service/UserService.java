@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.UserDto;
-import com.perye.dokit.dto.UserQueryCriteria;
+import com.perye.dokit.query.UserQueryCriteria;
 import com.perye.dokit.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

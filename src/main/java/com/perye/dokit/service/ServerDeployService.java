@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.ServerDeployDto;
-import com.perye.dokit.dto.ServerDeployQueryCriteria;
+import com.perye.dokit.query.ServerDeployQueryCriteria;
 import com.perye.dokit.entity.ServerDeploy;
 import org.springframework.data.domain.Pageable;
 

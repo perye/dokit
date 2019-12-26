@@ -1,8 +1,8 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.dto.JobQueryCriteria;
-import com.perye.dokit.dto.QuartzJobQueryCriteria;
+import com.perye.dokit.query.JobQueryCriteria;
+import com.perye.dokit.query.QuartzJobQueryCriteria;
 import com.perye.dokit.entity.QuartzJob;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.QuartzJobService;

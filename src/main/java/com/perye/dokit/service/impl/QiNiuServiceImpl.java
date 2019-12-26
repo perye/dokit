@@ -2,7 +2,7 @@ package com.perye.dokit.service.impl;
 
 //import com.google.gson.Gson;
 import com.alibaba.fastjson.JSON;
-import com.perye.dokit.dto.QiniuQueryCriteria;
+import com.perye.dokit.query.QiniuQueryCriteria;
 import com.perye.dokit.entity.QiniuConfig;
 import com.perye.dokit.entity.QiniuContent;
 import com.perye.dokit.exception.BadRequestException;
@@ -18,7 +18,6 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;

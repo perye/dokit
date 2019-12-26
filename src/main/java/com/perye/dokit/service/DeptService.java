@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.DeptDto;
-import com.perye.dokit.dto.DeptQueryCriteria;
+import com.perye.dokit.query.DeptQueryCriteria;
 import com.perye.dokit.entity.Dept;
 
 import javax.servlet.http.HttpServletResponse;

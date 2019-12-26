@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import com.perye.dokit.dto.AppDto;
-import com.perye.dokit.dto.AppQueryCriteria;
+import com.perye.dokit.query.AppQueryCriteria;
 import com.perye.dokit.entity.App;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.mapper.AppMapper;

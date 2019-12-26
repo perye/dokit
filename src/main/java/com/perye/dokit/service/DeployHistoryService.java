@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.DeployHistoryDto;
-import com.perye.dokit.dto.DeployHistoryQueryCriteria;
+import com.perye.dokit.query.DeployHistoryQueryCriteria;
 import com.perye.dokit.entity.DeployHistory;
 import org.springframework.data.domain.Pageable;
 

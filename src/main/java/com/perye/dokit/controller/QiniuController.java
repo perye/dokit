@@ -2,14 +2,13 @@ package com.perye.dokit.controller;
 
 
 import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.dto.QiniuQueryCriteria;
+import com.perye.dokit.query.QiniuQueryCriteria;
 import com.perye.dokit.entity.QiniuConfig;
 import com.perye.dokit.entity.QiniuContent;
 import com.perye.dokit.service.QiNiuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.perye.dokit.config.thread;
+package com.perye.dokit.thread;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

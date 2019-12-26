@@ -1,6 +1,6 @@
 package com.perye.dokit.utils;
 
-import com.perye.dokit.config.thread.ThreadPoolExecutorUtil;
+import com.perye.dokit.thread.ThreadPoolExecutorUtil;
 import com.perye.dokit.entity.QuartzJob;
 import com.perye.dokit.entity.QuartzLog;
 import com.perye.dokit.repository.QuartzLogRepository;
@@ -10,8 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 

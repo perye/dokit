@@ -1,7 +1,7 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.dto.PictureQueryCriteria;
+import com.perye.dokit.query.PictureQueryCriteria;
 import com.perye.dokit.entity.Picture;
 import com.perye.dokit.service.PictureService;
 import com.perye.dokit.utils.SecurityUtils;

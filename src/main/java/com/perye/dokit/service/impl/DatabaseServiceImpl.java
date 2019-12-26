@@ -2,7 +2,7 @@ package com.perye.dokit.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.perye.dokit.dto.DatabaseDto;
-import com.perye.dokit.dto.DatabaseQueryCriteria;
+import com.perye.dokit.query.DatabaseQueryCriteria;
 import com.perye.dokit.entity.Database;
 import com.perye.dokit.mapper.DatabaseMapper;
 import com.perye.dokit.repository.DatabaseRepository;

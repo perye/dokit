@@ -2,7 +2,7 @@ package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.dto.MenuDto;
-import com.perye.dokit.dto.MenuQueryCriteria;
+import com.perye.dokit.query.MenuQueryCriteria;
 import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.entity.Menu;
 import com.perye.dokit.exception.BadRequestException;

@@ -3,7 +3,7 @@ package com.perye.dokit.controller;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.entity.Test;
 import com.perye.dokit.service.TestService;
-import com.perye.dokit.dto.TestQueryCriteria;
+import com.perye.dokit.query.TestQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

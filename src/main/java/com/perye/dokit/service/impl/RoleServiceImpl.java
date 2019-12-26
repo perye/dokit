@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import com.perye.dokit.dto.RoleDto;
-import com.perye.dokit.dto.RoleQueryCriteria;
+import com.perye.dokit.query.RoleQueryCriteria;
 import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.entity.Menu;

@@ -1,4 +1,4 @@
-package com.perye.dokit.dto;
+package com.perye.dokit.query;
 
 import com.perye.dokit.annotation.Query;
 import lombok.Data;
@@ -12,15 +12,20 @@ import java.util.List;
  * @date 2019/12/10
  */
 @Data
-public class DeployQueryCriteria{
+public class DatabaseQueryCriteria{
 
     /**
      * 模糊
      */
-    @Query(type = Query.Type.INNER_LIKE, propName = "name", joinName = "app")
-    private String appName;
+    @Query(type = Query.Type.INNER_LIKE)
+    private String name;
+
+    /**
+     * 精确
+     */
+    @Query
+    private String jdbcUrl;
 
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> createTime;
-
 }

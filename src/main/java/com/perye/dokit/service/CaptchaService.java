@@ -2,7 +2,7 @@ package com.perye.dokit.service;
 
 import com.perye.dokit.entity.Captcha;
 import com.perye.dokit.dto.CaptchaDto;
-import com.perye.dokit.dto.CaptchaQueryCriteria;
+import com.perye.dokit.query.CaptchaQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;

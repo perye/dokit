@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import com.perye.dokit.dto.DeptDto;
-import com.perye.dokit.dto.DeptQueryCriteria;
+import com.perye.dokit.query.DeptQueryCriteria;
 import com.perye.dokit.entity.Dept;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.mapper.DeptMapper;

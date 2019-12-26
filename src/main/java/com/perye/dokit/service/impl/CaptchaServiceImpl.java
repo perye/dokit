@@ -6,7 +6,7 @@ import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.repository.CaptchaRepository;
 import com.perye.dokit.service.CaptchaService;
 import com.perye.dokit.dto.CaptchaDto;
-import com.perye.dokit.dto.CaptchaQueryCriteria;
+import com.perye.dokit.query.CaptchaQueryCriteria;
 import com.perye.dokit.mapper.CaptchaMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

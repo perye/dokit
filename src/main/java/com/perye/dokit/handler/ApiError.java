@@ -1,4 +1,4 @@
-package com.perye.dokit.exception.handle;
+package com.perye.dokit.handler;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

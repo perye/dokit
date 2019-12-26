@@ -6,7 +6,7 @@ import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.repository.TestRepository;
 import com.perye.dokit.service.TestService;
 import com.perye.dokit.dto.TestDto;
-import com.perye.dokit.dto.TestQueryCriteria;
+import com.perye.dokit.query.TestQueryCriteria;
 import com.perye.dokit.mapper.TestMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

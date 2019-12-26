@@ -1,6 +1,6 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.LogQueryCriteria;
+import com.perye.dokit.query.LogQueryCriteria;
 import com.perye.dokit.entity.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.data.domain.Pageable;

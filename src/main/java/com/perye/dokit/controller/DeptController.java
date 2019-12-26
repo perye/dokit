@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.config.DataScope;
 import com.perye.dokit.dto.DeptDto;
-import com.perye.dokit.dto.DeptQueryCriteria;
+import com.perye.dokit.query.DeptQueryCriteria;
 import com.perye.dokit.entity.Dept;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.DeptService;

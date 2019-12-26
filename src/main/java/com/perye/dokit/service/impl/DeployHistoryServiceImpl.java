@@ -2,7 +2,7 @@ package com.perye.dokit.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.perye.dokit.dto.DeployHistoryDto;
-import com.perye.dokit.dto.DeployHistoryQueryCriteria;
+import com.perye.dokit.query.DeployHistoryQueryCriteria;
 import com.perye.dokit.entity.DeployHistory;
 import com.perye.dokit.mapper.DeployHistoryMapper;
 import com.perye.dokit.repository.DeployHistoryRepository;

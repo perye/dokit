@@ -1,10 +1,9 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.dto.QiniuQueryCriteria;
+import com.perye.dokit.query.QiniuQueryCriteria;
 import com.perye.dokit.entity.QiniuConfig;
 import com.perye.dokit.entity.QiniuContent;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;

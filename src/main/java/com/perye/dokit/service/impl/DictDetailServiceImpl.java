@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import com.perye.dokit.dto.DictDetailDto;
-import com.perye.dokit.dto.DictDetailQueryCriteria;
+import com.perye.dokit.query.DictDetailQueryCriteria;
 import com.perye.dokit.entity.DictDetail;
 import com.perye.dokit.mapper.DictDetailMapper;
 import com.perye.dokit.repository.DictDetailRepository;

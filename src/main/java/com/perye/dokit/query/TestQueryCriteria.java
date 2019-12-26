@@ -1,4 +1,4 @@
-package com.perye.dokit.dto;
+package com.perye.dokit.query;
 
 import lombok.Data;
 import java.sql.Timestamp;

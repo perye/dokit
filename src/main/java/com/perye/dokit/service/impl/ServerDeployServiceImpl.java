@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import com.perye.dokit.dto.ServerDeployDto;
-import com.perye.dokit.dto.ServerDeployQueryCriteria;
+import com.perye.dokit.query.ServerDeployQueryCriteria;
 import com.perye.dokit.entity.ServerDeploy;
 import com.perye.dokit.mapper.ServerDeployMapper;
 import com.perye.dokit.repository.ServerDeployRepository;

@@ -2,7 +2,7 @@ package com.perye.dokit.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.perye.dokit.dto.LocalStorageDto;
-import com.perye.dokit.dto.LocalStorageQueryCriteria;
+import com.perye.dokit.query.LocalStorageQueryCriteria;
 import com.perye.dokit.entity.LocalStorage;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.mapper.LocalStorageMapper;

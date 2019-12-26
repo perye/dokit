@@ -1,7 +1,7 @@
 package com.perye.dokit.service.impl;
 
 import com.perye.dokit.dto.JobDTO;
-import com.perye.dokit.dto.JobQueryCriteria;
+import com.perye.dokit.query.JobQueryCriteria;
 import com.perye.dokit.entity.Job;
 import com.perye.dokit.mapper.JobMapper;
 import com.perye.dokit.repository.DeptRepository;
@@ -11,7 +11,6 @@ import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

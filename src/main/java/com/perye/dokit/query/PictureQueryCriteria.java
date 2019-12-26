@@ -1,4 +1,4 @@
-package com.perye.dokit.dto;
+package com.perye.dokit.query;
 
 import com.perye.dokit.annotation.Query;
 import lombok.Data;

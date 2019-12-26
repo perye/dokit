@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.DictDto;
-import com.perye.dokit.dto.DictQueryCriteria;
+import com.perye.dokit.query.DictQueryCriteria;
 import com.perye.dokit.entity.Dict;
 import org.springframework.data.domain.Pageable;
 

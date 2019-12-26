@@ -1,7 +1,7 @@
 package com.perye.dokit.service;
 
 import com.perye.dokit.dto.MenuDto;
-import com.perye.dokit.dto.MenuQueryCriteria;
+import com.perye.dokit.query.MenuQueryCriteria;
 import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.entity.Menu;
 

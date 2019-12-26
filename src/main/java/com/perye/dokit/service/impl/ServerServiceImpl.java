@@ -3,7 +3,7 @@ package com.perye.dokit.service.impl;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.perye.dokit.dto.ServerDto;
-import com.perye.dokit.dto.ServerQueryCriteria;
+import com.perye.dokit.query.ServerQueryCriteria;
 import com.perye.dokit.entity.Server;
 import com.perye.dokit.mapper.ServerMapper;
 import com.perye.dokit.repository.ServerRepository;

@@ -1,7 +1,7 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.dto.ServerQueryCriteria;
+import com.perye.dokit.query.ServerQueryCriteria;
 import com.perye.dokit.entity.Server;
 import com.perye.dokit.service.ServerService;
 import io.swagger.annotations.Api;

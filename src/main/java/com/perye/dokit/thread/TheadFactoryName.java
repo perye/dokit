@@ -1,4 +1,4 @@
-package com.perye.dokit.config.thread;
+package com.perye.dokit.thread;
 
 import org.springframework.stereotype.Component;
 

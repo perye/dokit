@@ -2,7 +2,7 @@ package com.perye.dokit.service;
 
 import com.perye.dokit.entity.Test;
 import com.perye.dokit.dto.TestDto;
-import com.perye.dokit.dto.TestQueryCriteria;
+import com.perye.dokit.query.TestQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;

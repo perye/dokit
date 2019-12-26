@@ -1,12 +1,11 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.dto.ServerDeployQueryCriteria;
+import com.perye.dokit.query.ServerDeployQueryCriteria;
 import com.perye.dokit.entity.ServerDeploy;
 import com.perye.dokit.service.ServerDeployService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

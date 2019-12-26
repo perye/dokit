@@ -1,7 +1,7 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.dto.DictQueryCriteria;
+import com.perye.dokit.query.DictQueryCriteria;
 import com.perye.dokit.entity.Dict;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.DictService;

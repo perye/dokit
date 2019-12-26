@@ -4,7 +4,7 @@ package com.perye.dokit.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.perye.dokit.dto.MenuDto;
-import com.perye.dokit.dto.MenuQueryCriteria;
+import com.perye.dokit.query.MenuQueryCriteria;
 import com.perye.dokit.dto.RoleSmallDto;
 import com.perye.dokit.entity.Menu;
 import com.perye.dokit.exception.BadRequestException;
