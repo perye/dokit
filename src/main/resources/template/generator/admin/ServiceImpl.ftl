@@ -15,7 +15,7 @@ import com.perye.dokit.utils.FileUtil;
 import ${package}.repository.${className}Repository;
 import ${package}.service.${className}Service;
 import ${package}.dto.${className}Dto;
-import ${package}.dto.${className}QueryCriteria;
+import ${package}.query.${className}QueryCriteria;
 import ${package}.mapper.${className}Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

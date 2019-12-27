@@ -345,7 +345,7 @@ public class GenUtil {
         }
 
         if ("QueryCriteria".equals(templateName)) {
-            return packagePath + "dto" + File.separator + className + "QueryCriteria.java";
+            return packagePath + "query" + File.separator + className + "QueryCriteria.java";
         }
 
         if ("Mapper".equals(templateName)) {

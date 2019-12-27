@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@Api(tags = "genTest管理")
+@Api(tags = "test管理")
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
@@ -35,24 +35,24 @@ public class TestController {
         testService.download(testService.queryAll(criteria), response);
     }
 
-    @Log("查询genTest")
-    @ApiOperation("查询genTest")
+    @Log("查询test")
+    @ApiOperation("查询test")
     @GetMapping()
     @PreAuthorize("@dokit.check('test:list')")
     public ResponseEntity<Object> getTests(TestQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(testService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增genTest")
-    @ApiOperation("新增genTest")
+    @Log("新增test")
+    @ApiOperation("新增test")
     @PostMapping
     @PreAuthorize("@dokit.check('test:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Test resources){
         return new ResponseEntity<>(testService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改genTest")
-    @ApiOperation("修改genTest")
+    @Log("修改test")
+    @ApiOperation("修改test")
     @PutMapping
     @PreAuthorize("@dokit.check('test:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Test resources){
@@ -60,18 +60,8 @@ public class TestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除genTest")
-    @ApiOperation("删除genTest")
-    @DeleteMapping(value = "/{id}")
-    @PreAuthorize("@dokit.check('test:del')")
-    public ResponseEntity<Object> delete(@PathVariable Integer id){
-    testService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
-    @Log("多选删除genTest")
-    @ApiOperation("多选删除genTest")
+    @Log("删除test")
+    @ApiOperation("删除test")
     @PreAuthorize("@dokit.check('test:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {

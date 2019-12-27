@@ -3,7 +3,7 @@ package ${package}.controller;
 import com.perye.dokit.aop.log.Log;
 import ${package}.entity.${className};
 import ${package}.service.${className}Service;
-import ${package}.dto.${className}QueryCriteria;
+import ${package}.query.${className}QueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

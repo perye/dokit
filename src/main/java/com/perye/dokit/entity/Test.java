@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 /**
 * @author perye
-* @date 2019-12-17
+* @date 2019-12-27
 */
 @Entity
 @Data
@@ -26,16 +26,20 @@ public class Test implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    /** createTime */
-    @Column(name = "createTime",nullable = false)
-    @NotNull
-    @CreationTimestamp
-    private Timestamp createtime;
+    /** 邮箱 */
+    @Column(name = "email",nullable = false)
+    @NotBlank
+    private String email;
 
-    /** username */
+    /** 用户名 */
     @Column(name = "username",nullable = false)
     @NotBlank
     private String username;
+
+    /** 创建时间 */
+    @Column(name = "create_time")
+    @CreationTimestamp
+    private Timestamp createTime;
 
     public void copy(Test source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

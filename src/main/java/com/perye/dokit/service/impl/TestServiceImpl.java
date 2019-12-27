@@ -11,9 +11,10 @@ import com.perye.dokit.mapper.TestMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+// 默认不使用缓存
+//import org.springframework.cache.annotation.CacheConfig;
+//import org.springframework.cache.annotation.CacheEvict;
+//import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.perye.dokit.utils.PageUtil;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 @Service
-@CacheConfig(cacheNames = "test")
+//@CacheConfig(cacheNames = "test")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class TestServiceImpl implements TestService {
 
@@ -40,20 +41,20 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    @Cacheable
+    //@Cacheable
     public Map<String,Object> queryAll(TestQueryCriteria criteria, Pageable pageable){
         Page<Test> page = testRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(testMapper::toDto));
     }
 
     @Override
-    @Cacheable
+    //@Cacheable
     public List<TestDto> queryAll(TestQueryCriteria criteria){
         return testMapper.toDto(testRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
-    @Cacheable(key = "#p0")
+    //@Cacheable(key = "#p0")
     public TestDto findById(Integer id) {
         Test test = testRepository.findById(id).orElseGet(Test::new);
         ValidationUtil.isNull(test.getId(),"Test","id",id);
@@ -61,14 +62,14 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public TestDto create(Test resources) {
         return testMapper.toDto(testRepository.save(resources));
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+    //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(Test resources) {
         Test test = testRepository.findById(resources.getId()).orElseGet(Test::new);
@@ -78,14 +79,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(Integer id) {
-        testRepository.deleteById(id);
-    }
-
-    @Override
-    @CacheEvict(allEntries = true)
+    //@CacheEvict(allEntries = true)
     public void deleteAll(Integer[] ids) {
         for (Integer id : ids) {
             testRepository.deleteById(id);
@@ -97,8 +91,9 @@ public class TestServiceImpl implements TestService {
         List<Map<String, Object>> list = new ArrayList<>();
         for (TestDto test : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("createTime", test.getCreatetime());
-            map.put("username", test.getUsername());
+            map.put("邮箱", test.getEmail());
+            map.put("用户名", test.getUsername());
+            map.put("创建时间", test.getCreateTime());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

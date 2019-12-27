@@ -1,4 +1,4 @@
-package ${package}.dto;
+package ${package}.query;
 
 import lombok.Data;
 <#if queryHasTimestamp>

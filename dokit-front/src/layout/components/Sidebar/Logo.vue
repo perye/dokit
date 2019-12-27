@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: 'dokit 后台管理',
+      title: '',
       logo: logoImg
     }
   }
@@ -52,7 +52,7 @@ export default {
       height: 100%;
       width: 100%;
       & .sidebar-logo {
-        width: 32px;
+        /*width: 32px;*/
         height: 32px;
         vertical-align: middle;
         margin-right: 6px;
@@ -70,7 +70,7 @@ export default {
     }
     &.collapse {
       .sidebar-logo {
-        margin-right: 0px;
+        margin-left: 20px;
       }
     }
   }

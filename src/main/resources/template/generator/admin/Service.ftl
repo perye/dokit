@@ -2,7 +2,7 @@ package ${package}.service;
 
 import ${package}.entity.${className};
 import ${package}.dto.${className}Dto;
-import ${package}.dto.${className}QueryCriteria;
+import ${package}.query.${className}QueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;

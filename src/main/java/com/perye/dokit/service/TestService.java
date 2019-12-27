@@ -48,12 +48,6 @@ public interface TestService {
     void update(Test resources);
 
     /**
-    * 删除
-    * @param id /
-    */
-    void delete(Integer id);
-
-    /**
     * 导出数据
     * @param all 待导出的数据
     * @param response /
