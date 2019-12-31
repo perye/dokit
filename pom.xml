@@ -12,6 +12,7 @@
     <artifactId>dokit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>dokit</name>
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -31,6 +32,7 @@
         <mail.version>1.4.7</mail.version>
         <qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
         <alipay.version>3.1.0</alipay.version>
+        <commons.io.version>2.5</commons.io.version>
     </properties>
 
     <dependencies>
@@ -283,6 +285,13 @@
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
             <version>0.1.55</version>
+        </dependency>
+
+        <!--io常用工具类 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
         </dependency>
 
 
