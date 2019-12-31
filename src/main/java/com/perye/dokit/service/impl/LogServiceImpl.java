@@ -10,6 +10,7 @@ import com.perye.dokit.mapper.LogSmallMapper;
 import com.perye.dokit.repository.LogRepository;
 import com.perye.dokit.service.LogService;
 import com.perye.dokit.utils.*;
+import com.perye.dokit.utils.ip.AddressUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.data.domain.Page;
@@ -102,7 +103,7 @@ public class LogServiceImpl implements LogService {
                 e.printStackTrace();
             }
         }
-        log.setAddress(StringUtils.getCityInfo(log.getRequestIp()));
+        log.setAddress(AddressUtils.getRealAddressByIP(log.getRequestIp()));
         log.setMethod(methodName);
         log.setUsername(username);
         log.setParams(params.toString() + " }");

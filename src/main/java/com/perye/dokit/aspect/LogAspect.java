@@ -6,6 +6,7 @@ import com.perye.dokit.utils.RequestHolder;
 import com.perye.dokit.utils.SecurityUtils;
 import com.perye.dokit.utils.StringUtils;
 import com.perye.dokit.utils.ThrowableUtil;
+import com.perye.dokit.utils.ip.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -55,7 +56,7 @@ public class LogAspect {
         Log log = new Log("INFO", System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
-        logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request),proceedingJoinPoint, log);
+        logService.save(getUsername(), StringUtils.getBrowser(request), IpUtils.getIpAddr(request),proceedingJoinPoint, log);
         return result;
     }
 
@@ -69,7 +70,7 @@ public class LogAspect {
         Log log = new Log("ERROR", System.currentTimeMillis() - currentTime.get());
         log.setExceptionDetail(ThrowableUtil.getStackTrace(e).getBytes());
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
-        logService.save(getUsername(), StringUtils.getBrowser(request), StringUtils.getIp(request), (ProceedingJoinPoint)joinPoint, log);
+        logService.save(getUsername(), StringUtils.getBrowser(request), IpUtils.getIpAddr(request), (ProceedingJoinPoint)joinPoint, log);
     }
 
     public String getUsername() {

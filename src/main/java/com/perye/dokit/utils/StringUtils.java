@@ -20,7 +20,7 @@ import java.util.Date;
 /**
  * 字符串工具类, 继承org.apache.commons.lang3.StringUtils类
  */
-public class StringUtils extends org.apache.commons.lang3.StringUtils{
+public class StringUtils extends org.apache.commons.lang3.StringUtils {
     private static final char SEPARATOR = '_';
 
     private static final String UNKNOWN = "unknown";
@@ -112,85 +112,16 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
     }
 
     /**
-     * 获取ip地址
-     */
-    public static String getIp(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        String comma = ",";
-        String localhost = "127.0.0.1";
-        if (ip.contains(comma)) {
-            ip = ip.split(",")[0];
-        }
-        if  (localhost.equals(ip))  {
-            // 获取本机真正的ip地址
-            try {
-                ip = InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-        }
-        return ip;
-    }
-
-    /**
-     * 根据ip获取详细地址
-     */
-    public static String getCityInfo(String ip) {
-        return "内网IP";
-    }
-    //TODO 以下方法造成 java heap space，内存溢出，待解决
-//    public static String getCityInfo(String ip) {
-//        DbSearcher searcher = null;
-//        try {
-//            String path = "ip2region/ip2region.db";
-//            String name = "ip2region.db";
-//            DbConfig config = new DbConfig();
-//            File file = FileUtil.inputStreamToFile(new ClassPathResource(path).getStream(), name);
-//            searcher = new DbSearcher(config, file.getPath());
-//            Method method;
-//            method = searcher.getClass().getMethod("btreeSearch", String.class);
-//            DataBlock dataBlock;
-//            dataBlock = (DataBlock) method.invoke(searcher, ip);
-//            String address = dataBlock.getRegion().replace("0|","");
-//            char symbol = '|';
-//            if(address.charAt(address.length()-1) == symbol){
-//                address = address.substring(0,address.length() - 1);
-//            }
-//            return address.equals(DoKitConstant.REGION)?"内网IP":address;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }finally {
-//            if(searcher!=null){
-//                try {
-//                    searcher.close();
-//                } catch (IOException ignored) {
-//                }
-//            }
-//
-//        }
-//        return "";
-//    }
-
-    /**
      * 获得当天是周几
      */
-    public static String getWeekDay(){
+    public static String getWeekDay() {
 //        String[] weekDays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+        String[] weekDays = {"星期日" , "星期一" , "星期二" , "星期三" , "星期四" , "星期五" , "星期六"};
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
 
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0){
+        if (w < 0) {
             w = 0;
         }
         return weekDays[w];
@@ -201,4 +132,15 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils{
         Browser browser = userAgent.getBrowser();
         return browser.getName();
     }
+
+    /**
+     * * 判断一个对象是否为空
+     *
+     * @param object Object
+     * @return true：为空 false：非空
+     */
+    public static boolean isNull(Object object) {
+        return object == null;
+    }
+
 }

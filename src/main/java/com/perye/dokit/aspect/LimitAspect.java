@@ -5,6 +5,7 @@ import com.perye.dokit.annotation.Limit;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.utils.RequestHolder;
 import com.perye.dokit.utils.StringUtils;
+import com.perye.dokit.utils.ip.IpUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -47,7 +48,7 @@ public class LimitAspect {
         String key = limit.key();
         if (StringUtils.isEmpty(key)) {
             if (limitType == LimitType.IP) {
-                key = StringUtils.getIp(request);
+                key = IpUtils.getIpAddr(request);
             } else {
                 key = method.getName();
             }
