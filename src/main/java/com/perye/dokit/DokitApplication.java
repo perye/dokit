@@ -4,7 +4,6 @@ import com.perye.dokit.annotation.AnonymousAccess;
 import com.perye.dokit.utils.SpringContextHolder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +45,7 @@ public class DokitApplication {
     @GetMapping("/")
     @AnonymousAccess
     public String index() {
-        return "后端服务已启动";
+        return "Backend service was started!!!";
     }
 
 }
