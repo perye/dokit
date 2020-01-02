@@ -111,6 +111,7 @@ public class LocalStorageServiceImpl implements LocalStorageService {
     }
 
     @Override
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {

@@ -19,7 +19,7 @@ public class AddressUtils {
     public static final String IP_URL = "http://ip.taobao.com/service/getIpInfo.php";
 
     public static String getRealAddressByIP(String ip) {
-        String address = "XX XX XX";
+        String address = "未知";
         // 内网不查询
         if (IpUtils.internalIp(ip)) {
             return "内网IP";
