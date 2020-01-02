@@ -10,10 +10,10 @@
     </parent>
     <groupId>com.perye</groupId>
     <artifactId>dokit</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>dokit</name>
     <packaging>jar</packaging>
-    <description>Demo project for Spring Boot</description>
+    <description>dokit</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

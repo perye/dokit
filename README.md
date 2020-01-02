@@ -280,10 +280,10 @@ sql监控
 ![数据库管理](./asserts/database.png)
 
 定时任务
-![定时任务](./asserts/email.png)
+![定时任务](./asserts/timing.png)
 
 代码生成
-![代码生成](./asserts/email.png)
+![代码生成](./asserts/generator.png)
 
 图床管理
 ![图床管理](./asserts/pictures.png)
