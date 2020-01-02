@@ -11,37 +11,11 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 17/12/2019 17:54:11
+ Date: 02/01/2020 13:20:32
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for alipay_config
--- ----------------------------
-DROP TABLE IF EXISTS `alipay_config`;
-CREATE TABLE `alipay_config` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `app_id` varchar(255) DEFAULT NULL COMMENT '应用ID',
-  `charset` varchar(255) DEFAULT NULL COMMENT '编码',
-  `format` varchar(255) DEFAULT NULL COMMENT '类型 固定格式json',
-  `gateway_url` varchar(255) DEFAULT NULL COMMENT '网关地址',
-  `notify_url` varchar(255) DEFAULT NULL COMMENT '异步回调',
-  `private_key` text COMMENT '私钥',
-  `public_key` text COMMENT '公钥',
-  `return_url` varchar(255) DEFAULT NULL COMMENT '回调地址',
-  `sign_type` varchar(255) DEFAULT NULL COMMENT '签名方式',
-  `sys_service_provider_id` varchar(255) DEFAULT NULL COMMENT '商户号',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of alipay_config
--- ----------------------------
-BEGIN;
-INSERT INTO `alipay_config` VALUES (1, '2016091700532697', 'utf-8', 'JSON', 'https://openapi.alipaydev.com/gateway.do', 'http://api.auauz.net/api/aliPay/notify', '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', 'http://api.auauz.net/api/aliPay/return', 'RSA2', '2088102176044281');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for captcha
@@ -63,7 +37,7 @@ CREATE TABLE `captcha` (
 -- Records of captcha
 -- ----------------------------
 BEGIN;
-INSERT INTO `captcha` VALUES (1, 1, '宋体', 1, 32, 130, 48, 4);
+INSERT INTO `captcha` VALUES (1, 2, 'Times New Roman', 1, 32, 130, 48, 1);
 COMMIT;
 
 -- ----------------------------
@@ -86,7 +60,7 @@ CREATE TABLE `column_config` (
   `remark` varchar(255) DEFAULT NULL,
   `date_annotation` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of column_config
@@ -108,9 +82,6 @@ INSERT INTO `column_config` VALUES (106, 'log', 'address', 'varchar', NULL, '', 
 INSERT INTO `column_config` VALUES (107, 'log', 'browser', 'varchar', NULL, '', b'1', NULL, '', b'1', b'0', NULL, NULL, NULL);
 INSERT INTO `column_config` VALUES (108, 'log', 'is_delete', 'bit', NULL, '', b'1', NULL, '', b'1', b'0', NULL, NULL, NULL);
 INSERT INTO `column_config` VALUES (109, 'log', 'update_time', 'datetime', NULL, '', b'1', NULL, '', b'1', b'0', NULL, NULL, NULL);
-INSERT INTO `column_config` VALUES (110, 'test', 'id', 'int', NULL, 'auto_increment', b'1', 'Input', 'PRI', b'1', b'1', '=', 'id', '');
-INSERT INTO `column_config` VALUES (111, 'test', 'createTime', 'datetime', NULL, '', b'1', 'Date', '', b'1', b'1', 'BetWeen', 'createTime', 'CreationTimestamp');
-INSERT INTO `column_config` VALUES (112, 'test', 'username', 'varchar', NULL, '', b'1', 'Input', '', b'1', b'1', 'Like', 'username', NULL);
 INSERT INTO `column_config` VALUES (131, 'captcha', 'id', 'bigint', NULL, '', b'0', NULL, 'PRI', b'0', b'1', NULL, 'id', NULL);
 INSERT INTO `column_config` VALUES (132, 'captcha', 'type', 'int', 'captcha_type', '', b'1', 'Radio', '', b'1', b'1', NULL, '验证码类型', NULL);
 INSERT INTO `column_config` VALUES (133, 'captcha', 'font_name', 'varchar', 'font_name', '', b'1', 'Radio', '', b'1', b'0', NULL, '字体名字', NULL);
@@ -119,6 +90,10 @@ INSERT INTO `column_config` VALUES (135, 'captcha', 'font_size', 'int', NULL, ''
 INSERT INTO `column_config` VALUES (136, 'captcha', 'width', 'int', NULL, '', b'1', NULL, '', b'1', b'0', NULL, '宽度', NULL);
 INSERT INTO `column_config` VALUES (137, 'captcha', 'height', 'int', NULL, '', b'1', NULL, '', b'1', b'0', NULL, '高度', NULL);
 INSERT INTO `column_config` VALUES (138, 'captcha', 'len', 'int', NULL, '', b'1', NULL, '', b'1', b'0', NULL, '位数', NULL);
+INSERT INTO `column_config` VALUES (149, 'test', 'id', 'int', NULL, 'auto_increment', b'1', 'Input', 'PRI', b'1', b'1', '=', 'id', NULL);
+INSERT INTO `column_config` VALUES (150, 'test', 'email', 'varchar', NULL, '', b'1', 'Input', '', b'1', b'1', 'NotNull', '邮箱', NULL);
+INSERT INTO `column_config` VALUES (151, 'test', 'username', 'varchar', NULL, '', b'1', 'Input', '', b'1', b'1', 'Like', '用户名', NULL);
+INSERT INTO `column_config` VALUES (152, 'test', 'create_time', 'datetime', NULL, '', b'1', '', '', b'1', b'0', 'BetWeen', '创建时间', 'CreationTimestamp');
 COMMIT;
 
 -- ----------------------------
@@ -247,7 +222,7 @@ CREATE TABLE `gen_config` (
 -- Records of gen_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `gen_config` VALUES (4, 'test', 'perye', b'1', 'com.perye.dokit', '/Volumes/perye/dokit/dokit-front/src/views/gentest', '/Volumes/perye/dokit/dokit-front/src/api', NULL, 'genTest');
+INSERT INTO `gen_config` VALUES (4, 'test', 'perye', b'1', 'com.perye.dokit', '/Volumes/perye/dokit/dokit-front/src/views/test', '/Volumes/perye/dokit/dokit-front/src/api', NULL, 'test');
 INSERT INTO `gen_config` VALUES (6, 'captcha', 'perye', b'1', 'com.perye.dokit', '/Volumes/perye/dokit/dokit-front/src/views/system/captcha', '/Volumes/perye/dokit/dokit-front/src/api', NULL, 'captcha');
 COMMIT;
 
@@ -297,7 +272,15 @@ CREATE TABLE `local_storage` (
   `operate` varchar(255) DEFAULT NULL COMMENT '操作人',
   `create_time` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of local_storage
+-- ----------------------------
+BEGIN;
+INSERT INTO `local_storage` VALUES (1, '22-20191227085731221.jpg', '22', 'jpg', '/Volumes/perye/file/dokit/图片/22-20191227085731221.jpg', '图片', '46.30KB', 'admin', '2019-12-27 08:57:31');
+INSERT INTO `local_storage` VALUES (2, '问题排查-20191227085817951.docx', '问题排查', 'docx', '/Volumes/perye/file/dokit/文档/问题排查-20191227085817951.docx', '文档', '332.05KB', 'admin', '2019-12-27 08:58:19');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for log
@@ -319,15 +302,14 @@ CREATE TABLE `log` (
   `is_delete` bit(1) DEFAULT b'0',
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5556 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=7196 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of log
 -- ----------------------------
 BEGIN;
-INSERT INTO `log` VALUES (5553, '2019-12-17 17:53:47', '删除所有INFO日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByInfo()', '{ }', '10.206.103.118', 23, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 17:53:47');
-INSERT INTO `log` VALUES (5554, '2019-12-17 17:53:54', '删除所有ERROR日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByError()', '{ }', '10.206.103.118', 14, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 17:53:54');
-INSERT INTO `log` VALUES (5555, '2019-12-17 17:53:56', '查询在线用户', NULL, 'INFO', 'com.perye.dokit.controller.OnlineController.getAll()', '{ filter: null pageable: Page request [number: 0, size 10, sort: id: DESC] }', '10.206.103.118', 22, 'admin', '内网IP', 'Chrome', b'0', '2019-12-17 17:53:56');
+INSERT INTO `log` VALUES (7194, '2020-01-02 13:18:36', '删除所有INFO日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByInfo()', '{ }', '127.0.0.1', 10, 'admin', '内网IP', 'Chrome', b'0', '2020-01-02 13:18:36');
+INSERT INTO `log` VALUES (7195, '2020-01-02 13:19:14', '查询服务器监控', NULL, 'INFO', 'com.perye.dokit.controller.ServerController.get()', '{ }', '127.0.0.1', 2026, 'admin', '内网IP', 'Chrome', b'0', '2020-01-02 13:19:14');
 COMMIT;
 
 -- ----------------------------
@@ -351,7 +333,7 @@ CREATE TABLE `menu` (
   `type` int(11) DEFAULT NULL COMMENT '类型',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `FKqcf9gem97gqa5qjm4d3elcqt5` (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of menu
@@ -371,7 +353,6 @@ INSERT INTO `menu` VALUES (14, b'0', '邮件工具', 'tools/email/index', 36, 34
 INSERT INTO `menu` VALUES (15, b'0', '富文本', 'components/Editor', 10, 52, 'fwb', 'tinymce', b'0', b'0', 'Editor', '2018-12-27 11:58:25', NULL, 1);
 INSERT INTO `menu` VALUES (16, b'0', '图床管理', 'tools/picture/index', 36, 35, 'image', 'pictures', b'0', b'0', 'Pictures', '2018-12-28 09:36:53', 'pictures:list', 1);
 INSERT INTO `menu` VALUES (18, b'0', '存储管理', 'tools/storage/index', 36, 33, 'qiniu', 'storage', b'0', b'0', 'Storage', '2018-12-31 11:12:15', 'storage:list', 1);
-INSERT INTO `menu` VALUES (19, b'0', '支付宝工具', 'tools/aliPay/index', 36, 37, 'alipay', 'aliPay', b'0', b'0', 'AliPay', '2018-12-31 14:52:38', NULL, 1);
 INSERT INTO `menu` VALUES (28, b'0', '定时任务', 'system/timing/index', 36, 31, 'timing', 'timing', b'0', b'0', 'Timing', '2019-01-07 20:34:40', 'timing:list', 1);
 INSERT INTO `menu` VALUES (30, b'0', '代码生成', 'generator/index', 36, 32, 'dev', 'generator', b'0', b'0', 'GeneratorIndex', '2019-01-11 15:45:55', NULL, 1);
 INSERT INTO `menu` VALUES (32, b'0', '异常日志', 'monitor/log/errorLog', 6, 12, 'error', 'errorLog', b'0', b'0', 'ErrorLog', '2019-01-13 13:49:03', NULL, 1);
@@ -410,7 +391,6 @@ INSERT INTO `menu` VALUES (75, b'0', '任务删除', '', 28, 4, '', '', b'0', b'
 INSERT INTO `menu` VALUES (77, b'0', '上传文件', '', 18, 2, '', '', b'0', b'0', '', '2019-10-29 13:09:09', 'storage:add', 2);
 INSERT INTO `menu` VALUES (78, b'0', '文件编辑', '', 18, 3, '', '', b'0', b'0', '', '2019-10-29 13:09:22', 'storage:edit', 2);
 INSERT INTO `menu` VALUES (79, b'0', '文件删除', '', 18, 4, '', '', b'0', b'0', '', '2019-10-29 13:09:34', 'storage:del', 2);
-INSERT INTO `menu` VALUES (80, b'0', '服务监控', 'monitor/server/index', 6, 14, 'codeConsole', 'server', b'0', b'0', 'ServerMonitor', '2019-11-07 13:06:39', 'server:list', 1);
 INSERT INTO `menu` VALUES (82, b'0', '生成配置', 'generator/config', 36, 33, 'dev', 'generator/config/:tableName', b'1', b'1', 'GeneratorConfig', '2019-11-17 20:08:56', '', 1);
 INSERT INTO `menu` VALUES (83, b'0', '图表库', 'components/Echarts', 10, 50, 'chart', 'echarts', b'1', b'0', 'Echarts', '2019-11-21 09:04:32', '', 1);
 INSERT INTO `menu` VALUES (90, b'0', '运维管理', '', 0, 20, 'mnt', 'mnt', b'0', b'0', 'Mnt', '2019-11-09 10:31:08', NULL, 1);
@@ -432,10 +412,12 @@ INSERT INTO `menu` VALUES (111, b'0', '部署删除', '', 94, 999, '', '', b'0',
 INSERT INTO `menu` VALUES (112, b'0', '数据库新增', '', 98, 999, '', '', b'0', b'0', '', '2019-11-17 11:12:43', 'database:add', 2);
 INSERT INTO `menu` VALUES (113, b'0', '数据库编辑', '', 98, 999, '', '', b'0', b'0', '', '2019-11-17 11:12:58', 'database:edit', 2);
 INSERT INTO `menu` VALUES (114, b'0', '数据库删除', '', 98, 999, '', '', b'0', b'0', '', '2019-11-17 11:13:14', 'database:del', 2);
-INSERT INTO `menu` VALUES (115, b'0', '测试生成', 'gentest/index', 1, 999, 'Steve-Jobs', 'genTest', b'0', b'0', NULL, '2019-11-25 18:10:29', 'test:list', 1);
+INSERT INTO `menu` VALUES (115, b'0', '测试', 'gentest/index', 0, 999, 'Steve-Jobs', 'test', b'0', b'0', NULL, '2019-11-25 18:10:29', 'test:list', 1);
 INSERT INTO `menu` VALUES (116, b'0', '生成预览', 'generator/preview', 36, 999, 'java', 'generator/preview/:tableName', b'1', b'1', 'Preview', '2019-11-26 14:54:36', NULL, 1);
 INSERT INTO `menu` VALUES (117, b'0', '验证码设置', 'system/captcha/index', 118, 999, 'app', 'captcha', b'0', b'0', NULL, '2019-12-17 15:38:35', 'captcha:list', 1);
 INSERT INTO `menu` VALUES (118, b'0', '系统设置', NULL, 0, 999, 'bug', 'setting', b'0', b'0', NULL, '2019-12-17 17:52:05', NULL, 0);
+INSERT INTO `menu` VALUES (119, b'0', '测试新增', NULL, 115, 999, NULL, NULL, b'0', b'0', NULL, '2019-12-27 10:29:15', 'test:add', 2);
+INSERT INTO `menu` VALUES (120, b'0', '系统状态', 'monitor/server', 6, 1, 'codeConsole', 'Server', b'0', b'0', 'Server', '2020-01-02 10:30:43', 'server:list', 1);
 COMMIT;
 
 -- ----------------------------
@@ -456,13 +438,6 @@ CREATE TABLE `mnt_app` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
--- Records of mnt_app
--- ----------------------------
-BEGIN;
-INSERT INTO `mnt_app` VALUES (1, '9514-1.0.jar', '/root/upload', '/root/ops', '/root/backup', 9514, 'cd  /root/ops\nnohup java -jar 9514-1.0.jar >nohup.out 2>&1 &\n', 'mkdir -p /root/ops\nmv -f /root/upload/9514-1.0.jar /root/ops\n', '2019-11-24 20:52:59');
-COMMIT;
-
--- ----------------------------
 -- Table structure for mnt_database
 -- ----------------------------
 DROP TABLE IF EXISTS `mnt_database`;
@@ -472,6 +447,7 @@ CREATE TABLE `mnt_database` (
   `jdbc_url` varchar(255) NOT NULL COMMENT 'jdbc连接',
   `user_name` varchar(255) NOT NULL COMMENT '账号',
   `pwd` varchar(255) NOT NULL COMMENT '密码',
+  `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
@@ -479,7 +455,7 @@ CREATE TABLE `mnt_database` (
 -- Records of mnt_database
 -- ----------------------------
 BEGIN;
-INSERT INTO `mnt_database` VALUES ('39f72aa9f13b42239569f2073e07f8f2', 'test', 'jdbc:log4jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false', 'root', '123456');
+INSERT INTO `mnt_database` VALUES ('39f72aa9f13b42239569f2073e07f8f2', 'test', 'jdbc:log4jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false', 'root', '123456', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -539,43 +515,6 @@ CREATE TABLE `mnt_server` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
--- Records of mnt_server
--- ----------------------------
-BEGIN;
-INSERT INTO `mnt_server` VALUES (1, NULL, 'root', '2019-12-14 23:49:02', '193.112.143.187', ' 腾讯云', 'Hgd19980211', 22);
-COMMIT;
-
--- ----------------------------
--- Table structure for monitor_server
--- ----------------------------
-DROP TABLE IF EXISTS `monitor_server`;
-CREATE TABLE `monitor_server` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `name` varchar(255) DEFAULT NULL COMMENT '名称',
-  `ip` varchar(255) NOT NULL COMMENT 'IP地址',
-  `port` int(11) DEFAULT NULL COMMENT '访问端口',
-  `state` varchar(255) DEFAULT NULL COMMENT '状态',
-  `cpu_rate` float DEFAULT NULL COMMENT 'CPU使用率',
-  `cpu_core` int(11) DEFAULT NULL COMMENT 'CPU内核数',
-  `mem_total` float DEFAULT NULL COMMENT '内存总数',
-  `mem_used` float DEFAULT NULL COMMENT '内存使用量',
-  `disk_total` float DEFAULT NULL COMMENT '磁盘总量',
-  `disk_used` float DEFAULT NULL COMMENT '磁盘使用量',
-  `swap_total` float DEFAULT NULL COMMENT '交换区总量',
-  `swap_used` float DEFAULT NULL COMMENT '交换区使用量',
-  `sort` int(11) DEFAULT NULL COMMENT '排序',
-  `address` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='服务器监控';
-
--- ----------------------------
--- Records of monitor_server
--- ----------------------------
-BEGIN;
-INSERT INTO `monitor_server` VALUES (5, 'dokit', '127.0.0.1', 8080, '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '127.0.0.1');
-COMMIT;
-
--- ----------------------------
 -- Table structure for permission
 -- ----------------------------
 DROP TABLE IF EXISTS `permission`;
@@ -604,14 +543,7 @@ CREATE TABLE `picture` (
   `width` varchar(255) DEFAULT NULL COMMENT '图片宽度',
   `md5code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of picture
--- ----------------------------
-BEGIN;
-INSERT INTO `picture` VALUES (1, '2019-12-16 10:43:46', 'https://sm.ms/delete/k7PDLTqs4rUnuXOgY9zhMN2ebi', '22.jpg', '650', '46.30KB', 'https://i.loli.net/2019/12/16/olvzymnaWcthUSO.jpg', 'admin', '650', 'd5d5ddc90655fc5fa13aeffc310a2105');
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for qiniu_config
@@ -666,7 +598,7 @@ CREATE TABLE `quartz_job` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `quartz_job` VALUES (1, 'visitsTask', '0 0 0 * * ?', b'0', '更新访客记录', 'run', NULL, '每日0点创建新的访客记录', '2019-01-08 14:53:31');
-INSERT INTO `quartz_job` VALUES (2, 'testTask', '0/5 * * * * ?', b'1', '测试1', 'run1', '5555', '带参测试，多参使用json', NULL);
+INSERT INTO `quartz_job` VALUES (2, 'testTask', '0/5 * * * * ?', b'1', '测试1', 'run1', 'hhh', '带参测试，多参使用json', NULL);
 INSERT INTO `quartz_job` VALUES (3, 'testTask', '0/5 * * * * ?', b'1', '测试', 'run', '', '不带参测试', '2019-09-26 16:44:39');
 COMMIT;
 
@@ -686,7 +618,7 @@ CREATE TABLE `quartz_log` (
   `params` varchar(255) DEFAULT NULL,
   `time` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of quartz_log
@@ -707,6 +639,14 @@ INSERT INTO `quartz_log` VALUES (17, 'testTask', '2019-12-08 14:01:30', '0/5 * *
 INSERT INTO `quartz_log` VALUES (18, 'testTask', '2019-12-08 14:03:15', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', '5555', 18);
 INSERT INTO `quartz_log` VALUES (19, 'testTask', '2019-12-08 14:03:20', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', '5555', 0);
 INSERT INTO `quartz_log` VALUES (20, 'visitsTask', '2019-12-15 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 35);
+INSERT INTO `quartz_log` VALUES (21, 'testTask', '2019-12-26 11:14:05', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', '5555', 20);
+INSERT INTO `quartz_log` VALUES (22, 'testTask', '2019-12-26 11:14:07', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', '5555', 0);
+INSERT INTO `quartz_log` VALUES (23, 'testTask', '2019-12-26 11:14:10', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', '5555', 0);
+INSERT INTO `quartz_log` VALUES (24, 'testTask', '2019-12-26 11:14:15', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', '5555', 1);
+INSERT INTO `quartz_log` VALUES (25, 'testTask', '2019-12-26 11:14:26', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', 'hhh', 1);
+INSERT INTO `quartz_log` VALUES (26, 'testTask', '2019-12-26 11:14:30', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', 'hhh', 1);
+INSERT INTO `quartz_log` VALUES (27, 'testTask', '2019-12-26 11:14:35', '0/5 * * * * ?', NULL, b'1', '测试1', 'run1', 'hhh', 1);
+INSERT INTO `quartz_log` VALUES (28, 'visitsTask', '2020-01-02 00:00:01', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 160);
 COMMIT;
 
 -- ----------------------------
@@ -785,7 +725,6 @@ INSERT INTO `roles_menus` VALUES (14, 1);
 INSERT INTO `roles_menus` VALUES (15, 1);
 INSERT INTO `roles_menus` VALUES (16, 1);
 INSERT INTO `roles_menus` VALUES (18, 1);
-INSERT INTO `roles_menus` VALUES (19, 1);
 INSERT INTO `roles_menus` VALUES (28, 1);
 INSERT INTO `roles_menus` VALUES (30, 1);
 INSERT INTO `roles_menus` VALUES (32, 1);
@@ -824,7 +763,6 @@ INSERT INTO `roles_menus` VALUES (75, 1);
 INSERT INTO `roles_menus` VALUES (77, 1);
 INSERT INTO `roles_menus` VALUES (78, 1);
 INSERT INTO `roles_menus` VALUES (79, 1);
-INSERT INTO `roles_menus` VALUES (80, 1);
 INSERT INTO `roles_menus` VALUES (82, 1);
 INSERT INTO `roles_menus` VALUES (83, 1);
 INSERT INTO `roles_menus` VALUES (87, 1);
@@ -855,6 +793,8 @@ INSERT INTO `roles_menus` VALUES (115, 1);
 INSERT INTO `roles_menus` VALUES (116, 1);
 INSERT INTO `roles_menus` VALUES (117, 1);
 INSERT INTO `roles_menus` VALUES (118, 1);
+INSERT INTO `roles_menus` VALUES (119, 1);
+INSERT INTO `roles_menus` VALUES (120, 1);
 INSERT INTO `roles_menus` VALUES (1, 2);
 INSERT INTO `roles_menus` VALUES (2, 2);
 INSERT INTO `roles_menus` VALUES (3, 2);
@@ -868,7 +808,6 @@ INSERT INTO `roles_menus` VALUES (14, 2);
 INSERT INTO `roles_menus` VALUES (15, 2);
 INSERT INTO `roles_menus` VALUES (16, 2);
 INSERT INTO `roles_menus` VALUES (18, 2);
-INSERT INTO `roles_menus` VALUES (19, 2);
 INSERT INTO `roles_menus` VALUES (28, 2);
 INSERT INTO `roles_menus` VALUES (30, 2);
 INSERT INTO `roles_menus` VALUES (33, 2);
@@ -907,17 +846,19 @@ CREATE TABLE `roles_permissions` (
 DROP TABLE IF EXISTS `test`;
 CREATE TABLE `test` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `createTime` datetime DEFAULT NULL COMMENT '创建日期',
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `create_time` datetime NOT NULL,
+  `email` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮箱',
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户名',
+  `create_time` datetime NOT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of test
 -- ----------------------------
 BEGIN;
-INSERT INTO `test` VALUES (1, NULL, 'perye', '2019-12-17 14:35:21');
+INSERT INTO `test` VALUES (1, '11143526@qq.com', 'perye', '2019-12-31 09:38:36');
+INSERT INTO `test` VALUES (2, '', '23231', '2019-12-27 10:49:41');
+INSERT INTO `test` VALUES (3, '1114223526@qq.com', '213', '2019-12-31 09:32:04');
 COMMIT;
 
 -- ----------------------------
@@ -953,10 +894,10 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, NULL, '11143521@qq.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'admin', 1, '15759115111', 11, '2018-08-23 09:11:56', '2019-12-08 00:09:03', 'admin', '男');
-INSERT INTO `user` VALUES (3, NULL, 'test@dokit.net', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'test', 2, '17777777777', 12, '2018-12-27 20:05:26', '2019-04-01 09:15:24', NULL, NULL);
-INSERT INTO `user` VALUES (6, NULL, '111435262@qq.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'perye', 2, '15759111153', 11, '2019-12-08 11:44:38', NULL, 'perye', NULL);
-INSERT INTO `user` VALUES (7, NULL, '15759115151@dokit.com', 1, '$2a$10$NtVHb8s2I4TojxEUDUqx5e/NNiutgByfLUd3xL1H.74Wf.827XRHu', 'perye_user', 5, '15759115151', 14, '2019-12-17 15:01:43', NULL, 'perye_user', '男');
+INSERT INTO `user` VALUES (1, 1, '11143526@qq.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'admin', 1, '15759115111', 11, '2018-08-23 09:11:56', '2019-12-08 00:09:03', 'admin', '男');
+INSERT INTO `user` VALUES (3, NULL, 'test@dokit.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'test', 2, '17777777777', 12, '2018-12-27 20:05:26', '2019-04-01 09:15:24', 'test', '女');
+INSERT INTO `user` VALUES (6, NULL, '111435262@qq.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'perye', 2, '15759111153', 11, '2019-12-08 11:44:38', NULL, 'perye', '男');
+INSERT INTO `user` VALUES (7, NULL, '15759115151@dokit.com', 1, '$2a$10$NtVHb8s2I4TojxEUDUqx5e/NNiutgByfLUd3xL1H.74Wf.827XRHu', 'perye_user', 5, '15759115151', 14, '2019-12-17 15:01:43', NULL, 'perye', '男');
 COMMIT;
 
 -- ----------------------------
@@ -970,7 +911,14 @@ CREATE TABLE `user_avatar` (
   `size` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of user_avatar
+-- ----------------------------
+BEGIN;
+INSERT INTO `user_avatar` VALUES (1, '22-20191218093347675.jpg', '/Volumes/perye/file/dokit/avatar/22-20191218093347675.jpg', '46.30KB', '2019-12-18 21:33:48');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for users_roles
@@ -1034,7 +982,7 @@ CREATE TABLE `visits` (
   `week_day` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `UK_11aksgq87euk9bcyeesfs4vtp` (`date`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of visits
@@ -1050,6 +998,16 @@ INSERT INTO `visits` VALUES (114, '2019-12-14 15:21:41', '2019-12-14', 2, 6, '�
 INSERT INTO `visits` VALUES (115, '2019-12-15 00:00:00', '2019-12-15', 3, 7, '星期日');
 INSERT INTO `visits` VALUES (116, '2019-12-16 10:04:22', '2019-12-16', 2, 8, '星期一');
 INSERT INTO `visits` VALUES (117, '2019-12-17 08:58:45', '2019-12-17', 1, 16, '星期二');
+INSERT INTO `visits` VALUES (118, '2019-12-18 09:13:55', '2019-12-18', 2, 9, '星期三');
+INSERT INTO `visits` VALUES (119, '2019-12-19 11:07:52', '2019-12-19', 1, 3, '星期四');
+INSERT INTO `visits` VALUES (120, '2019-12-22 00:52:25', '2019-12-22', 1, 3, '星期日');
+INSERT INTO `visits` VALUES (121, '2019-12-25 13:42:58', '2019-12-25', 1, 18, '星期三');
+INSERT INTO `visits` VALUES (122, '2019-12-26 09:20:01', '2019-12-26', 1, 3, '星期四');
+INSERT INTO `visits` VALUES (123, '2019-12-27 08:49:15', '2019-12-27', 2, 8, '星期五');
+INSERT INTO `visits` VALUES (124, '2019-12-30 17:38:22', '2019-12-30', 1, 2, '星期一');
+INSERT INTO `visits` VALUES (125, '2019-12-31 09:12:52', '2019-12-31', 3, 9, '星期二');
+INSERT INTO `visits` VALUES (126, '2020-01-01 14:11:28', '2020-01-01', 1, 5, '星期三');
+INSERT INTO `visits` VALUES (127, '2020-01-02 00:00:01', '2020-01-02', 1, 8, '星期四');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
