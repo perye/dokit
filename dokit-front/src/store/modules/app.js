@@ -6,7 +6,7 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  size: Cookies.get('size') || 'small'
+  size: Cookies.get('size') || 'medium'
 }
 
 const mutations = {

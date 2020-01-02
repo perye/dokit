@@ -12,6 +12,8 @@ import 'mavon-editor/dist/css/index.css'
 // 数据字典
 import dict from './components/Dict'
 
+import './utils/error-log' // error log
+
 // 权限指令
 import permission from './components/Permission'
 import './assets/styles/element-variables.scss'

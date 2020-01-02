@@ -103,7 +103,7 @@
     <div>
       <el-divider content-position="left">Java虚拟机信息</el-divider>
       <el-row class="panel-group" :gutter="40">
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-people">
               <svg-icon icon-class="visits" class-name="card-panel-icon"/>
@@ -114,7 +114,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-message">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -125,7 +125,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-money">
               <svg-icon icon-class="visits" class-name="card-panel-icon"/>
@@ -138,7 +138,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-shopping">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -149,7 +149,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-shopping">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -160,7 +160,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-shopping">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -171,7 +171,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-shopping">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -182,7 +182,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-shopping">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -199,7 +199,7 @@
     <div>
       <el-divider content-position="left">系统相关信息</el-divider>
       <el-row class="panel-group" :gutter="40">
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="5">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-people">
               <svg-icon icon-class="visits" class-name="card-panel-icon"/>
@@ -210,7 +210,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="5">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-message">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -221,7 +221,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="5">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-money">
               <svg-icon icon-class="visits" class-name="card-panel-icon"/>
@@ -232,7 +232,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="5">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-shopping">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -243,7 +243,7 @@
             </div>
           </div>
         </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="4">
+        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="8">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-shopping">
               <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
@@ -256,79 +256,6 @@
         </el-col>
       </el-row>
     </div>
-
-    <div>
-      <el-divider content-position="left">系统文件相关信息</el-divider>
-      <el-row class="panel-group" :gutter="40" v-for="item in sysFiles">
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="4">
-          <div class="card-panel">
-            <div class="card-panel-icon-wrapper icon-people">
-              <svg-icon icon-class="visits" class-name="card-panel-icon"/>
-            </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">盘符路径</div>
-              <span>{{item.dirName}}</span>
-            </div>
-          </div>
-        </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="4">
-          <div class="card-panel">
-            <div class="card-panel-icon-wrapper icon-message">
-              <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
-            </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">盘符类型</div>
-              <span>{{item.sysTypeName}}</span>
-            </div>
-          </div>
-        </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="4">
-          <div class="card-panel">
-            <div class="card-panel-icon-wrapper icon-shopping">
-              <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
-            </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">总大小</div>
-              <span>{{item.total}}</span>
-            </div>
-          </div>
-        </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="4">
-          <div class="card-panel">
-            <div class="card-panel-icon-wrapper icon-shopping">
-              <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
-            </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">剩余大小</div>
-              <span>{{item.free}}</span>
-            </div>
-          </div>
-        </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="4">
-          <div class="card-panel">
-            <div class="card-panel-icon-wrapper icon-shopping">
-              <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
-            </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">已经使用量</div>
-              <span>{{item.used}}</span>
-            </div>
-          </div>
-        </el-col>
-        <el-col class="card-panel-col" :xs="12" :sm="12" :lg="4">
-          <div class="card-panel">
-            <div class="card-panel-icon-wrapper icon-shopping">
-              <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
-            </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">资源的使用率</div>
-              <span>{{item.usage}}%</span>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-
   </div>
 </template>
 
@@ -355,18 +282,7 @@
         cpu: {cpuNum: 0, sys: 0, used: 0, free: 0},
         mem: {total: 0, used: 0, free: 0, usage: 0},
         jvm: {name: "", home: "", version: "", startTime: "", runTime: "", total: 0, max: 0, free: 0, used: 0, usage: 0},
-        sys: {computerName: "", computerIp: "", userDir: "", osName: "", osArch: ""},
-        sysFiles:[
-          {
-            dirName: "",
-            sysTypeName: "",
-            typeName: "",
-            total: "",
-            free: "",
-            used: "",
-            usage: ""
-          }
-        ]
+        sys: {computerName: "", computerIp: "", userDir: "", osName: "", osArch: ""}
       }
     },
     mounted() {
@@ -398,9 +314,6 @@
         this.sys.userDir = res.sys.userDir
         this.sys.osName = res.sys.osName
         this.sys.osArch = res.sys.osArch
-
-        this.sysFiles = res.sysFiles
-
       })
     }
   }
