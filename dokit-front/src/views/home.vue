@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-editor-container">
+      <github class="github-corner" />
       <panel-group />
       <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
         <line-chart />
@@ -10,6 +11,7 @@
 </template>
 
 <script>
+import Github from '@/components/Github'
 import PanelGroup from './dashboard/PanelGroup'
 import LineChart from './dashboard/LineChart'
 import { count } from '@/api/visits'
@@ -22,6 +24,7 @@ count().then(res => {
 export default {
   name: 'Dashboard',
   components: {
+    Github,
     PanelGroup,
     LineChart
   }
@@ -30,13 +33,27 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .dashboard-editor-container {
-    padding: 18px 22px 22px 22px;
+    padding: 32px;
     background-color: rgb(240, 242, 245);
+    position: relative;
+
+    .github-corner {
+      position: absolute;
+      top: 0px;
+      border: 0;
+      right: 0;
+    }
 
     .chart-wrapper {
       background: #fff;
       padding: 16px 16px 0;
       margin-bottom: 32px;
+    }
+  }
+
+  @media (max-width:1024px) {
+    .chart-wrapper {
+      padding: 8px;
     }
   }
 </style>
