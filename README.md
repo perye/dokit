@@ -18,6 +18,12 @@ Just do kit!
 - 用户名:admin
 - 密码:123456
 
+项目地址
+
+|github|码云|
+| ------ | ------ | 
+|[https://github.com/Perye/dokit](https://github.com/Perye/dokit)|[https://gitee.com/hongguodong/dokit](https://gitee.com/hongguodong/dokit)|
+
 ##### 后端技术
 
 | 技术                 | 说明                | 
