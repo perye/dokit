@@ -31,7 +31,7 @@
       <!--表格渲染-->
       <el-table v-loading="loading" :data="data" style="width: 100%;">
         <el-table-column label="所属字典">
-          <template slot-scope="scope">
+          <template>
             {{ dictName }}
           </template>
         </el-table-column>

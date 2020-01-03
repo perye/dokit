@@ -79,6 +79,8 @@ public class EmailServiceImpl implements EmailService {
                     .setTos(emailVo.getTos().toArray(new String[size]))
                     .setTitle(emailVo.getSubject())
                     .setContent(content)
+                    //抄送给自己防止邮箱发送出现554
+                    .setCcs(emailConfig.getFromUser())
                     .setHtml(true)
                     //关闭session
                     .setUseGlobalSession(false)

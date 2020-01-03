@@ -4,44 +4,44 @@
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="visits" class-name="card-panel-icon"/>
+          <svg-icon icon-class="visits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">日流量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.newVisits" :duration="2600"/>
+          <count-to class="card-panel-num" :start-val="0" :end-val="count.newVisits" :duration="2600" />
         </div>
       </div>
     </el-col>
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
+          <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">日IP量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.newIp" :duration="3000"/>
+          <count-to class="card-panel-num" :start-val="0" :end-val="count.newIp" :duration="3000" />
         </div>
       </div>
     </el-col>
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="visits" class-name="card-panel-icon"/>
+          <svg-icon icon-class="visits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">周流量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.recentVisits" :duration="3200"/>
+          <count-to class="card-panel-num" :start-val="0" :end-val="count.recentVisits" :duration="3200" />
         </div>
       </div>
     </el-col>
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="ipvisits" class-name="card-panel-icon"/>
+          <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">周IP量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.recentIp" :duration="3600"/>
+          <count-to class="card-panel-num" :start-val="0" :end-val="count.recentIp" :duration="3600" />
         </div>
       </div>
     </el-col>
@@ -49,27 +49,27 @@
 </template>
 
 <script>
-  import CountTo from 'vue-count-to'
-  import {get} from '@/api/visits'
+import CountTo from 'vue-count-to'
+import { get } from '@/api/visits'
 
-  export default {
-    components: {
-      CountTo
-    },
-    data() {
-      return {
-        count: {newIp: 0, newVisits: 0, recentIp: 0, recentVisits: 0}
-      }
-    },
-    mounted() {
-      get().then(res => {
-        this.count.newIp = res.newIp
-        this.count.newVisits = res.newVisits
-        this.count.recentIp = res.recentIp
-        this.count.recentVisits = res.recentVisits
-      })
+export default {
+  components: {
+    CountTo
+  },
+  data() {
+    return {
+      count: { newIp: 0, newVisits: 0, recentIp: 0, recentVisits: 0 }
     }
+  },
+  mounted() {
+    get().then(res => {
+      this.count.newIp = res.newIp
+      this.count.newVisits = res.newVisits
+      this.count.recentIp = res.recentIp
+      this.count.recentVisits = res.recentVisits
+    })
   }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

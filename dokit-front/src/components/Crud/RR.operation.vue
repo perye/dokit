@@ -15,7 +15,7 @@
     ) 重置
 </template>
 <script>
-  import { crud } from '@crud/crud'
+import { crud } from '@crud/crud'
 export default {
   mixins: [crud()],
   props: {

@@ -103,7 +103,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
-            updateEmail(this.form).then(res => {
+          updateEmail(this.form).then(res => {
             this.loading = false
             this.resetForm()
             this.$notify({

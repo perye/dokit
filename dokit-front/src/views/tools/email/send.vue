@@ -49,6 +49,7 @@ export default {
   },
   mounted() {
     const _this = this
+    var editor = new E(this.$refs.editor)
     // 自定义菜单配置
     editor.customConfig.zIndex = 10
     // 文件上传

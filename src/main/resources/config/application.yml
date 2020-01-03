@@ -67,6 +67,6 @@ xss:
   # 过滤开关
   enabled: true
   # 排除链接（多个用逗号分隔）
-  excludes:
+  excludes: /api/email
   # 匹配链接
   urlPatterns: /api/*
