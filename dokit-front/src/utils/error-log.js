@@ -33,5 +33,14 @@ if (checkNeed()) {
     })
   }
 
-
+  Vue.config.warnHandler = function(msg, vm, trace, a) {
+    Vue.nextTick(() => {
+      store.dispatch('errorLog/addWarnLog', {
+        msg,
+        vm,
+        trace,
+        url: window.location.href
+      })
+    })
+  }
 }

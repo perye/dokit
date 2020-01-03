@@ -1,13 +1,21 @@
 const state = {
-  logs: []
+  errorLog: [],
+  warnLog: []
 }
 
 const mutations = {
   ADD_ERROR_LOG: (state, log) => {
-    state.logs.push(log)
+    state.errorLog.push(log)
   },
   CLEAR_ERROR_LOG: (state) => {
-    state.logs.splice(0)
+    state.errorLog.splice(0)
+  },
+
+  ADD_WARN_LOG: (state, log) => {
+    state.warnLog.push(log)
+  },
+  CLEAR_WARN_LOG: (state) => {
+    state.warnLog.splice(0)
   }
 }
 
@@ -17,6 +25,13 @@ const actions = {
   },
   clearErrorLog({ commit }) {
     commit('CLEAR_ERROR_LOG')
+  },
+
+  addWarnLog({ commit }, log) {
+    commit('ADD_WARN_LOG', log)
+  },
+  clearWarnLog({ commit }) {
+    commit('CLEAR_WARN_LOG')
   }
 }
 

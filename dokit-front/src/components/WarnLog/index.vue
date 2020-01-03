@@ -1,30 +1,30 @@
 <template>
-  <div v-if="errorLogs.length>0">
+  <div v-if="warnLogs.length>0">
     <el-badge :is-dot="true" style="line-height: 25px;margin-top: -5px;" @click.native="dialogTableVisible=true">
-      <el-button style="padding: 8px 10px;" size="small" type="danger">
+      <el-button style="padding: 8px 10px;" size="small" type="warning">
         <svg-icon icon-class="bug" />
       </el-button>
     </el-badge>
 
     <el-dialog :visible.sync="dialogTableVisible" width="80%" append-to-body>
       <div slot="title">
-        <span style="padding-right: 10px;">错误日志收集</span>
+        <span style="padding-right: 10px;">警告日志收集</span>
         <el-button size="mini" type="primary" icon="el-icon-delete" @click="clearAll">Clear All</el-button>
       </div>
-      <el-table :data="errorLogs" border>
+      <el-table :data="warnLogs" border>
         <el-table-column label="Message">
           <template slot-scope="{row}">
             <div>
               <span class="message-title">Msg:</span>
               <el-tag type="danger">
-                {{ row.err.message }}
+                {{ row.msg }}
               </el-tag>
             </div>
             <br>
             <div>
               <span class="message-title" style="padding-right: 10px;">Info: </span>
               <el-tag type="warning">
-                {{ row.vm.$vnode.tag }} error in {{ row.info }}
+                {{ row.vm.$vnode.tag }}
               </el-tag>
             </div>
             <br>
@@ -38,7 +38,7 @@
         </el-table-column>
         <el-table-column label="Stack">
           <template slot-scope="scope">
-            {{ scope.row.err.stack }}
+            {{ scope.row.trace }}
           </template>
         </el-table-column>
       </el-table>
@@ -48,21 +48,22 @@
 
 <script>
 export default {
-  name: 'ErrorLog',
+  name: 'WarnLog',
   data() {
     return {
       dialogTableVisible: false
     }
   },
   computed: {
-    errorLogs() {
-      return this.$store.getters.errorLogs
+    warnLogs() {
+      return this.$store.getters.warnLogs
     }
+
   },
   methods: {
     clearAll() {
       this.dialogTableVisible = false
-      this.$store.dispatch('errorLog/clearErrorLog')
+      this.$store.dispatch('errorLog/clearWarnLog')
     }
   }
 }

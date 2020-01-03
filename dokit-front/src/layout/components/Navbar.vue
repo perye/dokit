@@ -8,6 +8,7 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
         <error-log class="errLog-container right-menu-item hover-effect" />
+        <warn-log class="errLog-container right-menu-item hover-effect" />
         <el-tooltip content="全屏缩放" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
         </el-tooltip>
@@ -47,6 +48,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import ErrorLog from '@/components/ErrorLog'
+import WarnLog from '@/components/WarnLog'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
@@ -57,6 +59,7 @@ export default {
     Breadcrumb,
     Hamburger,
     ErrorLog,
+    WarnLog,
     Screenfull,
     SizeSelect,
     Search
