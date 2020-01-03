@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 02/01/2020 13:20:32
+ Date: 03/01/2020 11:10:28
 */
 
 SET NAMES utf8mb4;
@@ -199,7 +199,14 @@ CREATE TABLE `email_config` (
   `port` varchar(255) DEFAULT NULL COMMENT '端口',
   `user` varchar(255) DEFAULT NULL COMMENT '发件者用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of email_config
+-- ----------------------------
+BEGIN;
+INSERT INTO `email_config` VALUES (1, 'dokitadmin@163.com', 'smtp.163.com', '39A3136EF72412D9D54D85A74BAC2619', '465', 'dokit');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for gen_config
@@ -272,14 +279,13 @@ CREATE TABLE `local_storage` (
   `operate` varchar(255) DEFAULT NULL COMMENT '操作人',
   `create_time` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of local_storage
 -- ----------------------------
 BEGIN;
-INSERT INTO `local_storage` VALUES (1, '22-20191227085731221.jpg', '22', 'jpg', '/Volumes/perye/file/dokit/图片/22-20191227085731221.jpg', '图片', '46.30KB', 'admin', '2019-12-27 08:57:31');
-INSERT INTO `local_storage` VALUES (2, '问题排查-20191227085817951.docx', '问题排查', 'docx', '/Volumes/perye/file/dokit/文档/问题排查-20191227085817951.docx', '文档', '332.05KB', 'admin', '2019-12-27 08:58:19');
+INSERT INTO `local_storage` VALUES (1, '22-20191227085731221.jpg', '221', 'jpg', '/Volumes/perye/file/dokit/图片/22-20191227085731221.jpg', '图片', '46.30KB', 'admin', '2019-12-27 08:57:31');
 COMMIT;
 
 -- ----------------------------
@@ -302,14 +308,49 @@ CREATE TABLE `log` (
   `is_delete` bit(1) DEFAULT b'0',
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7196 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=7590 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of log
 -- ----------------------------
 BEGIN;
-INSERT INTO `log` VALUES (7194, '2020-01-02 13:18:36', '删除所有INFO日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByInfo()', '{ }', '127.0.0.1', 10, 'admin', '内网IP', 'Chrome', b'0', '2020-01-02 13:18:36');
-INSERT INTO `log` VALUES (7195, '2020-01-02 13:19:14', '查询服务器监控', NULL, 'INFO', 'com.perye.dokit.controller.ServerController.get()', '{ }', '127.0.0.1', 2026, 'admin', '内网IP', 'Chrome', b'0', '2020-01-02 13:19:14');
+INSERT INTO `log` VALUES (7553, '2020-01-03 11:05:49', '删除所有INFO日志', NULL, 'INFO', 'com.perye.dokit.controller.LogController.delAllByInfo()', '{ }', '127.0.0.1', 26, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:05:49');
+INSERT INTO `log` VALUES (7554, '2020-01-03 11:05:53', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 157, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:05:53');
+INSERT INTO `log` VALUES (7555, '2020-01-03 11:05:53', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 161, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:05:53');
+INSERT INTO `log` VALUES (7556, '2020-01-03 11:05:53', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 265, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:05:53');
+INSERT INTO `log` VALUES (7557, '2020-01-03 11:05:53', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 16, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:05:53');
+INSERT INTO `log` VALUES (7558, '2020-01-03 11:06:02', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 3, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:06:02');
+INSERT INTO `log` VALUES (7559, '2020-01-03 11:06:03', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 14, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:06:03');
+INSERT INTO `log` VALUES (7560, '2020-01-03 11:06:03', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 13, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:06:03');
+INSERT INTO `log` VALUES (7561, '2020-01-03 11:06:03', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 7, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:06:03');
+INSERT INTO `log` VALUES (7562, '2020-01-03 11:07:05', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 45, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:05');
+INSERT INTO `log` VALUES (7563, '2020-01-03 11:07:05', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 10, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:05');
+INSERT INTO `log` VALUES (7564, '2020-01-03 11:07:05', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 86, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:05');
+INSERT INTO `log` VALUES (7565, '2020-01-03 11:07:05', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 19, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:05');
+INSERT INTO `log` VALUES (7566, '2020-01-03 11:07:09', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 3, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:09');
+INSERT INTO `log` VALUES (7567, '2020-01-03 11:07:09', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 14, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:09');
+INSERT INTO `log` VALUES (7568, '2020-01-03 11:07:09', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 14, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:09');
+INSERT INTO `log` VALUES (7569, '2020-01-03 11:07:09', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 14, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:09');
+INSERT INTO `log` VALUES (7570, '2020-01-03 11:07:32', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 5, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:32');
+INSERT INTO `log` VALUES (7571, '2020-01-03 11:07:32', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 17, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:32');
+INSERT INTO `log` VALUES (7572, '2020-01-03 11:07:32', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 24, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:32');
+INSERT INTO `log` VALUES (7573, '2020-01-03 11:07:32', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 13, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:32');
+INSERT INTO `log` VALUES (7574, '2020-01-03 11:07:42', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 6, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:42');
+INSERT INTO `log` VALUES (7575, '2020-01-03 11:07:42', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 26, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:42');
+INSERT INTO `log` VALUES (7576, '2020-01-03 11:07:42', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 40, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:42');
+INSERT INTO `log` VALUES (7577, '2020-01-03 11:07:42', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 22, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:42');
+INSERT INTO `log` VALUES (7578, '2020-01-03 11:07:52', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 14, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:52');
+INSERT INTO `log` VALUES (7579, '2020-01-03 11:07:52', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 49, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:52');
+INSERT INTO `log` VALUES (7580, '2020-01-03 11:07:52', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 63, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:52');
+INSERT INTO `log` VALUES (7581, '2020-01-03 11:07:52', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 23, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:52');
+INSERT INTO `log` VALUES (7582, '2020-01-03 11:07:54', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 4, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:54');
+INSERT INTO `log` VALUES (7583, '2020-01-03 11:07:54', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 19, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:54');
+INSERT INTO `log` VALUES (7584, '2020-01-03 11:07:54', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 20, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:54');
+INSERT INTO `log` VALUES (7585, '2020-01-03 11:07:54', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 8, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:54');
+INSERT INTO `log` VALUES (7586, '2020-01-03 11:07:55', '查询字典详情', NULL, 'INFO', 'com.perye.dokit.controller.DictDetailController.getDictDetails()', '{ criteria: DictDetailQueryCriteria(label=null, dictName=user_status) pageable: Page request [number: 0, size 2000, sort: sort: ASC] }', '127.0.0.1', 5, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:55');
+INSERT INTO `log` VALUES (7587, '2020-01-03 11:07:55', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 22, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:55');
+INSERT INTO `log` VALUES (7588, '2020-01-03 11:07:55', '查询部门', NULL, 'INFO', 'com.perye.dokit.controller.DeptController.getDepts()', '{ criteria: DeptQueryCriteria(ids=[], name=null, enabled=null, pid=null, createTime=null) }', '127.0.0.1', 36, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:55');
+INSERT INTO `log` VALUES (7589, '2020-01-03 11:07:56', '查询用户', NULL, 'INFO', 'com.perye.dokit.controller.UserController.getUsers()', '{ criteria: UserQueryCriteria(id=null, deptIds=[], blurry=null, enabled=null, deptId=null, createTime=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '127.0.0.1', 9, 'admin', '内网IP', 'Chrome', b'0', '2020-01-03 11:07:56');
 COMMIT;
 
 -- ----------------------------
@@ -333,7 +374,7 @@ CREATE TABLE `menu` (
   `type` int(11) DEFAULT NULL COMMENT '类型',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `FKqcf9gem97gqa5qjm4d3elcqt5` (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of menu
@@ -412,12 +453,14 @@ INSERT INTO `menu` VALUES (111, b'0', '部署删除', '', 94, 999, '', '', b'0',
 INSERT INTO `menu` VALUES (112, b'0', '数据库新增', '', 98, 999, '', '', b'0', b'0', '', '2019-11-17 11:12:43', 'database:add', 2);
 INSERT INTO `menu` VALUES (113, b'0', '数据库编辑', '', 98, 999, '', '', b'0', b'0', '', '2019-11-17 11:12:58', 'database:edit', 2);
 INSERT INTO `menu` VALUES (114, b'0', '数据库删除', '', 98, 999, '', '', b'0', b'0', '', '2019-11-17 11:13:14', 'database:del', 2);
-INSERT INTO `menu` VALUES (115, b'0', '测试', 'gentest/index', 0, 999, 'Steve-Jobs', 'test', b'0', b'0', NULL, '2019-11-25 18:10:29', 'test:list', 1);
+INSERT INTO `menu` VALUES (115, b'0', '测试生成', 'test/gen/index', 121, 999, 'Steve-Jobs', 'gen', b'0', b'0', NULL, '2019-11-25 18:10:29', 'test:list', 1);
 INSERT INTO `menu` VALUES (116, b'0', '生成预览', 'generator/preview', 36, 999, 'java', 'generator/preview/:tableName', b'1', b'1', 'Preview', '2019-11-26 14:54:36', NULL, 1);
 INSERT INTO `menu` VALUES (117, b'0', '验证码设置', 'system/captcha/index', 118, 999, 'app', 'captcha', b'0', b'0', NULL, '2019-12-17 15:38:35', 'captcha:list', 1);
 INSERT INTO `menu` VALUES (118, b'0', '系统设置', NULL, 0, 999, 'bug', 'setting', b'0', b'0', NULL, '2019-12-17 17:52:05', NULL, 0);
 INSERT INTO `menu` VALUES (119, b'0', '测试新增', NULL, 115, 999, NULL, NULL, b'0', b'0', NULL, '2019-12-27 10:29:15', 'test:add', 2);
 INSERT INTO `menu` VALUES (120, b'0', '系统状态', 'monitor/server', 6, 1, 'codeConsole', 'Server', b'0', b'0', 'Server', '2020-01-02 10:30:43', 'server:list', 1);
+INSERT INTO `menu` VALUES (121, b'0', '功能测试', NULL, 0, 999, 'dev', 'test', b'0', b'0', NULL, '2020-01-03 09:09:35', NULL, 0);
+INSERT INTO `menu` VALUES (122, b'0', '错误收集', 'test/error/index', 121, 999, 'error', 'error', b'0', b'0', 'Error', '2020-01-03 09:15:08', NULL, 1);
 COMMIT;
 
 -- ----------------------------
@@ -469,7 +512,7 @@ CREATE TABLE `mnt_deploy` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `FK6sy157pseoxx4fmcqr1vnvvhy` (`app_id`) USING BTREE,
   CONSTRAINT `FK6sy157pseoxx4fmcqr1vnvvhy` FOREIGN KEY (`app_id`) REFERENCES `mnt_app` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Table structure for mnt_deploy_history
@@ -512,7 +555,7 @@ CREATE TABLE `mnt_server` (
   `password` varchar(255) DEFAULT NULL,
   `port` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for permission
@@ -543,7 +586,14 @@ CREATE TABLE `picture` (
   `width` varchar(255) DEFAULT NULL COMMENT '图片宽度',
   `md5code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of picture
+-- ----------------------------
+BEGIN;
+INSERT INTO `picture` VALUES (1, '2020-01-03 10:28:14', 'https://sm.ms/delete/BoXnrQYpeic6HVCDzJ7mKvNLMd', '22.jpg', '650', '46.30KB', 'https://i.loli.net/2020/01/03/VPe1U6zi2M5qCua.jpg', 'admin', '650', 'd5d5ddc90655fc5fa13aeffc310a2105');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for qiniu_config
@@ -795,6 +845,8 @@ INSERT INTO `roles_menus` VALUES (117, 1);
 INSERT INTO `roles_menus` VALUES (118, 1);
 INSERT INTO `roles_menus` VALUES (119, 1);
 INSERT INTO `roles_menus` VALUES (120, 1);
+INSERT INTO `roles_menus` VALUES (121, 1);
+INSERT INTO `roles_menus` VALUES (122, 1);
 INSERT INTO `roles_menus` VALUES (1, 2);
 INSERT INTO `roles_menus` VALUES (2, 2);
 INSERT INTO `roles_menus` VALUES (3, 2);
@@ -894,7 +946,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, 1, '11143526@qq.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'admin', 1, '15759115111', 11, '2018-08-23 09:11:56', '2019-12-08 00:09:03', 'admin', '男');
+INSERT INTO `user` VALUES (1, 1, 'dokitadmin@163.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'admin', 1, '15759115111', 11, '2018-08-23 09:11:56', '2019-12-08 00:09:03', 'admin', '男');
 INSERT INTO `user` VALUES (3, NULL, 'test@dokit.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'test', 2, '17777777777', 12, '2018-12-27 20:05:26', '2019-04-01 09:15:24', 'test', '女');
 INSERT INTO `user` VALUES (6, NULL, '111435262@qq.com', 1, '$2a$10$HhxyGZy.ulf3RvAwaHUGb.k.2i9PBpv4YbLMJWp8pES7pPhTyRCF.', 'perye', 2, '15759111153', 11, '2019-12-08 11:44:38', NULL, 'perye', '男');
 INSERT INTO `user` VALUES (7, NULL, '15759115151@dokit.com', 1, '$2a$10$NtVHb8s2I4TojxEUDUqx5e/NNiutgByfLUd3xL1H.74Wf.827XRHu', 'perye_user', 5, '15759115151', 14, '2019-12-17 15:01:43', NULL, 'perye', '男');
@@ -958,7 +1010,7 @@ CREATE TABLE `verification_code` (
   `is_delete` bit(1) DEFAULT b'0',
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of verification_code
@@ -967,6 +1019,11 @@ BEGIN;
 INSERT INTO `verification_code` VALUES (1, '598339', '2019-12-07 23:58:06', b'0', 'email', '11143526@qq.com', '重置邮箱', b'0', '2019-12-08 00:03:06');
 INSERT INTO `verification_code` VALUES (2, '408142', '2019-12-07 23:58:56', b'0', 'email', '1303306125@qq.com', '重置邮箱', b'0', '2019-12-08 00:03:56');
 INSERT INTO `verification_code` VALUES (3, '382006', '2019-12-08 00:08:29', b'0', 'email', '11143526@qq.com', '重置邮箱', b'0', '2019-12-08 00:13:29');
+INSERT INTO `verification_code` VALUES (4, '472774', NULL, b'0', 'email', 'dokitadmin@163.com', '重置邮箱', b'0', NULL);
+INSERT INTO `verification_code` VALUES (5, '394172', NULL, b'0', 'email', '11143526@qq.com', '重置邮箱', b'0', NULL);
+INSERT INTO `verification_code` VALUES (6, '874132', NULL, b'0', 'email', '11143526@qq.com', '重置邮箱', b'0', NULL);
+INSERT INTO `verification_code` VALUES (7, '849147', NULL, b'0', 'email', 'dokitadmin@163.com', '重置邮箱', b'0', NULL);
+INSERT INTO `verification_code` VALUES (8, '772482', NULL, b'0', 'email', '11143526@qq.com', '重置邮箱', b'0', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -982,7 +1039,7 @@ CREATE TABLE `visits` (
   `week_day` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `UK_11aksgq87euk9bcyeesfs4vtp` (`date`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of visits
@@ -1007,7 +1064,8 @@ INSERT INTO `visits` VALUES (123, '2019-12-27 08:49:15', '2019-12-27', 2, 8, '�
 INSERT INTO `visits` VALUES (124, '2019-12-30 17:38:22', '2019-12-30', 1, 2, '星期一');
 INSERT INTO `visits` VALUES (125, '2019-12-31 09:12:52', '2019-12-31', 3, 9, '星期二');
 INSERT INTO `visits` VALUES (126, '2020-01-01 14:11:28', '2020-01-01', 1, 5, '星期三');
-INSERT INTO `visits` VALUES (127, '2020-01-02 00:00:01', '2020-01-02', 1, 8, '星期四');
+INSERT INTO `visits` VALUES (127, '2020-01-02 00:00:01', '2020-01-02', 1, 21, '星期四');
+INSERT INTO `visits` VALUES (128, '2020-01-03 09:05:39', '2020-01-03', 1, 16, '星期五');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
