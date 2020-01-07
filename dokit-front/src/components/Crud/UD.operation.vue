@@ -71,17 +71,6 @@ export default {
       pop: false
     }
   },
-  onPopoverShow() {
-    setTimeout(() => {
-      document.addEventListener('click', this.handleDocumentClick)
-    }, 0)
-  },
-  onPopoverHide() {
-    document.removeEventListener('click', this.handleDocumentClick)
-  },
-  handleDocumentClick(event) {
-    this.pop = false
-  },
   methods: {
     doCancel() {
       this.pop = false
@@ -94,6 +83,17 @@ export default {
       if (data === this.data) {
         this.pop = false
       }
+    },
+    onPopoverShow() {
+      setTimeout(() => {
+        document.addEventListener('click', this.handleDocumentClick)
+      }, 0)
+    },
+    onPopoverHide() {
+      document.removeEventListener('click', this.handleDocumentClick)
+    },
+    handleDocumentClick(event) {
+      this.pop = false
     }
   }
 }

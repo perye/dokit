@@ -1,5 +1,4 @@
 <template>
-
   <div class="crud-opts">
     <span class="crud-opts-left">
       <!--左侧插槽-->
