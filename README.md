@@ -18,6 +18,8 @@ Just do kit!
 - 用户名:admin
 - 密码:123456
 
+ps:需要增删请自行增加用户测试，勿直接使用admin操作
+
 项目地址
 
 |github|码云|
@@ -232,88 +234,19 @@ Just do kit!
 
 ```
 
-#### 项目截图
+#### 系统预览
 
 首页
-![首页](./asserts/dashboard.png)
+![首页](https://i.loli.net/2020/01/07/qRDfPelSUsgd4cX.jpg)
 
 用户管理
-![用户管理](./asserts/user.png)
+![用户管理](https://i.loli.net/2020/01/07/UzS2Jko48P1xpYi.png)
 
-角色管理及菜单分配
-![角色管理](./asserts/role.png)
+角色管理
+![角色管理](https://i.loli.net/2020/01/07/BWfhctILKGx3FOw.png)
 
 菜单管理
-![菜单管理](./asserts/menu.png)
-
-部门管理
-![部门管理](./asserts/dept.png)
-
-岗位管理
-![岗位管理](./asserts/jobs.png)
-
-字典管理
-![字典管理](./asserts/dict.png)
-
-在线用户
-![在线用户](./asserts/online.png)
-
-操作日志
-![操作日志](./asserts/logs.png)
-
-错误日志
-![错误日志](./asserts/errorLog.png)
-
-错误日志详情
-![错误日志详情](./asserts/errorDetail.png)
-
-服务监控
-![服务监控](./asserts/server.png)
-
-系统缓存
-![系统缓存](./asserts/redis.png)
-
-sql监控
-![sql监控](./asserts/druid.png)
-
-服务器
-![服务器](./asserts/serverDeploy.png)
-
-应用管理
-![应用管理](./asserts/app.png)
-
-部署管理
-![部署管理](./asserts/deploy.png)
-
-部署备份
-![部署备份](./asserts/deployHistory.png)
-
-数据库管理
-![数据库管理](./asserts/database.png)
-
-定时任务
-![定时任务](./asserts/timing.png)
+![菜单管理](https://i.loli.net/2020/01/07/6qhBA2edJxRzrWT.png)
 
 代码生成
-![代码生成](./asserts/generator.png)
-
-图床管理
-![图床管理](./asserts/pictures.png)
-
-接口文档
-![接口文档](./asserts/swagger.png)
-
-图表库
-![图表库](./asserts/echarts.png)
-
-图标库
-![图标库](./asserts/icon.png)
-
-富文本
-![富文本](./asserts/tinymce.png)
-
-MarkDown
-![MarkDown](./asserts/markdown.png)
-
-Yaml编辑
-![Yaml编辑器](./asserts/yaml.png)
+![代码生成](https://i.loli.net/2020/01/07/1rouCmxwXRjaSF9.png)

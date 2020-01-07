@@ -1,14 +1,17 @@
-<template lang="pug">
-  div(v-if="crud.props.searchToggle")
-    el-input.filter-item(
+<template>
+  <div v-if="crud.props.searchToggle">
+    <el-input
       v-model="query.name"
-      clearable size="small"
+      class="filter-item"
+      clearable="clearable"
+      size="small"
       placeholder="输入岗位名称搜索"
       style="width: 200px;"
       @keyup.enter.native="crud.toQuery"
-    )/
-    el-date-picker.date-item(
+    />
+    <el-date-picker
       v-model="query.createTime"
+      class="date-item"
       :default-time="['00:00:00','23:59:59']"
       type="daterange"
       range-separator=":"
@@ -16,27 +19,26 @@
       value-format="yyyy-MM-dd HH:mm:ss"
       start-placeholder="开始日期"
       end-placeholder="结束日期"
-    )/
-    el-select.filter-item(
+    />
+    <el-select
       v-model="query.enabled"
-      clearable
+      class="filter-item"
+      clearable="clearable"
       size="small"
       placeholder="状态"
       style="width: 90px"
       @change="crud.toQuery"
-    )
-      el-option(
-        v-for="item in dict.dict.job_status"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      )/
-    rrOperation/
+    >
+      <el-option v-for="item in dict.dict.job_status" :key="item.value" :label="item.label" :value="item.value" />
+    </el-select>
+    <rrOperation />
+  </div>
 </template>
 
 <script>
 import { header } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
+
 export default {
   components: { rrOperation },
   mixins: [header()],
