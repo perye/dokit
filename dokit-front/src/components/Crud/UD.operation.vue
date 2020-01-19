@@ -3,6 +3,7 @@
     <el-button
       v-permission="permission.edit"
       :disabled="disabledEdit"
+      :loading="crud.status.cu === 2"
       size="mini"
       type="primary"
       icon="el-icon-edit"

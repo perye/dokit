@@ -243,6 +243,7 @@ function CRUD(options) {
       if (!callVmHook(crud, CRUD.HOOK.beforeSubmit)) {
         return
       }
+      crud.status.add = CRUD.STATUS.PROCESSING
       crud.crudMethod.add(crud.form).then(() => {
         crud.status.add = CRUD.STATUS.NORMAL
         crud.resetForm()
@@ -250,6 +251,7 @@ function CRUD(options) {
         callVmHook(crud, CRUD.HOOK.afterSubmit)
         crud.toQuery()
       }).catch(() => {
+        crud.status.add = CRUD.STATUS.PREPARED
         callVmHook(crud, CRUD.HOOK.afterAddError)
       })
     },
@@ -260,6 +262,7 @@ function CRUD(options) {
       if (!callVmHook(crud, CRUD.HOOK.beforeSubmit)) {
         return
       }
+      crud.status.edit = CRUD.STATUS.PROCESSING
       crud.crudMethod.edit(crud.form).then(() => {
         crud.status.edit = CRUD.STATUS.NORMAL
         crud.getDataStatus(crud.form.id).edit = CRUD.STATUS.NORMAL
@@ -268,6 +271,7 @@ function CRUD(options) {
         callVmHook(crud, CRUD.HOOK.afterSubmit)
         crud.refresh()
       }).catch(() => {
+        crud.status.edit = CRUD.STATUS.PREPARED
         callVmHook(crud, CRUD.HOOK.afterEditError)
       })
     },
