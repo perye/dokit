@@ -5,8 +5,12 @@ import lombok.Setter;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -15,17 +19,38 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity implements Serializable {
     // 删除标识
     @Column(name = "is_delete", columnDefinition = "bit default 0")
     private Boolean isDelete = false;
 
-    @Column(name = "create_time")
+    /**
+     * 创建人
+     */
+    @CreatedBy
+    @Column(name = "create_by", updatable = false)
+    private String createdBy;
+
+    /**
+     * 创建时间
+     */
     @CreationTimestamp
+    @Column(name = "create_time",updatable = false)
     private Timestamp createTime;
 
-    @Column(name = "update_time")
+    /**
+     * 更新人
+     */
+    @LastModifiedBy
+    @Column(name = "update_by")
+    private String updatedBy;
+
+    /**
+     * 更新时间
+     */
     @UpdateTimestamp
+    @Column(name = "update_time")
     private Timestamp updateTime;
 
     public @interface Update {}
