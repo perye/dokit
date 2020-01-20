@@ -1,19 +1,17 @@
 package com.perye.dokit.entity;
 
-import com.perye.dokit.base.BaseEntity;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Setter
-@Getter
+@Data
 @Table(name = "log")
 @NoArgsConstructor
-public class Log  extends BaseEntity {
+public class Log implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
