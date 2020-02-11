@@ -2,6 +2,7 @@ package com.perye.dokit.controller;
 
 import com.perye.dokit.aop.log.Log;
 import com.perye.dokit.service.OnlineUserService;
+import com.perye.dokit.utils.EncryptUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +48,8 @@ public class OnlineController {
     @PreAuthorize("@dokit.check()")
     public ResponseEntity<Object> delete(@RequestBody Set<String> keys) throws Exception {
         for (String key : keys) {
+            // 解密key
+            key = EncryptUtils.desDecrypt(key);
             onlineUserService.kickOut(key);
         }
         return new ResponseEntity<>(HttpStatus.OK);
