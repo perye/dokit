@@ -20,7 +20,9 @@ const api = {
     // 文件上传
     fileUploadApi: baseUrl + '/api/localStorage',
     // baseUrl，
-    baseApi: baseUrl
+    baseApi: baseUrl,
+    // 表单构建
+    formApi: 'https://mrhj.gitee.io/form-generator/'
   }
 }
 
