@@ -81,8 +81,10 @@ public class DictServiceImpl implements DictService {
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        dictRepository.deleteById(id);
+    public void delete(Set<Long> ids) {
+        for (Long id:ids) {
+            dictRepository.deleteById(id);
+        }
     }
 
     @Override

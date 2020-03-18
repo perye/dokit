@@ -200,8 +200,6 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
-// crud交由presenter持有
-const defaultCrud = CRUD({ title: '菜单', url: 'api/menus', crudMethod: { ...crudMenu }})
 const defaultForm = {
   id: null,
   name: null,
@@ -222,7 +220,10 @@ const defaultForm = {
 export default {
   name: 'Menu',
   components: { Treeselect, IconSelect, crudOperation, rrOperation, udOperation },
-  mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
+  cruds() {
+    return CRUD({ title: '菜单', url: 'api/menus', crudMethod: { ...crudMenu }})
+  },
+  mixins: [presenter(), header(), form(defaultForm), crud()],
   data() {
     return {
       menus: [],

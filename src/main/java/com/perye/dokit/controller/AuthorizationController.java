@@ -10,8 +10,8 @@ import com.perye.dokit.dto.CaptchaDto;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.security.TokenProvider;
 import com.perye.dokit.service.CaptchaService;
-import com.perye.dokit.vo.AuthUser;
-import com.perye.dokit.vo.JwtUser;
+import com.perye.dokit.vo.AuthUserDto;
+import com.perye.dokit.vo.JwtUserDto;
 import com.perye.dokit.service.OnlineUserService;
 import com.perye.dokit.utils.*;
 import com.wf.captcha.*;
@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/auth")
 @Api(tags = "系统：系统授权接口")
-public class AuthController {
+public class AuthorizationController {
 
     @Value("${loginCode.expiration}")
     private Long expiration;
@@ -69,7 +69,7 @@ public class AuthController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthController(SecurityProperties properties, RedisUtils redisUtils, UserDetailsService userDetailsService, OnlineUserService onlineUserService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, CaptchaService captchaService) {
+    public AuthorizationController(SecurityProperties properties, RedisUtils redisUtils, UserDetailsService userDetailsService, OnlineUserService onlineUserService, TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, CaptchaService captchaService) {
         this.properties = properties;
         this.redisUtils = redisUtils;
         this.userDetailsService = userDetailsService;
@@ -81,47 +81,47 @@ public class AuthController {
 
     /**
      * 登录授权
-     * @param authUser
+     * @param authUserDto
      * @return
      */
     @Log("用户登录")
     @ApiOperation("登录授权")
     @AnonymousAccess
     @PostMapping(value = "/login")
-    public ResponseEntity<Object> login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request){
+    public ResponseEntity<Object> login(@Validated @RequestBody AuthUserDto authUserDto, HttpServletRequest request){
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
-        String password = new String(rsa.decrypt(authUser.getPassword(), KeyType.PrivateKey));
+        String password = new String(rsa.decrypt(authUserDto.getPassword(), KeyType.PrivateKey));
         // 查询验证码
-        String code = (String) redisUtils.get(authUser.getUuid());
+        String code = (String) redisUtils.get(authUserDto.getUuid());
         // 清除验证码
-        redisUtils.del(authUser.getUuid());
+        redisUtils.del(authUserDto.getUuid());
         if (StringUtils.isBlank(code)) {
             throw new BadRequestException("验证码不存在或已过期");
         }
-        if (StringUtils.isBlank(authUser.getCode()) || !authUser.getCode().equalsIgnoreCase(code)) {
+        if (StringUtils.isBlank(authUserDto.getCode()) || !authUserDto.getCode().equalsIgnoreCase(code)) {
             throw new BadRequestException("验证码错误");
         }
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
+                new UsernamePasswordAuthenticationToken(authUserDto.getUsername(), password);
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成令牌
         String token = tokenProvider.createToken(authentication);
-        final JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+        final JwtUserDto jwtUserDto = (JwtUserDto) authentication.getPrincipal();
 
         // 保存在线信息
-        onlineUserService.save(jwtUser, token, request);
+        onlineUserService.save(jwtUserDto, token, request);
 
         if(singleLogin){
             //踢掉之前已经登录的token
-            onlineUserService.checkLoginOnUser(authUser.getUsername(),token);
+            onlineUserService.checkLoginOnUser(authUserDto.getUsername(),token);
         }
         // 返回 token 与 用户信息
         Map<String,Object> authInfo = new HashMap<String,Object>(2){{
             put("token", properties.getTokenStartWith() + token);
-            put("user", jwtUser);
+            put("user", jwtUserDto);
         }};
         return ResponseEntity.ok(authInfo);
     }
@@ -129,8 +129,7 @@ public class AuthController {
     @ApiOperation("获取用户信息")
     @GetMapping(value = "/info")
     public ResponseEntity<Object> getUserInfo(){
-        JwtUser jwtUser = (JwtUser)userDetailsService.loadUserByUsername(SecurityUtils.getUsername());
-        return ResponseEntity.ok(jwtUser);
+        return ResponseEntity.ok(SecurityUtils.getCurrentUser());
     }
 
     @ApiOperation("获取验证码")

@@ -65,13 +65,14 @@ import Search from './search'
 import CRUD, { presenter } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
-// crud交由presenter持有
-const defaultCrud = CRUD({ title: '日志', url: 'api/logs' })
 
 export default {
   name: 'Log',
   components: { Search, crudOperation, pagination },
-  mixins: [presenter(defaultCrud)],
+  cruds() {
+    return CRUD({ title: '日志', url: 'api/logs' })
+  },
+  mixins: [presenter()],
   created() {
     this.crud.optShow = {
       add: false,

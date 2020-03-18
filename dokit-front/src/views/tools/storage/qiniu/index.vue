@@ -88,11 +88,12 @@ import CRUD, { presenter, header, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
-// crud交由presenter持有
-const defaultCrud = CRUD({ title: '七牛云文件', url: 'api/qiNiuContent', crudMethod: { ...crudQiNiu }})
 export default {
   components: { eForm, pagination, crudOperation, rrOperation },
-  mixins: [presenter(defaultCrud), header(), crud()],
+  cruds() {
+    return CRUD({ title: '七牛云文件', url: 'api/qiNiuContent', crudMethod: { ...crudQiNiu }})
+  },
+  mixins: [presenter(), header(), crud()],
   data() {
     return {
       permission: {

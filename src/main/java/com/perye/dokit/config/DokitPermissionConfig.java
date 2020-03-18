@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class DokitPermissionConfig {
 
     public Boolean check(String ...permissions){
-        List<String> dokitPermissions = SecurityUtils.getUserDetails().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        List<String> dokitPermissions = SecurityUtils.getCurrentUser().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         return dokitPermissions.contains("admin") || Arrays.stream(permissions).anyMatch(dokitPermissions::contains);
     }
 

@@ -75,7 +75,7 @@ public class LogAspect {
 
     public String getUsername() {
         try {
-            return SecurityUtils.getUsername();
+            return SecurityUtils.getCurrentUsername();
         }catch (Exception e){
             return "";
         }

@@ -1,6 +1,7 @@
 package com.perye.dokit.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.perye.dokit.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,44 +10,35 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public class JwtUser implements UserDetails {
+public class JwtUserDto implements UserDetails {
 
-    private final Long id;
-
-    private final String username;
-
-
-    private final String nickName;
-
-    private final String sex;
+    private UserDto user;
 
 
     @JsonIgnore
-    private final String password;
+    private List<GrantedAuthority> authorities;
 
-    private final String avatar;
+    public Set<String> getRoles() {
+        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+    }
 
-    private final String email;
-
-    private final String phone;
-
-    private final String dept;
-
-    private final String job;
-
+    @Override
     @JsonIgnore
-    private final Collection<GrantedAuthority> authorities;
+    public String getPassword() {
+        return user.getPassword();
+    }
 
-    private final boolean enabled;
-
-    private Timestamp createTime;
-
+    @Override
     @JsonIgnore
-    private final Date lastPasswordResetDate;
+    public String getUsername() {
+        return user.getUsername();
+    }
 
     @JsonIgnore
     @Override
@@ -66,19 +58,11 @@ public class JwtUser implements UserDetails {
         return true;
     }
 
+
+    @Override
     @JsonIgnore
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
     public boolean isEnabled() {
-        return enabled;
-    }
-
-    public Collection getRoles() {
-        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        return user.getEnabled();
     }
 }
 

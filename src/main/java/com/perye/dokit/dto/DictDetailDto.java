@@ -19,7 +19,7 @@ public class DictDetailDto implements Serializable {
     private String value;
 
     // 排序
-    private String sort;
+    private Integer sort;
 
     private DictSmallDto dict;
 

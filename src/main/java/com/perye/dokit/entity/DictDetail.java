@@ -31,7 +31,7 @@ public class DictDetail implements Serializable {
 
     // 排序
     @Column(name = "sort")
-    private String sort = "999";
+    private Integer sort = 999;
 
     // 字典id
     @ManyToOne(fetch=FetchType.LAZY)

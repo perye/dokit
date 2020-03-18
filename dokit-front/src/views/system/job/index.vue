@@ -63,17 +63,18 @@ import CRUD, { presenter } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 import udOperation from '@crud/UD.operation'
-// crud交由presenter持有
-const crud = CRUD({
-  title: '岗位',
-  url: 'api/job',
-  sort: ['sort,asc', 'id,desc'],
-  crudMethod: { ...crudJob }
-})
 export default {
   name: 'Job',
   components: { eHeader, eForm, crudOperation, pagination, udOperation },
-  mixins: [presenter(crud)],
+  cruds() {
+    return CRUD({
+      title: '岗位',
+      url: 'api/job',
+      sort: ['sort,asc', 'id,desc'],
+      crudMethod: { ...crudJob }
+    })
+  },
+  mixins: [presenter()],
   // 数据字典
   dicts: ['job_status'],
   data() {
@@ -93,7 +94,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        // eslint-disable-next-line no-undef
         crud.crudMethod.edit(data).then(() => {
+          // eslint-disable-next-line no-undef
           crud.notify(this.dict.label.job_status[val] + '成功', 'success')
         }).catch(err => {
           data.enabled = !data.enabled

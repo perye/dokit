@@ -105,7 +105,7 @@ public interface RoleService {
      * @param user 用户信息
      * @return 权限信息
      */
-    Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
+    List<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
 
 }
 

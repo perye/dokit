@@ -83,12 +83,13 @@ import CRUD, { presenter, header, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
-// crud交由presenter持有
-const defaultCrud = CRUD({ url: 'auth/online', title: '在线用户' })
 export default {
   name: 'OnlineUser',
   components: { pagination, crudOperation, rrOperation },
-  mixins: [presenter(defaultCrud), header(), crud()],
+  cruds() {
+    return CRUD({ url: 'auth/online', title: '在线用户' })
+  },
+  mixins: [presenter(), header(), crud()],
   data() {
     return {
       delLoading: false,

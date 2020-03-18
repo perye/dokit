@@ -12,6 +12,8 @@
         <settings />
       </right-panel>
     </div>
+    <!--  防止刷新后主题丢失  -->
+    <Theme v-show="false" ref="theme" />
   </div>
 </template>
 
@@ -20,16 +22,19 @@ import RightPanel from '@/components/RightPanel'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
+import Theme from '@/components/ThemePicker'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'Layout',
   components: {
     AppMain,
     Navbar,
+    RightPanel,
     Settings,
     Sidebar,
     TagsView,
-    RightPanel
+    Theme
   },
   mixins: [ResizeMixin],
   computed: {
@@ -47,6 +52,15 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
+    }
+  },
+  mounted() {
+    if (Cookies.get('theme')) {
+      this.$refs.theme.theme = Cookies.get('theme')
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'theme',
+        value: Cookies.get('theme')
+      })
     }
   },
   methods: {

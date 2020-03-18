@@ -136,8 +136,7 @@ public class UserController {
     @ApiOperation("修改用户：个人中心")
     @PutMapping(value = "center")
     public ResponseEntity<Object> center(@Validated(User.Update.class) @RequestBody User resources) {
-        UserDto userDto = userService.findByName(SecurityUtils.getUsername());
-        if (!resources.getId().equals(userDto.getId())) {
+        if(!resources.getId().equals(SecurityUtils.getCurrentUserId())){
             throw new BadRequestException("不能修改他人资料");
         }
         userService.updateCenter(resources);
@@ -149,12 +148,11 @@ public class UserController {
     @DeleteMapping
     @PreAuthorize("@dokit.check('user:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids) {
-        UserDto user = userService.findByName(SecurityUtils.getUsername());
         for (Long id : ids) {
-            Integer currentLevel = Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
+            Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getCurrentUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
             Integer optLevel = Collections.min(roleService.findByUsersId(id).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
             if (currentLevel > optLevel) {
-                throw new BadRequestException("角色权限不足，不能删除：" + userService.findByName(SecurityUtils.getUsername()).getUsername());
+                throw new BadRequestException("角色权限不足，不能删除：" + userService.findById(id).getUsername());
             }
         }
         userService.delete(ids);
@@ -168,7 +166,7 @@ public class UserController {
         RSA rsa = new RSA(privateKey, null);
         String oldPass = new String(rsa.decrypt(passVo.getOldPass(), KeyType.PrivateKey));
         String newPass = new String(rsa.decrypt(passVo.getNewPass(), KeyType.PrivateKey));
-        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        UserDto user = userService.findByName(SecurityUtils.getCurrentUsername());
         if (!passwordEncoder.matches(oldPass, user.getPassword())) {
             throw new BadRequestException("修改失败，旧密码错误");
         }
@@ -193,7 +191,7 @@ public class UserController {
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
         String password = new String(rsa.decrypt(user.getPassword(), KeyType.PrivateKey));
-        UserDto userDto = userService.findByName(SecurityUtils.getUsername());
+        UserDto userDto = userService.findByName(SecurityUtils.getCurrentUsername());
         if (!passwordEncoder.matches(password, userDto.getPassword())) {
             throw new BadRequestException("密码错误");
         }
@@ -209,8 +207,7 @@ public class UserController {
      * @param resources /
      */
     private void checkLevel(User resources) {
-        UserDto user = userService.findByName(SecurityUtils.getUsername());
-        Integer currentLevel = Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
+        Integer currentLevel =  Collections.min(roleService.findByUsersId(SecurityUtils.getCurrentUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         Integer optLevel = roleService.findByRoles(resources.getRoles());
         if (currentLevel > optLevel) {
             throw new BadRequestException("角色权限不足");

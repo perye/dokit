@@ -1,7 +1,7 @@
 <template>
   <el-color-picker
     v-model="theme"
-    :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d', ]"
+    :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d']"
     class="theme-picker"
     popper-class="theme-picker-dropdown"
   />
@@ -10,6 +10,7 @@
 <script>
 const version = require('element-ui/package.json').version // element-ui version from node_modules
 const ORIGINAL_THEME = '#409EFF' // default color
+import Cookies from 'js-cookie'
 export default {
   data() {
     return {
@@ -30,17 +31,12 @@ export default {
       immediate: true
     },
     async theme(val) {
-      const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
+      Cookies.set('theme', val, { expires: 365 })
+      const oldVal = this.chalk ? this.theme : Cookies.get('theme') ? Cookies.get('theme') : ORIGINAL_THEME
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
-      const $message = this.$message({
-        message: ' Compiling the theme',
-        customClass: 'theme-message',
-        type: 'success',
-        duration: 0,
-        iconClass: 'el-icon-loading'
-      })
+
       const getHandler = (variable, id) => {
         return () => {
           const originalCluster = this.getThemeCluster(ORIGINAL_THEME.replace('#', ''))
@@ -71,7 +67,6 @@ export default {
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
       })
       this.$emit('change', val)
-      $message.close()
     }
   },
   methods: {

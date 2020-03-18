@@ -23,6 +23,6 @@ public class AuditorConfig implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         // 这里应根据实际业务情况获取具体信息
-        return Optional.of(SecurityUtils.getUsername());
+        return Optional.of(SecurityUtils.getCurrentUsername());
     }
 }

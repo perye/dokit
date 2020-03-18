@@ -22,7 +22,7 @@
       <div style="text-align: right; margin: 0">
         <el-button size="mini" type="text" @click="doCancel">取消</el-button>
         <el-button
-          :loading="crud.dataStatus[data.id].delete === 2"
+          :loading="crud.dataStatus[crud.getDataId(data)].delete === 2"
           type="primary"
           size="mini"
           @click="crud.doDelete(data)"

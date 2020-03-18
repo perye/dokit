@@ -5,7 +5,7 @@
     vertical-align: middle;
     margin: 0 3px 10px 0;
     input {
-      height: 30.5px;
+      height: 30.5px !important;
       line-height: 30.5px;
     }
   }
@@ -100,4 +100,7 @@
   color: #333;
   font-family: Courier New, serif;
   font-size: 12px
+}
+.el-tabs{
+  margin-bottom: 25px;
 }

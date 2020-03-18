@@ -4,21 +4,16 @@ import com.perye.dokit.config.SecurityProperties;
 import com.perye.dokit.utils.*;
 import com.perye.dokit.utils.ip.AddressUtils;
 import com.perye.dokit.utils.ip.IpUtils;
-import com.perye.dokit.vo.JwtUser;
-import com.perye.dokit.vo.OnlineUser;
+import com.perye.dokit.vo.JwtUserDto;
+import com.perye.dokit.vo.OnlineUserDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -36,22 +31,22 @@ public class OnlineUserService {
 
     /**
      * 保存在线用户信息
-     * @param jwtUser
+     * @param jwtUserDto
      * @param token
      * @param request
      */
-    public void save(JwtUser jwtUser, String token, HttpServletRequest request){
-        String job = jwtUser.getDept() + "/" + jwtUser.getJob();
+    public void save(JwtUserDto jwtUserDto, String token, HttpServletRequest request){
+        String job = jwtUserDto.getUser().getDept().getName() + "/" + jwtUserDto.getUser().getJob().getName();
         String ip = IpUtils.getIpAddr(request);
         String browser = StringUtils.getBrowser(request);
         String address = AddressUtils.getRealAddressByIP(ip);
-        OnlineUser onlineUser = null;
+        OnlineUserDto onlineUserDto = null;
         try {
-            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), job, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
+            onlineUserDto = new OnlineUserDto(jwtUserDto.getUsername(), jwtUserDto.getUser().getNickName(), job, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        redisUtils.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds()/1000);
+        redisUtils.set(properties.getOnlineKey() + token, onlineUserDto, properties.getTokenValidityInSeconds()/1000);
 
     }
 
@@ -62,10 +57,10 @@ public class OnlineUserService {
      * @return
      */
     public Map<String,Object> getAll(String filter, Pageable pageable){
-        List<OnlineUser> onlineUsers = getAll(filter);
+        List<OnlineUserDto> onlineUserDtos = getAll(filter);
         return PageUtil.toPage(
-                PageUtil.toPage(pageable.getPageNumber(), pageable.getPageSize(), onlineUsers),
-                onlineUsers.size());
+                PageUtil.toPage(pageable.getPageNumber(), pageable.getPageSize(), onlineUserDtos),
+                onlineUserDtos.size());
     }
 
     /**
@@ -73,22 +68,22 @@ public class OnlineUserService {
      * @param filter
      * @return
      */
-    public List<OnlineUser> getAll(String filter){
+    public List<OnlineUserDto> getAll(String filter){
         List<String> keys = redisUtils.scan(properties.getOnlineKey() + "*");
         Collections.reverse(keys);
-        List<OnlineUser> onlineUsers = new ArrayList<>();
+        List<OnlineUserDto> onlineUserDtos = new ArrayList<>();
         for (String key : keys) {
-            OnlineUser onlineUser = (OnlineUser) redisUtils.get(key);
+            OnlineUserDto onlineUserDto = (OnlineUserDto) redisUtils.get(key);
             if(StringUtils.isNotBlank(filter)){
-                if(onlineUser.toString().contains(filter)){
-                    onlineUsers.add(onlineUser);
+                if(onlineUserDto.toString().contains(filter)){
+                    onlineUserDtos.add(onlineUserDto);
                 }
             } else {
-                onlineUsers.add(onlineUser);
+                onlineUserDtos.add(onlineUserDto);
             }
         }
-        onlineUsers.sort((o1, o2) -> o2.getLoginTime().compareTo(o1.getLoginTime()));
-        return onlineUsers;
+        onlineUserDtos.sort((o1, o2) -> o2.getLoginTime().compareTo(o1.getLoginTime()));
+        return onlineUserDtos;
     }
 
     /**
@@ -116,14 +111,14 @@ public class OnlineUserService {
      * @param userName
      */
     public void checkLoginOnUser(String userName, String igoreToken){
-        List<OnlineUser> onlineUsers = getAll(userName);
-        if(onlineUsers ==null || onlineUsers.isEmpty()){
+        List<OnlineUserDto> onlineUserDtos = getAll(userName);
+        if(onlineUserDtos ==null || onlineUserDtos.isEmpty()){
             return;
         }
-        for(OnlineUser onlineUser:onlineUsers){
-            if(onlineUser.getUserName().equals(userName)){
+        for(OnlineUserDto onlineUserDto : onlineUserDtos){
+            if(onlineUserDto.getUserName().equals(userName)){
                 try {
-                    String token =EncryptUtils.desDecrypt(onlineUser.getKey());
+                    String token =EncryptUtils.desDecrypt(onlineUserDto.getKey());
                     if(StringUtils.isNotBlank(igoreToken)&&!igoreToken.equals(token)){
                         this.kickOut(token);
                     }else if(StringUtils.isBlank(igoreToken)){
@@ -142,9 +137,9 @@ public class OnlineUserService {
      * @param response
      * @throws IOException
      */
-    public void download(List<OnlineUser> all, HttpServletResponse response) throws IOException {
+    public void download(List<OnlineUserDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (OnlineUser user : all) {
+        for (OnlineUserDto user : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("用户名", user.getUserName());
             map.put("岗位", user.getJob());
@@ -163,7 +158,7 @@ public class OnlineUserService {
      * @param key
      * @return
      */
-    public OnlineUser getOne(String key) {
-        return (OnlineUser)redisUtils.get(key);
+    public OnlineUserDto getOne(String key) {
+        return (OnlineUserDto)redisUtils.get(key);
     }
 }

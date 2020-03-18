@@ -1,0 +1,103 @@
+用户表 user
+角色表 role
+用户角色表 users_roles
+权限表 permission
+角色权限表 roles_premissions
+菜单表 menu
+角色菜单表 roles_menus
+部门表 dept
+角色部门表 roles_depts
+岗位表 job
+用户头像表 user_avatar
+数据字典表 dict
+数据字典详细表 dict_detail
+日志表 log
+访问表 visits
+验证码表 verification_code
+定时任务表 quartz_job
+定时任务日志表 quartz_log
+七牛云配置表 qiniu_config
+七牛云内容表 qiniu_content
+图床表 picture
+本地存储表 local_storage
+app管理表 mnt_app
+数据库管理表 mnt_database
+部署管理表 mnt_deploy
+服务表 mnt_server
+部署服务表 mnt_deploy_server
+部署历史表 mnt_deploy_history
+邮箱配置表 email_config
+代码生成配置表 gen_config
+字段配置表 colunm_config
+验证码设置表 captcha
+
+
+------------------------
+
+
+代码生成配置表 gen_config
+字段配置表 colunm_config
+验证码设置表 captcha
+
+
+IntelliJ IDEA 2019.2.4 (Ultimate Edition)
+Build #IU-192.7142.36, built on October 29, 2019
+Licensed to 永久激活 idea.medeming.com
+Subscription is active until March 12, 2020
+Runtime version: 11.0.4+10-b304.77 x86_64
+VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o
+macOS 10.14.6
+GC: ParNew, ConcurrentMarkSweep
+Memory: 1502M
+Cores: 4
+Registry: debugger.watches.in.variables=false, compiler.automake.allow.when.app.running=true
+Non-Bundled Plugins: FindBugs-IDEA, GsonFormat, Lombook Plugin, actiBPM, com.alayouni.ansiHighlight, com.bruce.intellijpluin.stackoverflow, com.intellij.ideolog, com.alibaba.p3c.smartfox, com.paperetto.dash, com.vexus2.intellij.openingithub, net.seesharpsoft.intellij.plugins.csv, JRebelPlugin, BashSupport, cn.yiiguxing.plugin.translate, com.cybrosis.catdea, cn.wuzhizhan.plugin.mybatis, com.intellij.plugins.html.instantEditing, com.jetbrains.plugins.jade, com.jetbrains.php, MavenRunHelper, org.jetbrains.plugins.vue, Pythonid, com.zhaow.restful.toolkit, org.zalando.intellij.swagger, ru.adelf.idea.dotenv
+
+
+
+
+
+
+
+
+
+
+
+// 密码解密
+        RSA rsa = new RSA(privateKey, null);
+        String password = new String(rsa.decrypt(authUserDto.getPassword(), KeyType.PrivateKey));
+        // 查询验证码
+        String code = (String) redisUtils.get(authUserDto.getUuid());
+        // 清除验证码
+        redisUtils.del(authUserDto.getUuid());
+        if (StringUtils.isBlank(code)) {
+            throw new BadRequestException("验证码不存在或已过期");
+        }
+        if (StringUtils.isBlank(authUserDto.getCode()) || !authUserDto.getCode().equalsIgnoreCase(code)) {
+            throw new BadRequestException("验证码错误");
+        }
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(authUserDto.getUsername(), password);
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 生成令牌
+        String token = tokenProvider.createToken(authentication);
+        final JwtUser jwtUserDto = (JwtUser) authentication.getPrincipal();
+
+        // 保存在线信息
+        onlineUserService.save(jwtUserDto, token, request);
+
+        if(singleLogin){
+            //踢掉之前已经登录的token
+            onlineUserService.checkLoginOnUser(authUserDto.getUsername(),token);
+        }
+        // 返回 token 与 用户信息
+        Map<String,Object> authInfo = new HashMap<String,Object>(2){{
+            put("token", properties.getTokenStartWith() + token);
+            put("user", jwtUserDto);
+        }};
+        return ResponseEntity.ok(authInfo);
+
+        )
+        github.com,52.74.223,119 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==

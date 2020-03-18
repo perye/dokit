@@ -4,7 +4,7 @@ import com.perye.dokit.dto.DeptSmallDto;
 import com.perye.dokit.dto.JobSmallDto;
 import com.perye.dokit.dto.UserDto;
 import com.perye.dokit.exception.BadRequestException;
-import com.perye.dokit.vo.JwtUser;
+import com.perye.dokit.vo.JwtUserDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.roleService = roleService;
     }
     @Override
-    public UserDetails loadUserByUsername(String username){
+    public JwtUserDto loadUserByUsername(String username){
 
         UserDto user = userService.findByName(username);
         if (user == null) {
@@ -34,27 +34,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             if (!user.getEnabled()) {
                 throw new BadRequestException("账号未激活");
             }
-            return createJwtUser(user);
+            return new JwtUserDto(
+                    user,
+                    roleService.mapToGrantedAuthorities(user)
+            );
         }
-    }
-
-    private UserDetails createJwtUser(UserDto user) {
-        return new JwtUser(
-                user.getId(),
-                user.getUsername(),
-                user.getNickName(),
-                user.getSex(),
-                user.getPassword(),
-                user.getAvatar(),
-                user.getEmail(),
-                user.getPhone(),
-                Optional.ofNullable(user.getDept()).map(DeptSmallDto::getName).orElse(null),
-                Optional.ofNullable(user.getJob()).map(JobSmallDto::getName).orElse(null),
-                roleService.mapToGrantedAuthorities(user),
-                user.getEnabled(),
-                user.getCreateTime(),
-                user.getLastPasswordResetTime()
-        );
     }
 }
 

@@ -138,8 +138,7 @@ public class RoleController {
      * @return /
      */
     private int getLevels(Integer level){
-        UserDto user = userService.findByName(SecurityUtils.getUsername());
-        List<Integer> levels = roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
+        List<Integer> levels = roleService.findByUsersId(SecurityUtils.getCurrentUserId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList());
         int min = Collections.min(levels);
         if(level != null){
             if(level < min){

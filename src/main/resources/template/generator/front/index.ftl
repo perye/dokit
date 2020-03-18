@@ -118,14 +118,7 @@
   import crudOperation from '@crud/CRUD.operation'
   import udOperation from '@crud/UD.operation'
   import pagination from '@crud/Pagination'
-  // crud交由presenter持有
-  const defaultCrud = CRUD({
-    title: '${apiAlias}',
-    url: 'api/${changeClassName}',
-    sort: '${pkChangeColName},desc',
-    crudMethod: {...crud${className}
-    }
-  })
+
   const defaultForm = {
   <#if columns??><#list columns as column>${column.changeColumnName}:
   null<#if column_has_next>,
@@ -134,10 +127,13 @@
   export default {
     name: '${className}',
     components: {pagination, crudOperation, rrOperation, udOperation},
-    mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
+    mixins: [presenter(), header(), form(defaultForm), crud()],
     <#if hasDict>
     dicts: [<#if hasDict??><#list dicts as dict>'${dict}'<#if dict_has_next>, </#if></#list></#if>],
     </#if>
+    cruds() {
+      return CRUD({ title: '${apiAlias}', url: 'api/${changeClassName}', sort: '${pkChangeColName},desc', crudMethod: { ...crud${className} }})
+    },
     data() {
       return {
         permission: {
