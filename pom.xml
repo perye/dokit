@@ -31,7 +31,7 @@
         <configuration.version>1.9</configuration.version>
         <mail.version>1.4.7</mail.version>
         <qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
-        <commons.io.version>2.5</commons.io.version>
+        <commons.io.version>2.7</commons.io.version>
         <oshi.version>3.9.1</oshi.version>
     </properties>
 
