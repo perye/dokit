@@ -1,12 +1,13 @@
 package com.perye.dokit.controller;
 
-import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.annotation.Log;
 import com.perye.dokit.query.PictureQueryCriteria;
 import com.perye.dokit.entity.Picture;
 import com.perye.dokit.service.PictureService;
 import com.perye.dokit.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +20,17 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/pictures")
+@RequiredArgsConstructor
 @Api(tags = "工具：免费图床管理")
 public class PictureController {
 
     private final PictureService pictureService;
 
-    public PictureController(PictureService pictureService) {
-        this.pictureService = pictureService;
-    }
-
     @Log("查询图片")
     @PreAuthorize("@dokit.check('pictures:list')")
     @GetMapping()
     @ApiOperation("查询图片")
-    public ResponseEntity<Object> getRoles(PictureQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> query(PictureQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(pictureService.queryAll(criteria,pageable), HttpStatus.OK);
     }
 
@@ -66,7 +64,7 @@ public class PictureController {
     @ApiOperation("多选删除图片")
     @PreAuthorize("@dokit.check('pictures:del')")
     @DeleteMapping
-    public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {
+    public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
         pictureService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }

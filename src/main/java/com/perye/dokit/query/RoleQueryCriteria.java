@@ -10,7 +10,7 @@ import java.util.List;
 public class RoleQueryCriteria {
 
     // 多字段模糊
-    @Query(blurry = "name,remark")
+    @Query(blurry = "name,description")
     private String blurry;
 
 

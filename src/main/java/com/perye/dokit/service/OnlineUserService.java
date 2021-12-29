@@ -1,9 +1,7 @@
 package com.perye.dokit.service;
 
-import com.perye.dokit.config.SecurityProperties;
+import com.perye.dokit.config.bean.SecurityProperties;
 import com.perye.dokit.utils.*;
-import com.perye.dokit.utils.ip.AddressUtils;
-import com.perye.dokit.utils.ip.IpUtils;
 import com.perye.dokit.vo.JwtUserDto;
 import com.perye.dokit.vo.OnlineUserDto;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +15,11 @@ import java.util.*;
 
 @Service
 @Slf4j
-@SuppressWarnings({"unchecked","all"})
 public class OnlineUserService {
 
     private final SecurityProperties properties;
 
-    private RedisUtils redisUtils;
+    private final RedisUtils redisUtils;
 
     public OnlineUserService(SecurityProperties properties,  RedisUtils redisUtils) {
         this.properties = properties;
@@ -36,15 +33,15 @@ public class OnlineUserService {
      * @param request
      */
     public void save(JwtUserDto jwtUserDto, String token, HttpServletRequest request){
-        String job = jwtUserDto.getUser().getDept().getName() + "/" + jwtUserDto.getUser().getJob().getName();
-        String ip = IpUtils.getIpAddr(request);
+        String dept = jwtUserDto.getUser().getDept().getName();
+        String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
-        String address = AddressUtils.getRealAddressByIP(ip);
+        String address = StringUtils.getCityInfo(ip);
         OnlineUserDto onlineUserDto = null;
         try {
-            onlineUserDto = new OnlineUserDto(jwtUserDto.getUsername(), jwtUserDto.getUser().getNickName(), job, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
+            onlineUserDto = new OnlineUserDto(jwtUserDto.getUsername(), jwtUserDto.getUser().getNickName(), dept, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(),e);
         }
         redisUtils.set(properties.getOnlineKey() + token, onlineUserDto, properties.getTokenValidityInSeconds()/1000);
 
@@ -142,7 +139,7 @@ public class OnlineUserService {
         for (OnlineUserDto user : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("用户名", user.getUserName());
-            map.put("岗位", user.getJob());
+            map.put("部门", user.getDept());
             map.put("登录IP", user.getIp());
             map.put("登录地点", user.getAddress());
             map.put("浏览器", user.getBrowser());

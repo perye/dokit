@@ -14,7 +14,7 @@
           <el-input v-model="form.name" style="width: 370px;" />
         </el-form-item>
         <el-form-item label="描述">
-          <el-input v-model="form.remark" style="width: 370px;" />
+          <el-input v-model="form.description" style="width: 370px;" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -55,7 +55,7 @@
           >
             <el-table-column type="selection" width="55" />
             <el-table-column :show-overflow-tooltip="true" prop="name" label="名称" />
-            <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
+            <el-table-column :show-overflow-tooltip="true" prop="description" label="描述" />
             <el-table-column
               v-permission="['admin','dict:edit','dict:del']"
               label="操作"
@@ -109,7 +109,7 @@ import pagination from '@crud/Pagination'
 import rrOperation from '@crud/RR.operation'
 import udOperation from '@crud/UD.operation'
 
-const defaultForm = { id: null, name: null, remark: null }
+const defaultForm = { id: null, name: null, description: null, dictDetails: [] }
 
 export default {
   name: 'Dict',
@@ -124,7 +124,7 @@ export default {
     return {
       queryTypeOptions: [
         { key: 'name', display_name: '字典名称' },
-        { key: 'remark', display_name: '描述' }
+        { key: 'description', display_name: '描述' }
       ],
       rules: {
         name: [

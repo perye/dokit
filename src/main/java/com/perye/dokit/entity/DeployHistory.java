@@ -1,8 +1,12 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -15,46 +19,30 @@ import java.sql.Timestamp;
  * @date 2019/12/10 11:11 下午
  */
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="mnt_deploy_history")
-public class DeployHistory implements Serializable {
+public class DeployHistory extends BaseEntity implements Serializable {
 
-    /**
-     * 编号
-     */
     @Id
-    @Column(name = "id")
+    @Column(name = "history_id")
+    @ApiModelProperty(value = "ID", hidden = true)
     private String id;
 
-    /**
-     * 应用名称
-     */
-    @Column(name = "app_name",nullable = false)
+    @ApiModelProperty(value = "应用名称")
     private String appName;
 
-    /**
-     * 部署IP
-     */
-    @Column(name = "ip",nullable = false)
+    @ApiModelProperty(value = "IP")
     private String ip;
 
-    /**
-     * 部署时间
-     */
-    @Column(name = "deploy_date")
     @CreationTimestamp
+    @ApiModelProperty(value = "部署时间")
     private Timestamp deployDate;
 
-    /**
-     * 部署人员
-     */
-    @Column(name = "deploy_user",nullable = false)
+    @ApiModelProperty(value = "部署者")
     private String deployUser;
 
-    /**
-     * 部署编号
-     */
-    @Column(name = "deploy_id",nullable = false)
+    @ApiModelProperty(value = "部署ID")
     private Long deployId;
 
     public void copy(DeployHistory source){

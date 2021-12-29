@@ -70,7 +70,6 @@ Just do kit!
 | ssh2                 | 服务器连接          |
 | jsch                 | SFTP文件传输       |
 | mapstruct            | 属性映射工具         |
-| ip2region            | 根据ip转换成具体地理位置 |
 | mysql| 关系型数据库|
 
 ##### 前端技术
@@ -143,8 +142,6 @@ Just do kit!
 │       │   ├── application-prod.yml
 │       │   └── application.yml
 │       ├── generator.properties
-│       ├── ip2region               ip转换
-│       │   └── ip2region.db
 │       ├── log4jdbc.log4j2.properties
 │       ├── logback.xml
 │       ├── sigar-lib               sigar所需文件

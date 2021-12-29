@@ -1,12 +1,13 @@
 package com.perye.dokit.controller;
 
-import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.annotation.Log;
 import com.perye.dokit.query.DictQueryCriteria;
 import com.perye.dokit.entity.Dict;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.DictService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +21,11 @@ import java.util.Set;
 
 @RestController
 @Api(tags = "系统：字典管理")
+@RequiredArgsConstructor
 @RequestMapping("/api/dict")
 public class DictController {
 
     private final DictService dictService;
-
-    public DictController(DictService dictService) {
-        this.dictService = dictService;
-    }
 
     private static final String ENTITY_NAME = "dict";
 
@@ -43,7 +41,7 @@ public class DictController {
     @ApiOperation("查询字典")
     @GetMapping(value = "/all")
     @PreAuthorize("@dokit.check('dict:list')")
-    public ResponseEntity<Object> all(){
+    public ResponseEntity<Object> queryAll(){
         return new ResponseEntity<>(dictService.queryAll(new DictQueryCriteria()),HttpStatus.OK);
     }
 
@@ -51,7 +49,7 @@ public class DictController {
     @ApiOperation("查询字典")
     @GetMapping
     @PreAuthorize("@dokit.check('dict:list')")
-    public ResponseEntity<Object> getDicts(DictQueryCriteria resources, Pageable pageable){
+    public ResponseEntity<Object> query(DictQueryCriteria resources, Pageable pageable){
         return new ResponseEntity<>(dictService.queryAll(resources,pageable),HttpStatus.OK);
     }
 
@@ -63,7 +61,8 @@ public class DictController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(dictService.create(resources),HttpStatus.CREATED);
+        dictService.create(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Log("修改字典")

@@ -1,6 +1,8 @@
 package com.perye.dokit.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,57 +18,62 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "menu")
-public class Menu implements Serializable {
+@Table(name = "sys_menu")
+public class Menu extends BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "menu_id")
     @NotNull(groups = {Update.class})
+    @ApiModelProperty(value = "ID", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String name;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "menus")
+    @ApiModelProperty(value = "菜单角色")
+    private Set<Role> roles;
 
-    @Column(unique = true)
-    private Long sort = 999L;
+    @ApiModelProperty(value = "菜单标题")
+    private String title;
 
-    @Column(name = "path")
-    private String path;
-
-    private String component;
-
-    /** 类型，目录、菜单、按钮 */
-    @Column(name = "type")
-    private Integer type;
-
-    /** 权限 */
-    @Column(name = "permission")
-    private String permission;
-
-
-    @Column(unique = true,name = "component_name")
+    @Column(name = "name")
+    @ApiModelProperty(value = "菜单组件名称")
     private String componentName;
 
+    @ApiModelProperty(value = "排序")
+    private Integer menuSort = 999;
+
+    @ApiModelProperty(value = "组件路径")
+    private String component;
+
+    @ApiModelProperty(value = "路由地址")
+    private String path;
+
+    @ApiModelProperty(value = "菜单类型，目录、菜单、按钮")
+    private Integer type;
+
+    @ApiModelProperty(value = "权限标识")
+    private String permission;
+
+    @ApiModelProperty(value = "菜单图标")
     private String icon;
 
     @Column(columnDefinition = "bit(1) default 0")
+    @ApiModelProperty(value = "缓存")
     private Boolean cache;
 
     @Column(columnDefinition = "bit(1) default 0")
+    @ApiModelProperty(value = "是否隐藏")
     private Boolean hidden;
 
-    /** 上级菜单ID */
-    @Column(name = "pid",nullable = false)
+    @ApiModelProperty(value = "上级菜单")
     private Long pid;
 
-    /** 是否为外链 true/false */
-    @Column(name = "i_frame")
+    @ApiModelProperty(value = "子节点数目", hidden = true)
+    private Integer subCount = 0;
+
+    @ApiModelProperty(value = "外链菜单")
     private Boolean iFrame;
-
-    @ManyToMany(mappedBy = "menus")
-    @JsonIgnore
-    private Set<Role> roles;
-
 
     @Override
     public boolean equals(Object o) {
@@ -79,12 +86,6 @@ public class Menu implements Serializable {
         Menu menu = (Menu) o;
         return Objects.equals(id, menu.id);
     }
-
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
-
-    public @interface Update {}
 
     @Override
     public int hashCode() {

@@ -12,14 +12,9 @@ import java.util.List;
 
 public interface QiNiuService {
 
-    Object queryAll(QiniuQueryCriteria criteria, Pageable pageable);
-
-    List<QiniuContent> queryAll(QiniuQueryCriteria criteria);
-
-
     /**
      * 查配置
-     * @return Cacheable
+     * @return QiniuConfig
      */
     QiniuConfig find();
 
@@ -28,7 +23,12 @@ public interface QiNiuService {
      * @param qiniuConfig 配置
      * @return QiniuConfig
      */
-    QiniuConfig update(QiniuConfig qiniuConfig);
+    QiniuConfig config(QiniuConfig qiniuConfig);
+
+
+    Object queryAll(QiniuQueryCriteria criteria, Pageable pageable);
+
+    List<QiniuContent> queryAll(QiniuQueryCriteria criteria);
 
     /**
      * 上传文件

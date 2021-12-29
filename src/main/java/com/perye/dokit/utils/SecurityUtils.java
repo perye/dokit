@@ -1,6 +1,8 @@
 package com.perye.dokit.utils;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.perye.dokit.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 /**
  * 获取当前登录的用户
@@ -56,6 +60,16 @@ public class SecurityUtils {
     public static Long getCurrentUserId() {
         UserDetails userDetails = getCurrentUser();
         return new JSONObject(new JSONObject(userDetails).get("user")).get("id", Long.class);
+    }
+
+    /**
+     * 获取当前用户的数据权限
+     * @return /
+     */
+    public static List<Long> getCurrentUserDataScope(){
+        UserDetails userDetails = getCurrentUser();
+        JSONArray array = JSONUtil.parseArray(new JSONObject(userDetails).get("dataScopes"));
+        return JSONUtil.toList(array,Long.class);
     }
 
 

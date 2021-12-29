@@ -17,6 +17,7 @@ public interface LogService {
 
     /**
      * 分页查询
+     *
      * @param criteria 查询条件
      * @param pageable 分页参数
      * @return /
@@ -25,6 +26,7 @@ public interface LogService {
 
     /**
      * 查询全部数据
+     *
      * @param criteria 查询条件
      * @return /
      */
@@ -32,6 +34,7 @@ public interface LogService {
 
     /**
      * 查询用户日志
+     *
      * @param criteria 查询条件
      * @param pageable 分页参数
      * @return -
@@ -40,11 +43,12 @@ public interface LogService {
 
     /**
      * 保存日志数据
-     * @param username 用户
-     * @param browser 浏览器
-     * @param ip 请求IP
+     *
+     * @param username  用户
+     * @param browser   浏览器
+     * @param ip        请求IP
      * @param joinPoint /
-     * @param log 日志实体
+     * @param log       日志实体
      */
     @Async
     void save(String username, String browser, String ip, ProceedingJoinPoint joinPoint, Log log);
@@ -59,20 +63,12 @@ public interface LogService {
 
     /**
      * 导出日志
-     * @param logs 待导出的数据
+     *
+     * @param logs     待导出的数据
      * @param response /
      * @throws IOException /
      */
     void download(List<Log> logs, HttpServletResponse response) throws IOException;
-
-
-    /**
-     * 导出错误日志
-     * @param queryAll 待导出的数据
-     * @param response /
-     * @throws IOException /
-     */
-    void downloadError(List<Log> queryAll, HttpServletResponse response) throws IOException;
 
     /**
      * 删除所有错误日志
@@ -83,5 +79,4 @@ public interface LogService {
      * 删除所有INFO日志
      */
     void delAllByInfo();
-
 }

@@ -1,7 +1,9 @@
 package com.perye.dokit;
 
 import com.perye.dokit.annotation.AnonymousAccess;
+import com.perye.dokit.annotation.rest.AnonymousGetMapping;
 import com.perye.dokit.utils.SpringContextHolder;
+import io.swagger.annotations.Api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -15,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @EnableAsync
 @RestController
-//开启审计功能
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@Api(hidden = true)
 @EnableTransactionManagement
 @SpringBootApplication
+//开启审计功能
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class DokitApplication {
 
     public static void main(String[] args) {
@@ -43,10 +46,10 @@ public class DokitApplication {
 
     /**
      * 访问首页提示
+     *
      * @return /
      */
-    @GetMapping("/")
-    @AnonymousAccess
+    @AnonymousGetMapping("/")
     public String index() {
         return "Backend service was started!!!";
     }

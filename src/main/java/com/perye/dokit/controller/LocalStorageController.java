@@ -1,9 +1,10 @@
 package com.perye.dokit.controller;
 
-import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.annotation.Log;
 import com.perye.dokit.query.LocalStorageQueryCriteria;
 import com.perye.dokit.entity.LocalStorage;
 import com.perye.dokit.service.LocalStorageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +19,16 @@ import java.io.IOException;
 
 @Api(tags = "工具：本地存储管理")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/localStorage")
 public class LocalStorageController {
 
     private final LocalStorageService localStorageService;
 
-    public LocalStorageController(LocalStorageService localStorageService) {
-        this.localStorageService = localStorageService;
-    }
     @ApiOperation("查询文件")
     @GetMapping()
     @PreAuthorize("@dokit.check('storage:list')")
-    public ResponseEntity<Object> getLocalStorages(LocalStorageQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> query(LocalStorageQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(localStorageService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -45,7 +44,8 @@ public class LocalStorageController {
     @PostMapping()
     @PreAuthorize("@dokit.check('storage:add')")
     public ResponseEntity<Object> create(@RequestParam String name, @RequestParam("file") MultipartFile file){
-        return new ResponseEntity<>(localStorageService.create(name, file),HttpStatus.CREATED);
+        localStorageService.create(name, file);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiOperation("修改文件")
@@ -59,7 +59,7 @@ public class LocalStorageController {
     @Log("多选删除")
     @DeleteMapping
     @ApiOperation("多选删除")
-    public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {
+    public ResponseEntity<Object> delete(@RequestBody Long[] ids) {
         localStorageService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -23,9 +23,8 @@ public interface JobService {
     /**
      * 创建
      * @param resources /
-     * @return /
      */
-    JobDTO create(Job resources);
+    void create(Job resources);
 
     /**
      * 编辑
@@ -61,4 +60,11 @@ public interface JobService {
      * @throws IOException /
      */
     void download(List<JobDTO> queryAll, HttpServletResponse response) throws IOException;
+
+
+    /**
+     * 验证是否被用户关联
+     * @param ids /
+     */
+    void verification(Set<Long> ids);
 }

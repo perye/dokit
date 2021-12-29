@@ -1,4 +1,4 @@
-package ${package}.mapper;
+package ${package}.mapstruct;
 
 import com.perye.dokit.base.BaseMapper;
 import ${package}.entity.${className};

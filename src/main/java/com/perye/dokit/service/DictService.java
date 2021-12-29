@@ -29,18 +29,10 @@ public interface DictService {
     List<DictDto> queryAll(DictQueryCriteria dict);
 
     /**
-     * 根据ID查询
-     * @param id /
-     * @return /
-     */
-    DictDto findById(Long id);
-
-    /**
      * 创建
      * @param resources /
-     * @return /
      */
-    DictDto create(Dict resources);
+    void create(Dict resources);
 
     /**
      * 编辑

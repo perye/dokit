@@ -2,8 +2,10 @@ package com.perye.dokit.utils;
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
+import com.google.common.collect.Maps;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,20 +17,20 @@ import java.util.logging.Logger;
  */
 public class ScpClientUtil {
 
-    static private ScpClientUtil instance;
+    static private Map<String,ScpClientUtil> instance = Maps.newHashMap();
 
-    static synchronized public ScpClientUtil getInstance(String IP, int port, String username, String passward) {
-        if (instance == null) {
-            instance = new ScpClientUtil(IP, port, username, passward);
+    static synchronized public ScpClientUtil getInstance(String ip, int port, String username, String password) {
+        if (instance.get(ip) == null) {
+            instance.put(ip, new ScpClientUtil(ip, port, username, password));
         }
-        return instance;
+        return instance.get(ip);
     }
 
-    public ScpClientUtil(String IP, int port, String username, String passward) {
-        this.ip = IP;
+    public ScpClientUtil(String ip, int port, String username, String password) {
+        this.ip = ip;
         this.port = port;
         this.username = username;
-        this.password = passward;
+        this.password = password;
     }
 
     public void getFile(String remoteFile, String localTargetDirectory) {

@@ -1,5 +1,6 @@
 package com.perye.dokit.dto;
 
+import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +10,10 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class DictDetailDto implements Serializable {
+public class DictDetailDto extends BaseDTO implements Serializable {
     private Long id;
+
+    private DictSmallDto dict;
 
     // 字典标签
     private String label;
@@ -18,10 +21,6 @@ public class DictDetailDto implements Serializable {
     // 字典值
     private String value;
 
-    // 排序
-    private Integer sort;
+    private Integer dictSort;
 
-    private DictSmallDto dict;
-
-    private Timestamp createTime;
 }

@@ -11,6 +11,7 @@ import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.repository.PictureRepository;
 import com.perye.dokit.service.PictureService;
 import com.perye.dokit.utils.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
@@ -26,9 +27,8 @@ import java.io.IOException;
 import java.util.*;
 
 @Slf4j
-@CacheConfig(cacheNames = "picture")
 @Service(value = "pictureService")
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@RequiredArgsConstructor
 public class PictureServiceImpl implements PictureService {
 
     @Value("${smms.token}")
@@ -41,10 +41,6 @@ public class PictureServiceImpl implements PictureService {
     private static final String CODE = "code";
 
     private static final String MSG = "message";
-
-    public PictureServiceImpl(PictureRepository pictureRepository) {
-        this.pictureRepository = pictureRepository;
-    }
 
     @Override
     public Object queryAll(PictureQueryCriteria criteria, Pageable pageable){
@@ -123,7 +119,7 @@ public class PictureServiceImpl implements PictureService {
             if(!pictureRepository.existsByUrl(picture.getUrl())){
                 picture.setSize(FileUtil.getSize(Integer.parseInt(picture.getSize())));
                 picture.setUsername("System Sync");
-                picture.setMd5Code("");
+                picture.setMd5Code(null);
                 pictureRepository.save(picture);
             }
         }

@@ -1,7 +1,7 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-
+/.gradle/
 node_modules/
 dist/
 npm-debug.log*

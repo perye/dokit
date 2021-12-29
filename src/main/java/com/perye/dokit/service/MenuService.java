@@ -15,13 +15,17 @@ public interface MenuService {
 
     /**
      * 查询全部数据
+     *
      * @param criteria 条件
+     * @param isQuery  /
      * @return /
+     * @throws Exception /
      */
-    List<MenuDto> queryAll(MenuQueryCriteria criteria);
+    List<MenuDto> queryAll(MenuQueryCriteria criteria, Boolean isQuery) throws Exception;
 
     /**
      * 根据ID查询
+     *
      * @param id /
      * @return /
      */
@@ -29,55 +33,38 @@ public interface MenuService {
 
     /**
      * 创建
+     *
      * @param resources /
-     * @return /
      */
-    MenuDto create(Menu resources);
+    void create(Menu resources);
 
     /**
      * 编辑
+     *
      * @param resources /
      */
     void update(Menu resources);
 
     /**
      * 获取待删除的菜单
+     *
      * @param menuList /
-     * @param menuSet /
+     * @param menuSet  /
      * @return /
      */
     Set<Menu> getDeleteMenus(List<Menu> menuList, Set<Menu> menuSet);
 
     /**
-     * 获取菜单树
-     * @param menus /
-     * @return /
-     */
-    Object getMenuTree(List<Menu> menus);
-
-    /**
-     * 根据pid查询
-     * @param pid /
-     * @return /
-     */
-    List<Menu> findByPid(long pid);
-
-    /**
      * 构建菜单树
+     *
      * @param menuDtos 原始数据
      * @return /
      */
-    Map<String,Object> buildTree(List<MenuDto> menuDtos);
-
-    /**
-     * 根据角色查询
-     * @param roles /
-     * @return /
-     */
-    List<MenuDto> findByRoles(List<RoleSmallDto> roles);
+    List<MenuDto> buildTree(List<MenuDto> menuDtos);
 
     /**
      * 构建菜单树
+     *
      * @param menuDtos /
      * @return /
      */
@@ -85,6 +72,7 @@ public interface MenuService {
 
     /**
      * 根据ID查询
+     *
      * @param id /
      * @return /
      */
@@ -92,16 +80,42 @@ public interface MenuService {
 
     /**
      * 删除
+     *
      * @param menuSet /
      */
     void delete(Set<Menu> menuSet);
 
     /**
      * 导出
+     *
      * @param queryAll 待导出的数据
      * @param response /
      * @throws IOException /
      */
     void download(List<MenuDto> queryAll, HttpServletResponse response) throws IOException;
+
+    /**
+     * 懒加载菜单数据
+     *
+     * @param pid /
+     * @return /
+     */
+    List<MenuDto> getMenus(Long pid);
+
+    /**
+     * 根据ID获取同级与上级数据
+     *
+     * @param menuDto /
+     * @param objects /
+     * @return /
+     */
+    List<MenuDto> getSuperior(MenuDto menuDto, List<Menu> objects);
+
+    /**
+     * 根据当前用户获取菜单
+     * @param currentUserId /
+     * @return /
+     */
+    List<MenuDto> findByUser(Long currentUserId);
 }
 

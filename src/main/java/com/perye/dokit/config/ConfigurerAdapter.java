@@ -17,11 +17,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class ConfigurerAdapter implements WebMvcConfigurer {
 
-    @Value("${file.path}")
-    private String path;
+    /**
+     * 文件配置
+     */
+    private final FileProperties fileProperties;
 
-    @Value("${file.avatar}")
-    private String avatar;
+    public ConfigurerAdapter(FileProperties fileProperties) {
+        this.fileProperties = fileProperties;
+    }
 
     @Bean
     public CorsFilter corsFilter() {
@@ -37,8 +40,9 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String avatarUtl = "file:" + avatar.replace("\\","/");
-        String pathUtl = "file:" + path.replace("\\","/");
+        FileProperties.Path path = fileProperties.getPath();
+        String avatarUtl = "file:" + path.getAvatar().replace("\\","/");
+        String pathUtl = "file:" + path.getPath().replace("\\","/");
         registry.addResourceHandler("/avatar/**").addResourceLocations(avatarUtl).setCachePeriod(0);
         registry.addResourceHandler("/file/**").addResourceLocations(pathUtl).setCachePeriod(0);
         registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(0);

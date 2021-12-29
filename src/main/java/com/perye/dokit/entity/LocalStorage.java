@@ -1,5 +1,7 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -12,55 +14,41 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
-@Table(name = "local_storage")
+@Table(name = "tool_local_storage")
 @NoArgsConstructor
-public class LocalStorage implements Serializable {
+public class LocalStorage extends BaseEntity implements Serializable {
 
     @Id
+    @Column(name = "storage_id")
+    @ApiModelProperty(value = "ID", hidden = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    // 真实文件名
-    @Column(name = "real_name")
+    @ApiModelProperty(value = "真实文件名")
     private String realName;
 
-    // 文件名
-    @Column(name = "name")
+    @ApiModelProperty(value = "文件名")
     private String name;
 
-    // 后缀
-    @Column(name = "suffix")
+    @ApiModelProperty(value = "后缀")
     private String suffix;
 
-    // 路径
-    @Column(name = "path")
+    @ApiModelProperty(value = "路径")
     private String path;
 
-    // 类型
-    @Column(name = "type")
+    @ApiModelProperty(value = "类型")
     private String type;
 
-    // 大小
-    @Column(name = "size")
+    @ApiModelProperty(value = "大小")
     private String size;
 
-    // 操作人
-    @Column(name = "operate")
-    private String operate;
-
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
-
-    public LocalStorage(String realName, String name, String suffix, String path, String type, String size, String operate) {
+    public LocalStorage(String realName,String name, String suffix, String path, String type, String size) {
         this.realName = realName;
         this.name = name;
         this.suffix = suffix;
         this.path = path;
         this.type = type;
         this.size = size;
-        this.operate = operate;
     }
 
     public void copy(LocalStorage source) {

@@ -134,7 +134,7 @@ public class RedisConfig extends CachingConfigurerSupport {
  */
 class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
 
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     FastJsonRedisSerializer(Class<T> clazz) {
         super();

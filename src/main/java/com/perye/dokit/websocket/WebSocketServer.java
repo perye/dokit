@@ -70,7 +70,7 @@ public class WebSocketServer {
             try {
                 item.sendMessage(message);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(),e);
             }
         }
     }

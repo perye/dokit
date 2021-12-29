@@ -22,9 +22,9 @@ public class OnlineUserDto {
     private String nickName;
 
     /**
-     * 岗位
+     * 部门
      */
-    private String job;
+    private String dept;
 
     /**
      * 浏览器

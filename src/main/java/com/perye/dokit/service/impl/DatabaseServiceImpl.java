@@ -4,10 +4,11 @@ import cn.hutool.core.util.IdUtil;
 import com.perye.dokit.dto.DatabaseDto;
 import com.perye.dokit.query.DatabaseQueryCriteria;
 import com.perye.dokit.entity.Database;
-import com.perye.dokit.mapper.DatabaseMapper;
+import com.perye.dokit.mapstruct.DatabaseMapper;
 import com.perye.dokit.repository.DatabaseRepository;
 import com.perye.dokit.service.DatabaseService;
 import com.perye.dokit.utils.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,19 +25,14 @@ import java.util.*;
  * @email peryedev@gmail.com
  * @date 2019/12/10
  */
-@Service
 @Slf4j
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@Service
+@RequiredArgsConstructor
 public class DatabaseServiceImpl implements DatabaseService {
 
-    private DatabaseRepository databaseRepository;
+    private final DatabaseRepository databaseRepository;
 
-    private DatabaseMapper databaseMapper;
-
-    public DatabaseServiceImpl(DatabaseRepository databaseRepository,DatabaseMapper databaseMapper){
-        this.databaseMapper = databaseMapper;
-        this.databaseRepository = databaseRepository;
-    }
+    private final DatabaseMapper databaseMapper;
 
     @Override
     public Object queryAll(DatabaseQueryCriteria criteria, Pageable pageable){
@@ -58,9 +54,9 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public DatabaseDto create(Database resources) {
+    public void create(Database resources) {
         resources.setId(IdUtil.simpleUUID());
-        return databaseMapper.toDto(databaseRepository.save(resources));
+        databaseRepository.save(resources);
     }
 
     @Override

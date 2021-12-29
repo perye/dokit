@@ -1,5 +1,7 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,60 +20,77 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name="user")
-public class User implements Serializable {
+@Table(name="sys_user")
+public class User extends BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     @NotNull(groups = Update.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "ID", hidden = true)
     private Long id;
+
+    @ManyToMany
+    @ApiModelProperty(value = "用户角色")
+    @JoinTable(name = "sys_users_roles",
+            joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")})
+    private Set<Role> roles;
+
+    @ManyToMany
+    @ApiModelProperty(value = "用户岗位")
+    @JoinTable(name = "sys_users_jobs",
+            joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "job_id",referencedColumnName = "job_id")})
+    private Set<Job> jobs;
+
+    @OneToOne
+    @JoinColumn(name = "dept_id")
+    @ApiModelProperty(value = "用户部门")
+    private Dept dept;
+
 
     @NotBlank
     @Column(unique = true)
+    @ApiModelProperty(value = "用户名称")
     private String username;
 
-    /** 用户昵称 */
     @NotBlank
+    @ApiModelProperty(value = "用户昵称")
     private String nickName;
 
-    /** 性别 */
-    private String sex;
-
-
-    @OneToOne
-    @JoinColumn(name = "avatar_id")
-    private UserAvatar userAvatar;
-
     @NotBlank
+    @ApiModelProperty(value = "邮箱")
     @Email
     private String email;
 
     @NotBlank
+    @ApiModelProperty(value = "电话号码")
     private String phone;
 
-    @NotNull
-    private Boolean enabled;
+    @ApiModelProperty(value = "用户性别")
+    private String gender;
 
+    @ApiModelProperty(value = "头像真实名称",hidden = true)
+    private String avatarName;
+
+    @ApiModelProperty(value = "头像存储的路径", hidden = true)
+    private String avatarPath;
+
+    @ApiModelProperty(value = "密码")
     private String password;
 
-    @Column(name = "last_password_reset_time")
-    private Date lastPasswordResetTime;
+    @NotNull
+    @ApiModelProperty(value = "是否启用")
+    private Boolean enabled;
 
-    @ManyToMany
-    @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "id")})
-    private Set<Role> roles;
+    @ApiModelProperty(value = "是否为admin账号", hidden = true)
+    private Boolean isAdmin = false;
 
-    @OneToOne
-    @JoinColumn(name = "job_id")
-    private Job job;
+    @Column(name = "pwd_reset_time")
+    @ApiModelProperty(value = "最后修改密码的时间", hidden = true)
+    private Date pwdResetTime;
 
-    @OneToOne
-    @JoinColumn(name = "dept_id")
-    private Dept dept;
-
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
 
     public @interface Update {}
 

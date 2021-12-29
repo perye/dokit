@@ -12,13 +12,13 @@ import com.perye.dokit.exception.EntityExistException;
 </#if>
 import com.perye.dokit.utils.ValidationUtil;
 import com.perye.dokit.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import ${package}.repository.${className}Repository;
 import ${package}.service.${className}Service;
 import ${package}.dto.${className}Dto;
 import ${package}.query.${className}QueryCriteria;
-import ${package}.mapper.${className}Mapper;
+import ${package}.mapstruct.${className}Mapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 <#if !auto && pkColumnType = 'Long'>
 import cn.hutool.core.lang.Snowflake;
@@ -27,10 +27,6 @@ import cn.hutool.core.util.IdUtil;
 <#if !auto && pkColumnType = 'String'>
 import cn.hutool.core.util.IdUtil;
 </#if>
-// 默认不使用缓存
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.perye.dokit.utils.PageUtil;
@@ -43,34 +39,26 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 @Service
-//@CacheConfig(cacheNames = "${changeClassName}")
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@RequiredArgsConstructor
 public class ${className}ServiceImpl implements ${className}Service {
 
     private final ${className}Repository ${changeClassName}Repository;
 
     private final ${className}Mapper ${changeClassName}Mapper;
 
-    public ${className}ServiceImpl(${className}Repository ${changeClassName}Repository, ${className}Mapper ${changeClassName}Mapper) {
-        this.${changeClassName}Repository = ${changeClassName}Repository;
-        this.${changeClassName}Mapper = ${changeClassName}Mapper;
-    }
-
     @Override
-    //@Cacheable
     public Map<String,Object> queryAll(${className}QueryCriteria criteria, Pageable pageable){
         Page<${className}> page = ${changeClassName}Repository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(${changeClassName}Mapper::toDto));
     }
 
     @Override
-    //@Cacheable
     public List<${className}Dto> queryAll(${className}QueryCriteria criteria){
         return ${changeClassName}Mapper.toDto(${changeClassName}Repository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
-    //@Cacheable(key = "#p0")
+    @Transactional
     public ${className}Dto findById(${pkColumnType} ${pkChangeColName}) {
         ${className} ${changeClassName} = ${changeClassName}Repository.findById(${pkChangeColName}).orElseGet(${className}::new);
         ValidationUtil.isNull(${changeClassName}.get${pkCapitalColName}(),"${className}","${pkChangeColName}",${pkChangeColName});
@@ -78,7 +66,6 @@ public class ${className}ServiceImpl implements ${className}Service {
     }
 
     @Override
-    //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public ${className}Dto create(${className} resources) {
     <#if !auto && pkColumnType = 'Long'>
@@ -101,7 +88,6 @@ public class ${className}ServiceImpl implements ${className}Service {
     }
 
     @Override
-    //@CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(${className} resources) {
         ${className} ${changeClassName} = ${changeClassName}Repository.findById(resources.get${pkCapitalColName}()).orElseGet(${className}::new);
@@ -124,9 +110,8 @@ public class ${className}ServiceImpl implements ${className}Service {
     }
 
     @Override
-    //@CacheEvict(allEntries = true)
     public void deleteAll(${pkColumnType}[] ids) {
-        for (${pkColumnType} id : ids) {
+        for (${pkColumnType} ${pkChangeColName} : ids) {
             ${changeClassName}Repository.deleteById(${pkChangeColName});
         }
     }

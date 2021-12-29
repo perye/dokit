@@ -1,8 +1,12 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -15,43 +19,27 @@ import java.sql.Timestamp;
  * @date 2019/12/10 10:55 下午
  */
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="mnt_database")
-public class Database implements Serializable {
+public class Database extends BaseEntity implements Serializable {
 
-    /**
-     * id
-     */
     @Id
-    @Column(name = "id")
+    @Column(name = "db_id")
+    @ApiModelProperty(value = "ID", hidden = true)
     private String id;
 
-    /**
-     * 数据库名称
-     */
-    @Column(name = "name",nullable = false)
+    @ApiModelProperty(value = "数据库名称")
     private String name;
 
-    /**
-     * 数据库连接地址
-     */
-    @Column(name = "jdbc_url",nullable = false)
+    @ApiModelProperty(value = "数据库连接地址")
     private String jdbcUrl;
 
-    /**
-     * 数据库密码
-     */
-    @Column(name = "pwd",nullable = false)
+    @ApiModelProperty(value = "数据库密码")
     private String pwd;
 
-    /**
-     * 用户名
-     */
-    @Column(name = "user_name",nullable = false)
+    @ApiModelProperty(value = "用户名")
     private String userName;
-
-    @CreationTimestamp
-    private Timestamp createTime;
 
     public void copy(Database source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

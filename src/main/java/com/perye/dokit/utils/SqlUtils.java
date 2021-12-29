@@ -118,7 +118,7 @@ public class SqlUtils {
             try {
                 connection.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(),e);
                 log.error("connection close error：" + e.getMessage());
             }
         }
@@ -130,7 +130,7 @@ public class SqlUtils {
             try {
                 rs.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(),e);
             }
         }
     }

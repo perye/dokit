@@ -1,5 +1,6 @@
 package com.perye.dokit.dto;
 
+import com.perye.dokit.base.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,16 +11,14 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DictDto implements Serializable {
+public class DictDto extends BaseDTO implements Serializable {
+
     private Long id;
-
-    // 字典名称
-    private String name;
-
-    // 字典名称
-    private String remark;
 
     private List<DictDetailDto> dictDetails;
 
-    private Timestamp createTime;
+    private String name;
+
+    private String description;
+
 }
