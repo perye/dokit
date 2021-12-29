@@ -9,39 +9,62 @@ spring:
       password: 123456
 
       # 初始化配置
-      initial-size: 3
+      initial-size: 5
       # 最小连接数
-      min-idle: 3
+      min-idle: 10
       # 最大连接数
-      max-active: 15
+      max-active: 20
       # 获取连接超时时间
       max-wait: 5000
       # 连接有效性检测时间
-      time-between-eviction-runs-millis: 90000
-      # 最大空闲时间
-      min-evictable-idle-time-millis: 1800000
+      time-between-eviction-runs-millis: 60000
+      # 连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      # 连接在池中最大生存的时间
+      max-evictable-idle-time-millis: 900000
       test-while-idle: true
       test-on-borrow: false
       test-on-return: false
-      validation-query: select 1
-      # 配置监控统计拦截的filters
-      filters: stat
 
+      # 检测连接是否有效
+      validation-query: select 1
+      # 配置监控统计
+      webStatFilter:
+        enabled: true
       stat-view-servlet:
+        enabled: true
         url-pattern: /druid/*
         reset-enable: false
-        login-username: admin
-        login-password: 123456
 
-      web-stat-filter:
-        url-pattern: /*
-        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+      filter:
+        stat:
+          enabled: true
+          # 记录慢SQL
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
 
-  #配置 Jpa
-  jpa:
-    hibernate:
-      # 生产环境设置成 none，避免程序运行时自动更新数据库结构
-      ddl-auto: none
+# 登录相关配置
+login:
+  # 登录缓存
+  cache-enable: true
+  #  是否限制单用户登录
+  single: false
+  #  验证码
+  login-code:
+    #  验证码类型配置 查看 LoginProperties 类
+    code-type: chinese_gif
+    #  登录图形验证码有效时间/分钟
+    expiration: 2
+    #  验证码高度
+    width: 111
+    #  验证码宽度
+    heigth: 36
+    # 内容长度
+    length: 2
 
 #jwt
 jwt:
@@ -53,9 +76,17 @@ jwt:
   # 令牌过期时间 此处单位/毫秒 ，默认2小时，可在此网站生成 https://www.convertworld.com/zh-hans/time/milliseconds.html
   token-validity-in-seconds: 7200000
   # 在线用户key
-  online-key: online-token
+  online-key: online-token-
   # 验证码
-  code-key: code-key
+  code-key: code-key-
+  # token 续期检查时间范围（默认30分钟，单位毫秒），在token即将过期的一段时间内用户操作了，则给用户的token续期
+  detect: 1800000
+  # 续期时间范围，默认1小时，单位毫秒
+  renew: 3600000
+
+# IP 本地解析
+ip:
+  local-parsing: false
 
 #是否允许生成代码，生产环境设置为false
 generator:
@@ -74,8 +105,15 @@ swagger:
 
 # 文件存储路径
 file:
-  path: /home/dokit/file/
-  avatar: /home/dokit/avatar/
+  mac:
+    path: ~/dokit/file/
+    avatar: ~/dokit/avatar/
+  linux:
+    path: /home/dokit/file/
+    avatar: /home/dokit/avatar/
+  windows:
+    path: D:\dokit\file\
+    avatar: D:\dokit\avatar\
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5

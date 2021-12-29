@@ -13,6 +13,9 @@ import com.perye.dokit.utils.GenUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.StringUtils;
 import com.perye.dokit.vo.TableInfo;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,17 +33,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@SuppressWarnings({"unchecked","all"})
+@RequiredArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
+
+    private static final Logger log = LoggerFactory.getLogger(GeneratorServiceImpl.class);
 
     @PersistenceContext
     private EntityManager em;
 
     private final ColumnInfoRepository columnInfoRepository;
-
-    public GeneratorServiceImpl(ColumnInfoRepository columnInfoRepository) {
-        this.columnInfoRepository = columnInfoRepository;
-    }
 
     @Override
     public Object getTables() {
@@ -114,7 +115,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         // 第一种情况，数据库类字段改变或者新增字段
         for (ColumnInfo columnInfo : columnInfoList) {
             // 根据字段名称查找
-            List<ColumnInfo> columns = new ArrayList<ColumnInfo>(columnInfos.stream().filter(c-> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList()));
+            List<ColumnInfo> columns = columnInfos.stream().filter(c -> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList());
             // 如果能找到，就修改部分可能被字段
             if(CollectionUtil.isNotEmpty(columns)){
                 ColumnInfo column = columns.get(0);
@@ -133,7 +134,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         // 第二种情况，数据库字段删除了
         for (ColumnInfo columnInfo : columnInfos) {
             // 根据字段名称查找
-            List<ColumnInfo> columns = new ArrayList<ColumnInfo>(columnInfoList.stream().filter(c-> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList()));
+            List<ColumnInfo> columns = columnInfoList.stream().filter(c -> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList());
             // 如果找不到，就代表字段被删除了，则需要删除该字段
             if(CollectionUtil.isEmpty(columns)){
                 columnInfoRepository.delete(columnInfo);
@@ -154,7 +155,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         try {
             GenUtil.generatorCode(columns, genConfig);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new BadRequestException("生成失败，请手动处理已生成的文件");
         }
     }

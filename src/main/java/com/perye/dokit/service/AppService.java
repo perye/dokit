@@ -42,9 +42,8 @@ public interface AppService {
     /**
      * 创建
      * @param resources /
-     * @return /
      */
-    AppDto create(App resources);
+    void create(App resources);
 
     /**
      * 编辑

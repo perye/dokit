@@ -29,13 +29,6 @@
 			margin-bottom: 10px;
 			font-weight: bold;
 			background: #ebebeb;">${code}</p>
-        <div style="list-style: none;
-			margin-top: 22px;
-			maigin-bottom: 10px;
-			font-size: 14px;
-            color: #555;">
-            <p style="line-height: 12px;">Github：<a hover="color: #DA251D;" style="color: #999;" href="https://github.com/perye/dokit" target="_blank">https://github.com/perye/dokit</a></p>
-        </div>
         <div class="foot-hr hr" style="margin: 0 auto;
 			z-index: 111;
 			width: 800px;
@@ -46,7 +39,7 @@
 			font-size: 12px;
 			padding: 20px 0px;
 			font-family: Microsoft YaHei;">
-            Copyright &copy;${.now?string("yyyy")} DoKit 后台管理系统 All Rights Reserved.
+            Copyright &copy;${.now?string("yyyy")} <a hover="color: #DA251D;" style="color: #999;" href="https://github.com/perye/dkoit" target="_blank">dokit</a> 后台管理系统 All Rights Reserved.
         </div>
 
     </div>

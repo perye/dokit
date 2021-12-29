@@ -1,10 +1,14 @@
 package com.perye.dokit.entity;
 
 import com.perye.dokit.utils.GenUtil;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 /**
@@ -14,53 +18,56 @@ import javax.persistence.*;
  * @email peryedev@gmail.com
  * @date 2019/12/10 10:24 下午
  */
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "column_config")
-public class ColumnInfo {
+@Table(name = "code_column_config")
+public class ColumnInfo implements Serializable {
 
     @Id
+    @Column(name = "column_id")
+    @ApiModelProperty(value = "ID", hidden = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
+    @ApiModelProperty(value = "表名")
     private String tableName;
 
-    // 数据库字段名称
+    @ApiModelProperty(value = "数据库字段名称")
     private String columnName;
 
-    // 数据库字段类型
+    @ApiModelProperty(value = "数据库字段类型")
     private String columnType;
 
-    // 数据库字段键类型
+    @ApiModelProperty(value = "数据库字段键类型")
     private String keyType;
 
-    // 字段额外的参数
+    @ApiModelProperty(value = "字段额外的参数")
     private String extra;
 
-    // 数据库字段描述
+    @ApiModelProperty(value = "数据库字段描述")
     private String remark;
 
-    // 必填
+    @ApiModelProperty(value = "是否必填")
     private Boolean notNull;
 
-    // 是否在列表显示
+    @ApiModelProperty(value = "是否在列表显示")
     private Boolean listShow;
 
-    // 是否表单显示
+    @ApiModelProperty(value = "是否表单显示")
     private Boolean formShow;
 
-    // 表单类型
+    @ApiModelProperty(value = "表单类型")
     private String formType;
 
-    // 查询 1:模糊 2：精确
+    @ApiModelProperty(value = "查询 1:模糊 2：精确")
     private String queryType;
 
-    // 字典名称
+    @ApiModelProperty(value = "字典名称")
     private String dictName;
 
-    // 日期注解
+    @ApiModelProperty(value = "日期注解")
     private String dateAnnotation;
 
 

@@ -1,5 +1,7 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,29 +16,24 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name="dict")
-public class Dict implements Serializable {
+@Table(name="sys_dict")
+public class Dict extends BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "dict_id")
     @NotNull(groups = Update.class)
+    @ApiModelProperty(value = "ID", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name",nullable = false,unique = true)
-    @NotBlank
-    private String name;
-
-    @Column(name = "remark")
-    private String remark;
-
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
 
     @OneToMany(mappedBy = "dict",cascade={CascadeType.PERSIST,CascadeType.REMOVE})
     private List<DictDetail> dictDetails;
 
-    public @interface Update {}
+    @NotBlank
+    @ApiModelProperty(value = "名称")
+    private String name;
+
+    @ApiModelProperty(value = "描述")
+    private String description;
 
 }

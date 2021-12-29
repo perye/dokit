@@ -1,5 +1,6 @@
 package com.perye.dokit.base;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,38 +22,31 @@ import java.sql.Timestamp;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity implements Serializable {
-    // 删除标识
-    @Column(name = "is_delete", columnDefinition = "bit default 0")
-    private Boolean isDelete = false;
 
-    /**
-     * 创建人
-     */
     @CreatedBy
     @Column(name = "create_by", updatable = false)
-    private String createdBy;
+    @ApiModelProperty(value = "创建人", hidden = true)
+    private String createBy;
 
-    /**
-     * 创建时间
-     */
-    @CreationTimestamp
-    @Column(name = "create_time",updatable = false)
-    private Timestamp createTime;
-
-    /**
-     * 更新人
-     */
     @LastModifiedBy
     @Column(name = "update_by")
+    @ApiModelProperty(value = "更新人", hidden = true)
     private String updatedBy;
 
-    /**
-     * 更新时间
-     */
+    @CreationTimestamp
+    @Column(name = "create_time", updatable = false)
+    @ApiModelProperty(value = "创建时间", hidden = true)
+    private Timestamp createTime;
+
     @UpdateTimestamp
     @Column(name = "update_time")
+    @ApiModelProperty(value = "更新时间", hidden = true)
     private Timestamp updateTime;
 
+    /* 分组校验 */
+    public @interface Create {}
+
+    /* 分组校验 */
     public @interface Update {}
 
     @Override

@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 public @interface Query {
     // 基本对象的属性名
     String propName() default "";
+
     // 查询方式
     Type type() default Type.EQUAL;
 
@@ -43,16 +44,22 @@ public @interface Query {
         // 包含
         , IN
         // 不等于
-        ,NOT_EQUAL
+        , NOT_EQUAL
         // between
-        ,BETWEEN
+        , BETWEEN
         // 不为空
-        ,NOT_NULL
+        , NOT_NULL
+        // 为空
+        , IS_NULL
     }
 
-    // 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询
+    /**
+     * 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询
+     */
     enum Join {
-        /**左右连接*/
-        LEFT, RIGHT
+        /**
+         * 左右连接
+         */
+        LEFT, RIGHT, INNER
     }
 }

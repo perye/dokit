@@ -1,8 +1,12 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -15,61 +19,37 @@ import java.sql.Timestamp;
  * @date 2019/12/10 10:50 下午
  */
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="mnt_app")
-public class App implements Serializable {
+public class App extends BaseEntity implements Serializable {
 
-    /**
-     * 应用编号
-     */
     @Id
+    @Column(name = "app_id")
+    @ApiModelProperty(value = "ID", hidden = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * 应用名称
-     */
-    @Column(name = "name")
+    @ApiModelProperty(value = "名称")
     private String name;
 
-    /**
-     * 端口
-     */
-    @Column(name = "port")
+    @ApiModelProperty(value = "端口")
     private int port;
 
-    /**
-     * 上传目录
-     */
-    @Column(name = "upload_path")
+    @ApiModelProperty(value = "上传路径")
     private String uploadPath;
 
-    /**
-     * 部署目录
-     */
-    @Column(name = "deploy_path")
+    @ApiModelProperty(value = "部署路径")
     private String deployPath;
 
-    /**
-     * 备份目录
-     */
-    @Column(name = "backup_path")
+    @ApiModelProperty(value = "备份路径")
     private String backupPath;
 
-    /**
-     * 启动脚本
-     */
-    @Column(name = "start_script")
+    @ApiModelProperty(value = "启动脚本")
     private String startScript;
 
-    /**
-     * 部署脚本
-     */
-    @Column(name = "deploy_script")
+    @ApiModelProperty(value = "部署脚本")
     private String deployScript;
-
-    @CreationTimestamp
-    private Timestamp createTime;
 
     public void copy(App source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

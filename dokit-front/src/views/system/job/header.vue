@@ -9,17 +9,7 @@
       style="width: 200px;"
       @keyup.enter.native="crud.toQuery"
     />
-    <el-date-picker
-      v-model="query.createTime"
-      class="date-item"
-      :default-time="['00:00:00','23:59:59']"
-      type="daterange"
-      range-separator=":"
-      size="small"
-      value-format="yyyy-MM-dd HH:mm:ss"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-    />
+    <date-range-picker v-model="query.createTime" class="date-item" />
     <el-select
       v-model="query.enabled"
       class="filter-item"
@@ -38,9 +28,10 @@
 <script>
 import { header } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
+import DateRangePicker from '@/components/DateRangePicker'
 
 export default {
-  components: { rrOperation },
+  components: { rrOperation, DateRangePicker },
   mixins: [header()],
   props: {
     dict: {

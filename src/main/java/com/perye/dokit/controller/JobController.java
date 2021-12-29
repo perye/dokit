@@ -1,7 +1,6 @@
 package com.perye.dokit.controller;
 
-import com.perye.dokit.aop.log.Log;
-import com.perye.dokit.config.DataScope;
+import com.perye.dokit.annotation.Log;
 import com.perye.dokit.query.JobQueryCriteria;
 import com.perye.dokit.entity.Job;
 import com.perye.dokit.exception.BadRequestException;
@@ -9,6 +8,7 @@ import com.perye.dokit.service.JobService;
 import com.perye.dokit.utils.ThrowableUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +22,13 @@ import java.util.Set;
 
 @RestController
 @Api(tags = "系统：岗位管理")
+@RequiredArgsConstructor
 @RequestMapping("/api/job")
 public class JobController {
 
     private final JobService jobService;
 
-    private final DataScope dataScope;
-
     private static final String ENTITY_NAME = "job";
-
-    public JobController(JobService jobService, DataScope dataScope) {
-        this.jobService = jobService;
-        this.dataScope = dataScope;
-    }
 
     @Log("导出岗位数据")
     @ApiOperation("导出岗位数据")
@@ -48,9 +42,7 @@ public class JobController {
     @ApiOperation("查询岗位")
     @GetMapping
     @PreAuthorize("@dokit.check('job:list','user:list')")
-    public ResponseEntity<Object> getJobs(JobQueryCriteria criteria, Pageable pageable){
-        // 数据权限
-        criteria.setDeptIds(dataScope.getDeptIds());
+    public ResponseEntity<Object> query(JobQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(jobService.queryAll(criteria, pageable),HttpStatus.OK);
     }
 
@@ -62,7 +54,8 @@ public class JobController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(jobService.create(resources),HttpStatus.CREATED);
+        jobService.create(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Log("修改岗位")
@@ -79,11 +72,9 @@ public class JobController {
     @DeleteMapping
     @PreAuthorize("@dokit.check('job:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
-        try {
-            jobService.delete(ids);
-        }catch (Throwable e){
-            ThrowableUtil.throwForeignKeyException(e, "所选岗位存在用户关联，请取消关联后再试");
-        }
+        // 验证是否被用户关联
+        jobService.verification(ids);
+        jobService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,6 +1,10 @@
 package com.perye.dokit.dto;
 
+import com.perye.dokit.base.BaseDTO;
+import com.perye.dokit.base.BaseEntity;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -10,8 +14,9 @@ import java.sql.Timestamp;
  * @email peryedev@gmail.com
  * @date 2019/12/10
  */
-@Data
-public class AppDto implements Serializable {
+@Getter
+@Setter
+public class AppDto extends BaseDTO implements Serializable {
 
     /**
      * 应用编号
@@ -52,7 +57,5 @@ public class AppDto implements Serializable {
      * 部署脚本
      */
     private String deployScript;
-
-    private Timestamp createTime;
 
 }

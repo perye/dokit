@@ -12,9 +12,9 @@ import java.util.concurrent.Callable;
 @Slf4j
 public class QuartzRunnable implements Callable {
 
-    private Object target;
-    private Method method;
-    private String params;
+    private final Object target;
+    private final Method method;
+    private final String params;
 
     QuartzRunnable(String beanName, String methodName, String params)
             throws NoSuchMethodException, SecurityException {

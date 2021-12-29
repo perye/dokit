@@ -1,13 +1,14 @@
 package com.perye.dokit.controller;
 
 
-import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.annotation.Log;
 import com.perye.dokit.query.QiniuQueryCriteria;
 import com.perye.dokit.entity.QiniuConfig;
 import com.perye.dokit.entity.QiniuContent;
 import com.perye.dokit.service.QiNiuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,25 +25,22 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/qiNiuContent")
+@RequiredArgsConstructor
 @Api(tags = "工具：七牛云存储管理")
 public class QiniuController {
 
     private final QiNiuService qiNiuService;
 
-    public QiniuController(QiNiuService qiNiuService) {
-        this.qiNiuService = qiNiuService;
-    }
-
     @GetMapping(value = "/config")
-    public ResponseEntity get(){
+    public ResponseEntity queryConfig(){
         return new ResponseEntity<>(qiNiuService.find(), HttpStatus.OK);
     }
 
     @Log("配置七牛云存储")
     @ApiOperation("配置七牛云存储")
     @PutMapping(value = "/config")
-    public ResponseEntity<Object> emailConfig(@Validated @RequestBody QiniuConfig qiniuConfig){
-        qiNiuService.update(qiniuConfig);
+    public ResponseEntity<Object> updateConfig(@Validated @RequestBody QiniuConfig qiniuConfig){
+        qiNiuService.config(qiniuConfig);
         qiNiuService.update(qiniuConfig.getType());
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -57,7 +55,7 @@ public class QiniuController {
     @Log("查询文件")
     @ApiOperation("查询文件")
     @GetMapping
-    public ResponseEntity<Object> getRoles(QiniuQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> query(QiniuQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(qiNiuService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 

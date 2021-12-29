@@ -29,7 +29,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 /**
- * api页面 /swagger-ui.html
+ * api页面 /doc.html
  */
 @Configuration
 @EnableSwagger2
@@ -68,6 +68,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
+                .description("后台管理框架")
                 .title("dokit 接口文档")
                 .version("1.0")
                 .build();

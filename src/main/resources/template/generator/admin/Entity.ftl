@@ -2,6 +2,7 @@ package ${package}.entity;
 
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
+import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 <#if isNotNullColumns??>
@@ -31,9 +32,6 @@ public class ${className} implements Serializable {
 <#if columns??>
     <#list columns as column>
 
-        <#if column.remark != ''>
-    /** ${column.remark} */
-        </#if>
         <#if column.columnKey = 'PRI'>
     @Id
             <#if auto>
@@ -48,14 +46,19 @@ public class ${className} implements Serializable {
     @NotNull
             </#if>
         </#if>
-        <#if column.dateAnnotation??>
+        <#if (column.dateAnnotation)??>
             <#if column.dateAnnotation = 'CreationTimestamp'>
     @CreationTimestamp
             <#else>
     @UpdateTimestamp
             </#if>
         </#if>
-    private ${column.columnType} ${column.changeColumnName};
+        <#if column.remark != ''>
+            @ApiModelProperty(value = "${column.remark}")
+        <#else>
+            @ApiModelProperty(value = "${column.changeColumnName}")
+        </#if>
+        private ${column.columnType} ${column.changeColumnName};
     </#list>
 </#if>
 

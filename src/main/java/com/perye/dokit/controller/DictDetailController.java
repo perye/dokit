@@ -1,12 +1,14 @@
 package com.perye.dokit.controller;
 
-import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.annotation.Log;
+import com.perye.dokit.dto.DictDetailDto;
 import com.perye.dokit.query.DictDetailQueryCriteria;
 import com.perye.dokit.entity.DictDetail;
 import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.DictDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,41 +19,37 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @Api(tags = "系统：字典详情管理")
+@RequiredArgsConstructor
 @RequestMapping("/api/dictDetail")
 public class DictDetailController {
 
     private final DictDetailService dictDetailService;
-
-    public DictDetailController(DictDetailService dictDetailService) {
-        this.dictDetailService = dictDetailService;
-    }
 
     private static final String ENTITY_NAME = "dictDetail";
 
     @Log("查询字典详情")
     @ApiOperation("查询字典详情")
     @GetMapping
-    public ResponseEntity<Object> getDictDetails(DictDetailQueryCriteria criteria,
-                                         @PageableDefault(sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
+    public ResponseEntity<Object> query(DictDetailQueryCriteria criteria,
+                                         @PageableDefault(sort = {"dictSort"}, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity<>(dictDetailService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @Log("查询多个字典详情")
     @ApiOperation("查询多个字典详情")
     @GetMapping(value = "/map")
-    public ResponseEntity<Object> getDictDetailMaps(DictDetailQueryCriteria criteria,
-                                            @PageableDefault(sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
-        String[] names = criteria.getDictName().split(",");
-        Map<String,Object> map = new HashMap<>(names.length);
+    public ResponseEntity<Object> getDictDetailMaps(@RequestParam String dictName){
+        String[] names = dictName.split("[,，]");
+        Map<String, List<DictDetailDto>> dictMap = new HashMap<>(16);
         for (String name : names) {
-            criteria.setDictName(name);
-            map.put(name,dictDetailService.queryAll(criteria,pageable).get("content"));
+            dictMap.put(name, dictDetailService.getDictByName(name));
         }
-        return new ResponseEntity<>(map,HttpStatus.OK);
+        return new ResponseEntity<>(dictMap, HttpStatus.OK);
     }
 
     @Log("新增字典详情")
@@ -62,7 +60,8 @@ public class DictDetailController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(dictDetailService.create(resources),HttpStatus.CREATED);
+        dictDetailService.create(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Log("修改字典详情")

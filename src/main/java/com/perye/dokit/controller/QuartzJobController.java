@@ -1,6 +1,6 @@
 package com.perye.dokit.controller;
 
-import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.annotation.Log;
 import com.perye.dokit.query.JobQueryCriteria;
 import com.perye.dokit.query.QuartzJobQueryCriteria;
 import com.perye.dokit.entity.QuartzJob;
@@ -8,6 +8,7 @@ import com.perye.dokit.exception.BadRequestException;
 import com.perye.dokit.service.QuartzJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @Api(tags = "系统:定时任务管理")
+@RequiredArgsConstructor
 @RequestMapping("/api/jobs")
 public class QuartzJobController {
 
@@ -30,15 +32,11 @@ public class QuartzJobController {
 
     private final QuartzJobService quartzJobService;
 
-    public QuartzJobController(QuartzJobService quartzJobService) {
-        this.quartzJobService = quartzJobService;
-    }
-
     @Log("查询定时任务")
     @ApiOperation("查询定时任务")
     @GetMapping
     @PreAuthorize("@dokit.check('timing:list')")
-    public ResponseEntity<Object> getJobs(QuartzJobQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> query(QuartzJobQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(quartzJobService.queryAll(criteria,pageable), HttpStatus.OK);
     }
 
@@ -61,7 +59,7 @@ public class QuartzJobController {
     @ApiOperation("查询任务执行日志")
     @GetMapping(value = "/logs")
     @PreAuthorize("@dokit.check('timing:list')")
-    public ResponseEntity<Object> getJobLogs(QuartzJobQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> queryJobLog(QuartzJobQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(quartzJobService.queryAllLog(criteria,pageable), HttpStatus.OK);
     }
 
@@ -73,7 +71,8 @@ public class QuartzJobController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(quartzJobService.create(resources),HttpStatus.CREATED);
+        quartzJobService.create(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Log("修改定时任务")
@@ -89,7 +88,7 @@ public class QuartzJobController {
     @ApiOperation("更改定时任务状态")
     @PutMapping(value = "/{id}")
     @PreAuthorize("@dokit.check('timing:edit')")
-    public ResponseEntity<Object> updateIsPause(@PathVariable Long id){
+    public ResponseEntity<Object> update(@PathVariable Long id){
         quartzJobService.updateIsPause(quartzJobService.findById(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

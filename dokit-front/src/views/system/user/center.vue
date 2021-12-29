@@ -8,23 +8,22 @@
           </div>
           <div>
             <div style="text-align: center">
-              <el-upload
-                :show-file-list="false"
-                :on-success="handleSuccess"
-                :on-error="handleError"
-                :headers="headers"
-                :action="updateAvatarApi"
-                class="avatar-uploader"
-              >
-                <img :src="user.avatar ? baseApi + '/avatar/' + user.avatar : Avatar" title="点击上传头像" class="avatar">
-              </el-upload>
+              <div class="el-upload">
+                <img :src="user.avatarName ? baseApi + '/avatar/' + user.avatarName : Avatar" title="点击上传头像" class="avatar" @click="toggleShow">
+                <myUpload
+                  v-model="show"
+                  :headers="headers"
+                  :url="updateAvatarApi"
+                  @crop-upload-success="cropUploadSuccess"
+                />
+              </div>
             </div>
             <ul class="user-info">
               <li><div style="height: 100%"><svg-icon icon-class="login" /> 登录账号<div class="user-right">{{ user.username }}</div></div></li>
               <li><svg-icon icon-class="user1" /> 用户昵称 <div class="user-right">{{ user.nickName }}</div></li>
+              <li><svg-icon icon-class="dept" /> 所属部门 <div class="user-right"> {{ user.dept.name }}</div></li>
               <li><svg-icon icon-class="phone" /> 手机号码 <div class="user-right">{{ user.phone }}</div></li>
               <li><svg-icon icon-class="email" /> 用户邮箱 <div class="user-right">{{ user.email }}</div></li>
-              <li><svg-icon icon-class="dept" /> 所属部门 <div class="user-right"> {{ user.dept.name }} / {{ user.job.name }}</div></li>
               <li>
                 <svg-icon icon-class="anq" /> 安全设置
                 <div class="user-right">
@@ -51,7 +50,7 @@
                   <span style="color: #C0C0C0;margin-left: 10px;">手机号码不能重复</span>
                 </el-form-item>
                 <el-form-item label="性别">
-                  <el-radio-group v-model="form.sex" style="width: 178px">
+                  <el-radio-group v-model="form.gender" style="width: 178px">
                     <el-radio label="男">男</el-radio>
                     <el-radio label="女">女</el-radio>
                   </el-radio-group>
@@ -106,6 +105,7 @@
 </template>
 
 <script>
+import myUpload from 'vue-image-crop-upload'
 import { mapGetters } from 'vuex'
 import updatePass from './center/updatePass'
 import updateEmail from './center/updateEmail'
@@ -117,7 +117,7 @@ import Avatar from '@/assets/images/avatar.png'
 import { editUser } from '@/api/user'
 export default {
   name: 'Center',
-  components: { updatePass, updateEmail },
+  components: { updatePass, updateEmail, myUpload },
   mixins: [crud],
   data() {
     // 自定义验证
@@ -131,6 +131,7 @@ export default {
       }
     }
     return {
+      show: false,
       Avatar: Avatar,
       activeName: 'first',
       saveLoading: false,
@@ -157,10 +158,13 @@ export default {
     ])
   },
   created() {
-    this.form = { id: this.user.id, nickName: this.user.nickName, sex: this.user.sex, phone: this.user.phone }
+    this.form = { id: this.user.id, nickName: this.user.nickName, gender: this.user.gender, phone: this.user.phone }
     store.dispatch('GetInfo').then(() => {})
   },
   methods: {
+    toggleShow() {
+      this.show = !this.show
+    },
     handleClick(tab, event) {
       if (tab.name === 'second') {
         this.init()
@@ -170,22 +174,8 @@ export default {
       this.url = 'api/logs/user'
       return true
     },
-    handleSuccess(response, file, fileList) {
-      this.$notify({
-        title: '头像修改成功',
-        type: 'success',
-        duration: 2500
-      })
+    cropUploadSuccess(jsonData, field) {
       store.dispatch('GetInfo').then(() => {})
-    },
-    // 监听上传失败
-    handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.$notify({
-        title: msg.message,
-        type: 'error',
-        duration: 2500
-      })
     },
     doSubmit() {
       if (this.$refs['form']) {
@@ -208,19 +198,11 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .avatar-uploader-icon {
-    font-size: 28px;
-    width: 120px;
-    height: 120px;
-    line-height: 120px;
-    text-align: center
-  }
 
   .avatar {
     width: 120px;
     height: 120px;
-    display: block;
-    border-radius: 50%
+    border-radius: 50%;
   }
   .user-info {
     padding-left: 0;

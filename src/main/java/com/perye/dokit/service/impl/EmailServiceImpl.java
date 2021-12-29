@@ -8,6 +8,7 @@ import com.perye.dokit.repository.EmailRepository;
 import com.perye.dokit.service.EmailService;
 import com.perye.dokit.utils.EncryptUtils;
 import com.perye.dokit.vo.EmailVo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
@@ -20,32 +21,25 @@ import java.util.Optional;
 
 @Service
 @CacheConfig(cacheNames = "email")
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
     private final EmailRepository emailRepository;
 
-    public EmailServiceImpl(EmailRepository emailRepository) {
-        this.emailRepository = emailRepository;
-    }
-
     @Override
-    @CachePut(key = "'1'")
+    @CachePut(key = "'config'")
     @Transactional(rollbackFor = Exception.class)
-    public EmailConfig update(EmailConfig emailConfig, EmailConfig old) {
-        try {
-            if(!emailConfig.getPass().equals(old.getPass())){
-                // 对称加密
-                emailConfig.setPass(EncryptUtils.desEncrypt(emailConfig.getPass()));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public EmailConfig config(EmailConfig emailConfig, EmailConfig old) throws Exception {
+        emailConfig.setId(1L);
+        if(!emailConfig.getPass().equals(old.getPass())){
+            // 对称加密
+            emailConfig.setPass(EncryptUtils.desEncrypt(emailConfig.getPass()));
         }
         return emailRepository.save(emailConfig);
     }
 
     @Override
-    @Cacheable(key = "'1'")
+    @Cacheable(key = "'config'")
     public EmailConfig find() {
         Optional<EmailConfig> emailConfig = emailRepository.findById(1L);
         return emailConfig.orElseGet(EmailConfig::new);
@@ -59,6 +53,7 @@ public class EmailServiceImpl implements EmailService {
         }
         // 封装
         MailAccount account = new MailAccount();
+        account.setUser(emailConfig.getUser());
         account.setHost(emailConfig.getHost());
         account.setPort(Integer.parseInt(emailConfig.getPort()));
         account.setAuth(true);
@@ -71,6 +66,8 @@ public class EmailServiceImpl implements EmailService {
         account.setFrom(emailConfig.getUser()+"<"+emailConfig.getFromUser()+">");
         // ssl方式发送
         account.setSslEnable(true);
+        // 使用STARTTLS安全连接
+        account.setStarttlsEnable(true);
         String content = emailVo.getContent();
         // 发送
         try {

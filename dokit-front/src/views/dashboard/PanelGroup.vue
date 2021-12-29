@@ -2,46 +2,54 @@
 
   <el-row class="panel-group" :gutter="40">
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
-      <div class="card-panel">
+      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="visits" class-name="card-panel-icon" />
+          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">日流量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.newVisits" :duration="2600" />
+          <div class="card-panel-text">
+            New Visits
+          </div>
+          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
-      <div class="card-panel">
+      <div class="card-panel" @click="handleSetLineChartData('messages')">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
+          <svg-icon icon-class="message" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">日IP量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.newIp" :duration="3000" />
+          <div class="card-panel-text">
+            Messages
+          </div>
+          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
-      <div class="card-panel">
+      <div class="card-panel" @click="handleSetLineChartData('purchases')">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="visits" class-name="card-panel-icon" />
+          <svg-icon icon-class="money" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">周流量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.recentVisits" :duration="3200" />
+          <div class="card-panel-text">
+            Purchases
+          </div>
+          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col class="card-panel-col" :xs="12" :sm="12" :lg="6">
-      <div class="card-panel">
+      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="ipvisits" class-name="card-panel-icon" />
+          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">周IP量</div>
-          <count-to class="card-panel-num" :start-val="0" :end-val="count.recentIp" :duration="3600" />
+          <div class="card-panel-text">
+            Shoppings
+          </div>
+          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -50,29 +58,20 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import { get } from '@/api/visits'
 
 export default {
   components: {
     CountTo
   },
-  data() {
-    return {
-      count: { newIp: 0, newVisits: 0, recentIp: 0, recentVisits: 0 }
+  methods: {
+    handleSetLineChartData(type) {
+      this.$emit('handleSetLineChartData', type)
     }
-  },
-  mounted() {
-    get().then(res => {
-      this.count.newIp = res.newIp
-      this.count.newVisits = res.newVisits
-      this.count.recentIp = res.recentIp
-      this.count.recentVisits = res.recentVisits
-    })
   }
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style lang="scss" scoped>
   .panel-group {
     margin-top: 18px;
 
@@ -82,6 +81,7 @@ export default {
 
     .card-panel {
       height: 108px;
+      cursor: pointer;
       font-size: 12px;
       position: relative;
       overflow: hidden;
@@ -89,6 +89,24 @@ export default {
       background: #fff;
       box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
       border-color: rgba(0, 0, 0, .05);
+
+      &:hover {
+        .card-panel-icon-wrapper {
+          color: #fff;
+        }
+        .icon-people {
+          background: #40c9c6;
+        }
+        .icon-message {
+          background: #36a3f7;
+        }
+        .icon-money {
+          background: #f4516c;
+        }
+        .icon-shopping {
+          background: #34bfa3
+        }
+      }
 
       .icon-people {
         color: #40c9c6;
@@ -135,6 +153,23 @@ export default {
         .card-panel-num {
           font-size: 20px;
         }
+      }
+    }
+  }
+
+  @media (max-width:550px) {
+    .card-panel-description {
+      display: none;
+    }
+    .card-panel-icon-wrapper {
+      float: none !important;
+      width: 100%;
+      height: 100%;
+      margin: 0 !important;
+      .svg-icon {
+        display: block;
+        margin: 14px auto !important;
+        float: none !important;
       }
     }
   }

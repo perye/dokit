@@ -1,7 +1,7 @@
 package com.perye.dokit.controller;
 
 import com.perye.dokit.annotation.AnonymousAccess;
-import com.perye.dokit.aop.log.Log;
+import com.perye.dokit.annotation.Log;
 import com.perye.dokit.dto.DatabaseDto;
 import com.perye.dokit.query.DatabaseQueryCriteria;
 import com.perye.dokit.entity.Database;
@@ -11,6 +11,7 @@ import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.SqlUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +26,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-@Api(tags = "数据库管理")
+@Api(tags = "运维：数据库管理")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/database")
 public class DatabaseController {
 
-    private String fileSavePath = System.getProperty("java.io.tmpdir");
+    private final String fileSavePath = FileUtil.getTmpDirPath() + "/";
 
     private final DatabaseService databaseService;
-
-    public DatabaseController(DatabaseService databaseService) {
-        this.databaseService = databaseService;
-    }
 
     @Log("导出数据库数据")
     @ApiOperation("导出数据库数据")
@@ -51,7 +49,7 @@ public class DatabaseController {
     @ApiOperation(value = "查询数据库")
     @GetMapping
     @PreAuthorize("@dokit.check('database:list')")
-    public ResponseEntity<Object> getDatabases(DatabaseQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> query(DatabaseQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(databaseService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
@@ -60,7 +58,8 @@ public class DatabaseController {
     @PostMapping
     @PreAuthorize("@dokit.check('database:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Database resources){
-        return new ResponseEntity<>(databaseService.create(resources),HttpStatus.CREATED);
+        databaseService.create(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Log("修改数据库")

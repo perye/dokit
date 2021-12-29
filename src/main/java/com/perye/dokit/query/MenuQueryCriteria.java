@@ -9,11 +9,16 @@ import java.util.List;
 @Data
 public class MenuQueryCriteria {
 
-    // 多字段模糊
-    @Query(blurry = "name,path,component")
+    @Query(blurry = "title,component,permission")
     private String blurry;
 
 
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> createTime;
+
+    @Query(type = Query.Type.IS_NULL, propName = "pid")
+    private Boolean pidIsNull;
+
+    @Query
+    private Long pid;
 }

@@ -18,7 +18,7 @@ public interface LocalStorageService {
 
     LocalStorageDto findById(Long id);
 
-    LocalStorageDto create(String name, MultipartFile file);
+    void create(String name, MultipartFile file);
 
     void update(LocalStorage resources);
 

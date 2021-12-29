@@ -1,5 +1,6 @@
 package com.perye.dokit.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -14,30 +15,32 @@ import java.io.Serializable;
  */
 @Entity
 @Data
-@Table(name = "email_config")
+@Table(name = "tool_email_config")
 public class EmailConfig implements Serializable {
 
     @Id
+    @Column(name = "config_id")
+    @ApiModelProperty(value = "ID", hidden = true)
     private Long id;
 
-    // 邮件服务器SMTP地址
     @NotBlank
+    @ApiModelProperty(value = "邮件服务器SMTP地址")
     private String host;
 
-    // 邮件服务器SMTP端口
     @NotBlank
+    @ApiModelProperty(value = "邮件服务器 SMTP 端口")
     private String port;
 
-    // 发件者用户名，默认为发件人邮箱前缀
     @NotBlank
+    @ApiModelProperty(value = "发件者用户名")
     private String user;
 
     @NotBlank
+    @ApiModelProperty(value = "密码")
     private String pass;
 
-    // 收件人
     @NotBlank
-    @Column(name = "from_user")
+    @ApiModelProperty(value = "收件人")
     private String fromUser;
 }
 

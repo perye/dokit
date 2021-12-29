@@ -19,20 +19,20 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <jedis.version>2.9.0</jedis.version>
         <log4jdbc.version>1.16</log4jdbc.version>
         <swagger.version>2.9.2</swagger.version>
-        <fastjson.version>1.2.54</fastjson.version>
-        <druid.version>1.1.10</druid.version>
-        <hutool.version>5.0.6</hutool.version>
+        <fastjson.version>1.2.70</fastjson.version>
+        <druid.version>1.1.22</druid.version>
+        <hutool.version>5.3.4</hutool.version>
         <commons-pool2.version>2.5.0</commons-pool2.version>
-        <mapstruct.version>1.2.0.Final</mapstruct.version>
-        <jjwt.version>0.10.6</jjwt.version>
+        <mapstruct.version>1.3.1.Final</mapstruct.version>
+        <jjwt.version>0.11.1</jjwt.version>
+        <!-- oshi监控需要指定jna版本, 问题详见 https://github.com/oshi/oshi/issues/1040 -->
+        <jna.version>5.5.0</jna.version>
         <configuration.version>1.9</configuration.version>
-        <mail.version>1.4.7</mail.version>
+        <mail.version>1.5.0-b01</mail.version>
         <qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
         <commons.io.version>2.7</commons.io.version>
-        <oshi.version>3.9.1</oshi.version>
     </properties>
 
     <dependencies>
@@ -131,6 +131,12 @@
             <version>${druid.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
         <!--lombok插件-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -143,12 +149,6 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
-        </dependency>
-        <!--https://gitee.com/lionsoul/ip2region/tree/v1.4-release/-->
-        <dependency>
-            <groupId>org.lionsoul</groupId>
-            <artifactId>ip2region</artifactId>
-            <version>1.7.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -176,7 +176,7 @@
         <!--mapStruct依赖-->
         <dependency>
             <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-jdk8</artifactId>
+            <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
@@ -254,7 +254,7 @@
         <dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
-            <version>1.20</version>
+            <version>1.21</version>
         </dependency>
 
         <dependency>
@@ -286,7 +286,7 @@
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
-            <version>${oshi.version}</version>
+            <version>5.0.1</version>
         </dependency>
 
 
@@ -308,15 +308,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>sigar-lib/**</exclude>
-                </excludes>
-            </resource>
-        </resources>
     </build>
 
     <repositories>

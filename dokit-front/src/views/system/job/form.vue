@@ -11,9 +11,9 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" style="width: 370px;" />
       </el-form-item>
-      <el-form-item label="排序" prop="sort">
+      <el-form-item label="排序" prop="jobSort">
         <el-input-number
-          v-model.number="form.sort"
+          v-model.number="form.jobSort"
           :min="0"
           :max="999"
           controls-position="right"
@@ -25,9 +25,6 @@
           item.label }}
         </el-radio>
       </el-form-item>
-      <el-form-item label="所属部门" prop="dept.id" :rules="rules.dept">
-        <treeselect v-model="form.dept.id" :options="depts" style="width: 370px" placeholder="选择部门" />
-      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -37,22 +34,15 @@
 </template>
 
 <script>
-import CRUD, { form } from '@crud/crud'
-import { getDepts } from '@/api/dept'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { form } from '@crud/crud'
 
 const defaultForm = {
   id: 1,
   name: '',
-  sort: 999,
-  enabled: true,
-  dept: {
-    id: null
-  }
+  jobSort: 999,
+  enabled: true
 }
 export default {
-  components: { Treeselect },
   mixins: [form(defaultForm)],
   props: {
     jobStatus: {
@@ -62,34 +52,14 @@ export default {
   },
   data() {
     return {
-      depts: [],
       rules: {
         name: [
           { required: true, message: '请输入名称', trigger: 'blur' }
         ],
-        sort: [
+        jobSort: [
           { required: true, message: '请输入序号', trigger: 'blur', type: 'number' }
-        ],
-        dept: { required: true, message: '所属部门不能为空', trigger: 'select' }
+        ]
       }
-    }
-  },
-  methods: {
-    [CRUD.HOOK.beforeToCU]() {
-      getDepts({ enabled: true }).then(res => {
-        this.depts = res.content
-      })
-    },
-    // 提交前的验证
-    [CRUD.HOOK.afterValidateCU]() {
-      if (!this.form.dept.id) {
-        this.$notify({
-          title: '所属部门不能为空',
-          type: 'warning'
-        })
-        return false
-      }
-      return true
     }
   }
 }

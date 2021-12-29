@@ -4,13 +4,14 @@ import com.perye.dokit.dto.AppDto;
 import com.perye.dokit.query.AppQueryCriteria;
 import com.perye.dokit.entity.App;
 import com.perye.dokit.exception.BadRequestException;
-import com.perye.dokit.mapper.AppMapper;
+import com.perye.dokit.mapstruct.AppMapper;
 import com.perye.dokit.repository.AppRepository;
 import com.perye.dokit.service.AppService;
 import com.perye.dokit.utils.FileUtil;
 import com.perye.dokit.utils.PageUtil;
 import com.perye.dokit.utils.QueryHelp;
 import com.perye.dokit.utils.ValidationUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,17 +28,11 @@ import java.util.*;
  * @date 2019/12/10
  */
 @Service
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@RequiredArgsConstructor
 public class AppServiceImpl implements AppService {
 
-    private AppRepository appRepository;
-
-    private AppMapper appMapper;
-
-    public AppServiceImpl(AppRepository appRepository, AppMapper appMapper) {
-        this.appMapper = appMapper;
-        this.appRepository = appRepository;
-    }
+    private final AppRepository appRepository;
+    private final AppMapper appMapper;
 
     @Override
     public Object queryAll(AppQueryCriteria criteria, Pageable pageable){
@@ -59,9 +54,9 @@ public class AppServiceImpl implements AppService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AppDto create(App resources) {
+    public void create(App resources) {
         verification(resources);
-        return appMapper.toDto(appRepository.save(resources));
+        appRepository.save(resources);
     }
 
     @Override

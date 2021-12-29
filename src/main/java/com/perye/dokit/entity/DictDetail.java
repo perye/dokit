@@ -1,5 +1,7 @@
 package com.perye.dokit.entity;
 
+import com.perye.dokit.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,36 +14,28 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
-@Table(name="dict_detail")
-public class DictDetail implements Serializable {
+@Table(name="sys_dict_detail")
+public class DictDetail extends BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "detail_id")
     @NotNull(groups = Update.class)
+    @ApiModelProperty(value = "ID", hidden = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 字典标签
-    @Column(name = "label",nullable = false)
-    private String label;
-
-    // 字典值
-    @Column(name = "value",nullable = false)
-    private String value;
-
-    // 排序
-    @Column(name = "sort")
-    private Integer sort = 999;
-
-    // 字典id
-    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "dict_id")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @ApiModelProperty(value = "字典", hidden = true)
     private Dict dict;
 
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
+    @ApiModelProperty(value = "字典标签")
+    private String label;
 
-    public @interface Update {}
+    @ApiModelProperty(value = "字典值")
+    private String value;
+
+    @ApiModelProperty(value = "排序")
+    private Integer dictSort = 999;
 
 }

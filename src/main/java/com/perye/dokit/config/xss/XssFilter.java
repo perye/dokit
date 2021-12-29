@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,10 +35,7 @@ public class XssFilter implements Filter {
         String tempExcludes = filterConfig.getInitParameter("excludes");
         String tempEnabled = filterConfig.getInitParameter("enabled");
         if (StringUtils.isNotEmpty(tempExcludes)) {
-            String[] url = tempExcludes.split(",");
-            for (int i = 0; url != null && i < url.length; i++) {
-                excludes.add(url[i]);
-            }
+            excludes.addAll(Arrays.asList(tempExcludes.split(",")));
         }
         if (StringUtils.isNotEmpty(tempEnabled)) {
             enabled = Boolean.parseBoolean(tempEnabled);

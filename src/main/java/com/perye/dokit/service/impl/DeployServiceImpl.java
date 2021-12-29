@@ -8,7 +8,7 @@ import com.perye.dokit.entity.Deploy;
 import com.perye.dokit.entity.DeployHistory;
 import com.perye.dokit.entity.ServerDeploy;
 import com.perye.dokit.exception.BadRequestException;
-import com.perye.dokit.mapper.DeployMapper;
+import com.perye.dokit.mapstruct.DeployMapper;
 import com.perye.dokit.query.DeployQueryCriteria;
 import com.perye.dokit.repository.DeployRepository;
 import com.perye.dokit.service.*;
@@ -16,6 +16,7 @@ import com.perye.dokit.utils.*;
 import com.perye.dokit.websocket.MsgType;
 import com.perye.dokit.websocket.SocketMsg;
 import com.perye.dokit.websocket.WebSocketServer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ import java.util.*;
  */
 @Slf4j
 @Service
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@RequiredArgsConstructor
 public class DeployServiceImpl implements DeployService {
 
     private final String FILE_SEPARATOR = "/";
@@ -47,15 +48,10 @@ public class DeployServiceImpl implements DeployService {
 
     private final DeployHistoryService deployHistoryService;
 
-    // 循环次数
+    /**
+     * 循环次数
+     */
     private final Integer count = 30;
-
-    public DeployServiceImpl(DeployRepository deployRepository, DeployMapper deployMapper, ServerDeployService serverDeployService, DeployHistoryService deployHistoryService) {
-        this.deployRepository = deployRepository;
-        this.deployMapper = deployMapper;
-        this.serverDeployService = serverDeployService;
-        this.deployHistoryService = deployHistoryService;
-    }
 
     @Override
     public Object queryAll(DeployQueryCriteria criteria, Pageable pageable) {
@@ -77,8 +73,8 @@ public class DeployServiceImpl implements DeployService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public DeployDto create(Deploy resources) {
-        return deployMapper.toDto(deployRepository.save(resources));
+    public void create(Deploy resources) {
+        deployRepository.save(resources);
     }
 
     @Override
@@ -149,7 +145,7 @@ public class DeployServiceImpl implements DeployService {
                 stopApp(port, executeShellUtil);
                 sendMsg("备份原来应用", MsgType.INFO);
                 //备份应用
-                backupApp(executeShellUtil, ip, app.getDeployPath(), app.getName(), app.getBackupPath(), id);
+                backupApp(executeShellUtil, ip, app.getDeployPath()+FILE_SEPARATOR, app.getName(), app.getBackupPath()+FILE_SEPARATOR, id);
             }
             sendMsg("部署应用", MsgType.INFO);
             //部署文件,并启动应用
@@ -179,23 +175,16 @@ public class DeployServiceImpl implements DeployService {
         try {
             Thread.sleep(second * 1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
     private void backupApp(ExecuteShellUtil executeShellUtil, String ip, String fileSavePath, String appName, String backupPath, Long id) {
         String deployDate = DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN);
         StringBuilder sb = new StringBuilder();
-        String endsWith = "\\";
-        if (!backupPath.endsWith(FILE_SEPARATOR)&&!backupPath.endsWith(endsWith)) {
-            backupPath += FILE_SEPARATOR;
-        }
         backupPath += appName + FILE_SEPARATOR + deployDate + "\n";
         sb.append("mkdir -p ").append(backupPath);
         sb.append("mv -f ").append(fileSavePath);
-        if (!fileSavePath.endsWith(FILE_SEPARATOR)) {
-            sb.append(FILE_SEPARATOR);
-        }
         sb.append(appName).append(" ").append(backupPath);
         log.info("备份应用脚本:" + sb.toString());
         executeShellUtil.execute(sb.toString());
@@ -237,7 +226,7 @@ public class DeployServiceImpl implements DeployService {
         try {
             WebSocketServer.sendInfo(new SocketMsg(msg, msgType), "deploy");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(),e);
         }
     }
 
@@ -354,10 +343,7 @@ public class DeployServiceImpl implements DeployService {
             sendMsg("应用信息不存在：" + resources.getAppName(), MsgType.ERROR);
             throw new BadRequestException("应用信息不存在：" + resources.getAppName());
         }
-        String backupPath = app.getBackupPath();
-        if (!backupPath.endsWith(FILE_SEPARATOR)) {
-            backupPath += FILE_SEPARATOR;
-        }
+        String backupPath = app.getBackupPath()+FILE_SEPARATOR;
         backupPath += resources.getAppName() + FILE_SEPARATOR + deployDate;
         //这个是服务器部署路径
         String deployPath = app.getDeployPath();

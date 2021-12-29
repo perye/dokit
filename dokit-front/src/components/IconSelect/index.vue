@@ -24,10 +24,9 @@ export default {
   },
   methods: {
     filterIcons() {
+      this.iconList = icons
       if (this.name) {
         this.iconList = this.iconList.filter(item => item.includes(this.name))
-      } else {
-        this.iconList = icons
       }
     },
     selectedIcon(name) {

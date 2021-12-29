@@ -4,6 +4,7 @@ import com.perye.dokit.entity.GenConfig;
 import com.perye.dokit.repository.GenConfigRepository;
 import com.perye.dokit.service.GenConfigService;
 import com.perye.dokit.utils.StringUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,17 +14,12 @@ import java.io.File;
 import java.util.Optional;
 
 @Service
-@CacheConfig(cacheNames = "genConfig")
+@RequiredArgsConstructor
 public class GenConfigServiceImpl implements GenConfigService {
 
     private final GenConfigRepository genConfigRepository;
 
-    public GenConfigServiceImpl(GenConfigRepository genConfigRepository) {
-        this.genConfigRepository = genConfigRepository;
-    }
-
     @Override
-    @Cacheable(key = "#p0")
     public GenConfig find(String tableName) {
         GenConfig genConfig = genConfigRepository.findByTableName(tableName);
         if(genConfig == null){
@@ -33,7 +29,6 @@ public class GenConfigServiceImpl implements GenConfigService {
     }
 
     @Override
-    @CachePut(key = "#p0")
     public GenConfig update(String tableName, GenConfig genConfig) {
         // 如果 api 路径为空，则自动生成路径
         if(StringUtils.isBlank(genConfig.getApiPath())){

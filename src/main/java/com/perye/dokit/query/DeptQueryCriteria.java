@@ -1,5 +1,6 @@
 package com.perye.dokit.query;
 
+import com.perye.dokit.annotation.DataPermission;
 import com.perye.dokit.annotation.Query;
 import lombok.Data;
 
@@ -8,10 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-public class DeptQueryCriteria{
-
-    @Query(type = Query.Type.IN, propName="id")
-    private Set<Long> ids;
+@DataPermission(fieldName = "id")
+public class DeptQueryCriteria {
 
     @Query(type = Query.Type.INNER_LIKE)
     private String name;
@@ -21,6 +20,9 @@ public class DeptQueryCriteria{
 
     @Query
     private Long pid;
+
+    @Query(type = Query.Type.IS_NULL, propName = "pid")
+    private Boolean pidIsNull;
 
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> createTime;

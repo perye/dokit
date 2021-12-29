@@ -3,10 +3,11 @@ package com.perye.dokit.service.impl;
 import com.perye.dokit.dto.ServerDeployDto;
 import com.perye.dokit.query.ServerDeployQueryCriteria;
 import com.perye.dokit.entity.ServerDeploy;
-import com.perye.dokit.mapper.ServerDeployMapper;
+import com.perye.dokit.mapstruct.ServerDeployMapper;
 import com.perye.dokit.repository.ServerDeployRepository;
 import com.perye.dokit.service.ServerDeployService;
 import com.perye.dokit.utils.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,17 +24,11 @@ import java.util.*;
  * @date 2019/12/10
  */
 @Service
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@RequiredArgsConstructor
 public class ServerDeployServiceImpl implements ServerDeployService {
 
-    private ServerDeployRepository serverDeployRepository;
-
-    private ServerDeployMapper serverDeployMapper;
-
-    public ServerDeployServiceImpl(ServerDeployRepository serverDeployRepository,ServerDeployMapper serverDeployMapper){
-        this.serverDeployRepository = serverDeployRepository;
-        this.serverDeployMapper = serverDeployMapper;
-    }
+    private final ServerDeployRepository serverDeployRepository;
+    private final ServerDeployMapper serverDeployMapper;
 
     @Override
     public Object queryAll(ServerDeployQueryCriteria criteria, Pageable pageable){
@@ -77,8 +72,8 @@ public class ServerDeployServiceImpl implements ServerDeployService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ServerDeployDto create(ServerDeploy resources) {
-        return serverDeployMapper.toDto(serverDeployRepository.save(resources));
+    public void create(ServerDeploy resources) {
+        serverDeployRepository.save(resources);
     }
 
     @Override
