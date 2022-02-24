@@ -140,7 +140,7 @@ export default {
     margin: 20px;
     width: 730px;
   }
-  /deep/ .w-e-text-container {
+  ::v-deep .w-e-text-container {
     height: 360px !important;
   }
 </style>
