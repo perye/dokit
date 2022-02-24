@@ -1,11 +1,15 @@
 package com.perye.dokit.config.bean;
 
 import com.perye.dokit.exception.BadConfigurationException;
+import com.perye.dokit.utils.StringUtils;
 import com.wf.captcha.*;
 import com.wf.captcha.base.Captcha;
+import lombok.Data;
 
+import java.awt.*;
 import java.util.Objects;
 
+@Data
 public class LoginProperties {
 
     /**
@@ -20,28 +24,8 @@ public class LoginProperties {
      */
     private boolean cacheEnable;
 
-    public boolean isSingleLogin() {
-        return singleLogin;
-    }
-
-    public void setSingleLogin(boolean singleLogin) {
-        this.singleLogin = singleLogin;
-    }
-
-    public LoginCode getLoginCode() {
-        return loginCode;
-    }
-
-    public void setLoginCode(LoginCode loginCode) {
-        this.loginCode = loginCode;
-    }
-
     public boolean isCacheEnable() {
         return cacheEnable;
-    }
-
-    public void setCacheEnable(boolean cacheEnable) {
-        this.cacheEnable = cacheEnable;
     }
 
     /**
@@ -92,8 +76,11 @@ public class LoginProperties {
                     captcha.setLen(loginCode.getLength());
                     break;
                 default:
-                    throw new BadConfigurationException("验证码配置信息错误！！");
+                    throw new BadConfigurationException("验证码配置信息错误！正确配置查看 LoginCodeEnum ");
             }
+        }
+        if(StringUtils.isNotBlank(loginCode.getFontName())){
+            captcha.setFont(new Font(loginCode.getFontName(), Font.PLAIN, loginCode.getFontSize()));
         }
         return captcha;
     }

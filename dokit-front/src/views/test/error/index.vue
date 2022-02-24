@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     error() {
-      axios.get()
+      // axios.get()
     }
   }
 }
