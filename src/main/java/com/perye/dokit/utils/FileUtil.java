@@ -15,6 +15,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -71,7 +72,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         File file = null;
         try {
             // 用uuid作为文件名，防止生成的临时文件重复
-            file = File.createTempFile(IdUtil.simpleUUID(), prefix);
+            file = Files.createTempFile(IdUtil.simpleUUID(),prefix).toFile();
             // MultipartFile to File
             multipartFile.transferTo(file);
         } catch (IOException e) {
